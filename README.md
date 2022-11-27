@@ -6,7 +6,7 @@
 </p>
 
 ### About
-VP# is a modern .NET wrapper for the Virtual Paradise SDK which introduces a cleaner, more modern, and more async API.
+VP# is a high performance .NET wrapper for the [Virtual Paradise](https://virtualparadise.org) SDK which introduces a cleaner, more modern, and more async API.
 
 *(I'm also [dogfooding](https://www.pcmag.com/encyclopedia/term/dogfooding) this library, so there's that.)*
 
