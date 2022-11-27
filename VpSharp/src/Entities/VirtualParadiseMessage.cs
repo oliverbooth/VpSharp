@@ -9,7 +9,7 @@ public sealed class VirtualParadiseMessage
 {
     internal VirtualParadiseMessage(
         MessageType type,
-        string name,
+        string? name,
         string content,
         VirtualParadiseAvatar author,
         FontStyle style,
@@ -38,8 +38,8 @@ public sealed class VirtualParadiseMessage
     /// <summary>
     ///     Gets the message name.
     /// </summary>
-    /// <value>The message name.This will always be equal to the name of the <see cref="Author" /> for chat messages.</value>
-    public string Name { get; }
+    /// <value>The message name. This will always be equal to the name of the <see cref="Author" /> for chat messages.</value>
+    public string? Name { get; }
 
     /// <summary>
     ///     Gets the message color.

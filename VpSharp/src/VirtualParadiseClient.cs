@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
@@ -522,6 +522,55 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
         CurrentUser = await GetUserAsync(userId);
         vp_friends_get(NativeInstanceHandle);
+    }
+
+    /// <summary>
+    ///     Sends a chat message to everyone in the current world.
+    /// </summary>
+    /// <param name="message">The message to send.</param>
+    /// <returns>The message which was sent.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///     An attempt was made to send a message while not connected to a world.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <para><paramref name="message" /> is empty, or consists of only whitespace.</para>
+    ///     -or-
+    ///     <para><paramref name="message" /> is too long to send.</para>
+    /// </exception>
+    public Task<VirtualParadiseMessage> SendMessageAsync(string message)
+    {
+        ArgumentNullException.ThrowIfNull(message);
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            throw new ArgumentException("Message cannot be empty.");
+        }
+
+        lock (Lock)
+        {
+            var reason = (ReasonCode)vp_say(NativeInstanceHandle, message);
+            if (reason != ReasonCode.Success)
+            {
+                switch (reason)
+                {
+                    case ReasonCode.NotInWorld:
+                        throw new InvalidOperationException("A connection to the world server is required to send messages.");
+
+                    case ReasonCode.StringTooLong:
+                        throw new ArgumentException("The message is too long to send.");
+                }
+            }
+        }
+
+        var avatar = CurrentAvatar;
+        return Task.FromResult(new VirtualParadiseMessage(
+            MessageType.ChatMessage,
+            avatar!.Name,
+            message,
+            avatar,
+            FontStyle.Regular,
+            Color.Black
+        ));
     }
 
     internal TaskCompletionSource<ReasonCode> AddJoinCompletionSource(int reference)

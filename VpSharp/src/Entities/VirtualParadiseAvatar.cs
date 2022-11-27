@@ -1,3 +1,4 @@
+﻿using System.Drawing;
 using System.Numerics;
 using VpSharp.Extensions;
 using VpSharp.Internal;
@@ -161,6 +162,101 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
         }
 
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    ///     Sends a console message to the avatar with no name.
+    /// </summary>
+    /// <param name="message">The message to send.</param>
+    /// <param name="fontStyle">The font style of the message.</param>
+    /// <param name="color">The text color of the message.</param>
+    /// <returns>The message which was sent.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///     <para>An attempt was made to send a message while not connected to a world.</para>
+    ///     -or-
+    ///     <para>An attempt was made to send a message to an avatar that is not in the world.</para>
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <para><paramref name="message" /> is empty, or consists of only whitespace.</para>
+    ///     -or-
+    ///     <para><paramref name="message" /> is too long to send.</para>
+    /// </exception>
+    public Task<VirtualParadiseMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    {
+        // ReSharper disable once InconsistentlySynchronizedField
+        return SendMessageAsync(null, message, fontStyle, color);
+    }
+
+    /// <summary>
+    ///     Sends a console message to the avatar.
+    /// </summary>
+    /// <param name="name">The apparent author of the message.</param>
+    /// <param name="message">The message to send.</param>
+    /// <param name="fontStyle">The font style of the message.</param>
+    /// <param name="color">The text color of the message.</param>
+    /// <returns>The message which was sent.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///     <para>An attempt was made to send a message while not connected to a world.</para>
+    ///     -or-
+    ///     <para>An attempt was made to send a message to an avatar that is not in the world.</para>
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <para><paramref name="message" /> is empty, or consists of only whitespace.</para>
+    ///     -or-
+    ///     <para><paramref name="message" /> is too long to send.</para>
+    /// </exception>
+    /// <remarks>Passing <see langword="null" /> to <paramref name="name" /> will hide the name from the recipient.</remarks>
+    public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    {
+        ArgumentNullException.ThrowIfNull(message);
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            throw new ArgumentException("Message cannot be empty.");
+        }
+
+        VirtualParadiseAvatar avatar;
+
+        lock (_client.Lock)
+        {
+            var reason = (ReasonCode)vp_console_message(
+                _client.NativeInstanceHandle,
+                Session,
+                name ?? string.Empty,
+                message,
+                (int)fontStyle,
+                color.R,
+                color.G,
+                color.B
+            );
+
+            if (reason != ReasonCode.Success)
+            {
+                switch (reason)
+                {
+                    case ReasonCode.NotInWorld when _client.CurrentAvatar is null:
+                        throw new InvalidOperationException("A connection to the world server is required to send messages.");
+
+                    case ReasonCode.NotInWorld:
+                        throw new InvalidOperationException("The recipient avatar is not in this world.");
+
+                    case ReasonCode.StringTooLong:
+                        throw new ArgumentException("The message is too long to send.");
+                }
+            }
+
+            avatar = _client.CurrentAvatar!;
+        }
+
+        return Task.FromResult(new VirtualParadiseMessage(
+            MessageType.ConsoleMessage,
+            name,
+            message,
+            avatar,
+            fontStyle,
+            color
+        ));
     }
 
     /// <summary>
