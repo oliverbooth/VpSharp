@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VpSharp.Commands", "VpSharp.Commands\VpSharp.Commands.csproj", "{8EE96C20-57AA-48E1-95A2-04580C4F7E05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,5 +34,9 @@ Global
 		{87C0D19A-27C9-4041-9DD5-191B8D0FDEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87C0D19A-27C9-4041-9DD5-191B8D0FDEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87C0D19A-27C9-4041-9DD5-191B8D0FDEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EE96C20-57AA-48E1-95A2-04580C4F7E05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EE96C20-57AA-48E1-95A2-04580C4F7E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EE96C20-57AA-48E1-95A2-04580C4F7E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EE96C20-57AA-48E1-95A2-04580C4F7E05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -8,16 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VpSharp\VpSharp.csproj" />
+        <ProjectReference Include="..\VpSharp.Commands\VpSharp.Commands.csproj"/>
+        <ProjectReference Include="..\VpSharp\VpSharp.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="libvpsdk.so">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="VPSDK.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="libvpsdk.so">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="VPSDK.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

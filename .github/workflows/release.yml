@@ -32,6 +32,7 @@ jobs:
       run: |
         mkdir build
         dotnet pack VpSharp -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build
+        dotnet pack VpSharp.Commands -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build
 
     - name: Push NuGet Package to GitHub
       run: dotnet nuget push "build/*" --source "github" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate

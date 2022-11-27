@@ -1,5 +1,7 @@
 ﻿using VpSharp;
+using VpSharp.Commands;
 using VpSharp.Entities;
+using VpSharp.IntegrationTests.CommandModules;
 
 string? username = Environment.GetEnvironmentVariable("username");
 string? password = Environment.GetEnvironmentVariable("password");
@@ -16,7 +18,7 @@ if (string.IsNullOrWhiteSpace(password))
     return;
 }
 
-var configuration = new VirtualParadiseConfiguration()
+var configuration = new VirtualParadiseConfiguration
 {
     Username = username,
     Password = password,
@@ -26,6 +28,8 @@ var configuration = new VirtualParadiseConfiguration()
 };
 
 using var client = new VirtualParadiseClient(configuration);
+CommandsExtension commands = client.UseCommands(new CommandsExtensionConfiguration {Prefixes = new[] {"!"}});
+commands.RegisterCommands<TestCommands>();
 
 Console.WriteLine(@"Connecting to universe");
 await client.ConnectAsync().ConfigureAwait(false);
