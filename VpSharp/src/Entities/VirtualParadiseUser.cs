@@ -93,8 +93,16 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
     /// </returns>
     public bool Equals(VirtualParadiseUser? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return Id == other.Id;
     }
 
@@ -214,7 +222,9 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             location = new Location(world, position, rotation);
 
             if (!suppressTeleport)
+            {
                 await avatar.TeleportAsync(location.Value);
+            }
         }
 
         JoinResponse response = reason switch

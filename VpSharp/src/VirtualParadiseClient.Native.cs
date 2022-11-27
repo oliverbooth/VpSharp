@@ -17,7 +17,9 @@ public sealed partial class VirtualParadiseClient
     {
         var reason = (ReasonCode) Native.vp_init();
         if (reason == ReasonCode.VersionMismatch)
+        {
             throw new VersionMismatchException();
+        }
 
         _instanceHandle = GCHandle.Alloc(this);
         _netConfig.Context = GCHandle.ToIntPtr(_instanceHandle);

@@ -1,12 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using System.Drawing;
-using System.Numerics;
 using System.Threading.Channels;
 using VpSharp.Entities;
-using VpSharp.Exceptions;
-using VpSharp.Internal;
-using VpSharp.Internal.NativeAttributes;
-using VpSharp.Internal.ValueConverters;
 
 namespace VpSharp;
 
@@ -30,12 +24,16 @@ public sealed partial class VirtualParadiseClient
     public async Task<VirtualParadiseWorld?> GetWorldAsync(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
+        {
             throw new ArgumentException(ExceptionMessages.WorldNameCannotBeEmpty, nameof(name));
+        }
 
         await foreach (VirtualParadiseWorld world in EnumerateWorldsAsync())
         {
             if (string.Equals(world.Name, name))
+            {
                 return world;
+            }
         }
 
         return null;

@@ -15,13 +15,17 @@ internal static class WorldSettingsConverter
         {
             var attribute = property.GetCustomAttribute<SerializationKeyAttribute>();
             if (attribute is null)
+            {
                 continue;
+            }
 
             object? propertyValue = property.GetValue(settings);
             Type propertyType = property.PropertyType;
 
             if (propertyValue is null)
+            {
                 continue;
+            }
 
             var result = propertyValue.ToString();
 
@@ -33,9 +37,13 @@ internal static class WorldSettingsConverter
 
                 ValueConverter? converter;
                 if (converterAttribute.UseArgs)
+                {
                     converter = Activator.CreateInstance(converterType, converterAttribute.Args) as ValueConverter;
+                }
                 else
+                {
                     converter = Activator.CreateInstance(converterType) as ValueConverter;
+                }
 
                 if (converter is not null)
                 {
@@ -48,11 +56,15 @@ internal static class WorldSettingsConverter
             else
             {
                 if (propertyType == typeof(bool) || propertyType == typeof(bool?))
+                {
                     result = (bool)propertyValue ? "1" : "0";
+                }
             }
 
             if (result is not null)
+            {
                 dictionary.Add(attribute.Key, result);
+            }
         }
 
         return dictionary;
@@ -67,7 +79,9 @@ internal static class WorldSettingsConverter
         {
             var defaultValueAttribute = property.GetCustomAttribute<DefaultValueAttribute>();
             if (defaultValueAttribute is null)
+            {
                 continue;
+            }
 
             property.SetValue(settings, defaultValueAttribute.Value);
         }
@@ -79,7 +93,9 @@ internal static class WorldSettingsConverter
                     StringComparison.OrdinalIgnoreCase));
 
             if (property is null)
+            {
                 continue;
+            }
 
             using var reader = new StringReader(value);
             object propertyValue = value;
@@ -95,15 +111,25 @@ internal static class WorldSettingsConverter
                 Type propertyType = property.PropertyType;
 
                 if (propertyType == typeof(bool))
+                {
                     propertyValue = value == "1" || (bool.TryParse(value, out bool result) && result);
+                }
                 else if (propertyType == typeof(int))
+                {
                     propertyValue = int.TryParse(value, out int result) ? result : 0;
+                }
                 else if (propertyType == typeof(float))
+                {
                     propertyValue = float.TryParse(value, out float result) ? result : 0.0f;
+                }
                 else if (propertyType == typeof(double))
+                {
                     propertyValue = double.TryParse(value, out double result) ? result : 0.0;
+                }
                 else if (propertyType.IsEnum && int.TryParse(value, out int result))
+                {
                     propertyValue = Convert.ChangeType(result, propertyType);
+                }
             }
 
             // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -112,9 +138,13 @@ internal static class WorldSettingsConverter
             {
                 ValueConverter? converter;
                 if (converterAttribute.UseArgs)
+                {
                     converter = Activator.CreateInstance(converterType, converterAttribute.Args) as ValueConverter;
+                }
                 else
+                {
                     converter = Activator.CreateInstance(converterType) as ValueConverter;
+                }
 
                 converter?.Deserialize(reader, out propertyValue);
             }

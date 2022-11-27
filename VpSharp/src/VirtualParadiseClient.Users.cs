@@ -19,15 +19,22 @@ public sealed partial class VirtualParadiseClient
     public async Task<VirtualParadiseUser> GetUserAsync(int userId)
     {
         if (_users.TryGetValue(userId, out VirtualParadiseUser? user))
+        {
             return user;
+        }
 
         if (_usersCompletionSources.TryGetValue(userId, out TaskCompletionSource<VirtualParadiseUser>? taskCompletionSource))
+        {
             return await taskCompletionSource.Task;
+        }
 
         taskCompletionSource = new TaskCompletionSource<VirtualParadiseUser>();
         _usersCompletionSources.TryAdd(userId, taskCompletionSource);
 
-        lock (Lock) vp_user_attributes_by_id(NativeInstanceHandle, userId);
+        lock (Lock)
+        {
+            vp_user_attributes_by_id(NativeInstanceHandle, userId);
+        }
 
         user = await taskCompletionSource.Task;
         user = AddOrUpdateUser(user);

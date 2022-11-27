@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using VpSharp.Extensions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
@@ -98,8 +98,16 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// </returns>
     public bool Equals(VirtualParadiseAvatar? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return Session == other.Session && User.Equals(other.User);
     }
 
@@ -130,7 +138,9 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     {
         // ReSharper disable once InconsistentlySynchronizedField
         if (this == _client.CurrentAvatar)
+        {
             return Task.FromException(ThrowHelper.CannotUseSelfException());
+        }
 
         clickPoint ??= Location.Position;
         (double x, double y, double z) = clickPoint.Value;
@@ -143,9 +153,11 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             vp_double_set(handle, FloatAttribute.ClickHitY, y);
             vp_double_set(handle, FloatAttribute.ClickHitZ, z);
 
-            var reason = (ReasonCode) vp_avatar_click(handle, Session);
+            var reason = (ReasonCode)vp_avatar_click(handle, Session);
             if (reason == ReasonCode.NotInWorld)
+            {
                 return Task.FromException(ThrowHelper.NotInWorldException());
+            }
         }
 
         return Task.CompletedTask;
@@ -164,7 +176,9 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 
         // ReSharper disable once InconsistentlySynchronizedField
         if (this == _client.CurrentAvatar)
+        {
             return Task.FromException(ThrowHelper.CannotUseSelfException());
+        }
 
         lock (_client.Lock)
         {
@@ -248,21 +262,25 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
                 vp_double_set(handle, FloatAttribute.MyPitch, pitch);
                 vp_double_set(handle, FloatAttribute.MyYaw, yaw);
 
-                var reason = (ReasonCode) vp_state_change(handle);
+                var reason = (ReasonCode)vp_state_change(handle);
                 if (reason == ReasonCode.NotInWorld)
+                {
                     ThrowHelper.ThrowNotInWorldException();
+                }
             }
         }
         else
         {
             lock (_client.Lock)
             {
-                (float x, float y, float z) = (Vector3) position;
-                (float pitch, float yaw, float _) = (Vector3) rotation.ToEulerAngles(false);
+                (float x, float y, float z) = (Vector3)position;
+                (float pitch, float yaw, float _) = (Vector3)rotation.ToEulerAngles(false);
 
-                var reason = (ReasonCode) vp_teleport_avatar(handle, Session, world, x, y, z, yaw, pitch);
+                var reason = (ReasonCode)vp_teleport_avatar(handle, Session, world, x, y, z, yaw, pitch);
                 if (reason == ReasonCode.NotInWorld)
+                {
                     ThrowHelper.ThrowNotInWorldException();
+                }
             }
         }
 

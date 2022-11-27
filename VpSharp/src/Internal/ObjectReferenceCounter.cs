@@ -11,9 +11,14 @@ internal static class ObjectReferenceCounter
         int ret;
         Rwl.EnterWriteLock();
         if (s_reference < int.MaxValue)
+        {
             ret = s_reference++;
+        }
         else
+        {
             ret = s_reference = int.MinValue;
+        }
+
         Rwl.ExitWriteLock();
         return ret;
     }

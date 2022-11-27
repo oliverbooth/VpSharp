@@ -17,10 +17,14 @@ internal sealed class Vector3ToColorConverter : ValueConverter<ColorF>
 
             var currentChar = (char) readChar;
             if (currentChar == ' ')
+            {
                 spaceCount++;
+            }
 
             if (spaceCount < 3 && readChar != -1)
+            {
                 continue;
+            }
 
             (float x, float y, float z) = builder.AsSpan().ToVector3();
             result = ColorF.FromArgb(x, y, z);

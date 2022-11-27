@@ -24,7 +24,9 @@ public sealed partial class VirtualParadiseClient
     public IAsyncEnumerable<VirtualParadiseObject> EnumerateObjectsAsync(Cell cell, int? revision = null)
     {
         if (_cellChannels.TryGetValue(cell, out Channel<VirtualParadiseObject>? channel))
+        {
             return channel.Reader.ReadAllAsync();
+        }
 
         channel = Channel.CreateUnbounded<VirtualParadiseObject>();
         _cellChannels.TryAdd(cell, channel);
@@ -53,18 +55,25 @@ public sealed partial class VirtualParadiseClient
     /// <returns>An enumerable of <see cref="VirtualParadiseObject" />.</returns>
     public async IAsyncEnumerable<VirtualParadiseObject> EnumerateObjectsAsync(Cell center, int radius, int? revision = null)
     {
-        if (radius < 0) throw new ArgumentException("Range must be greater than or equal to 1.");
+        if (radius < 0)
+        {
+            throw new ArgumentException("Range must be greater than or equal to 1.");
+        }
 
         var cells = new HashSet<Cell>();
 
         for (int x = center.X - radius; x < center.X + radius; x++)
         for (int z = center.Z - radius; z < center.Z + radius; z++)
+        {
             cells.Add(new Cell(x, z));
+        }
 
         foreach (Cell cell in cells.OrderBy(c => Vector2.Distance(c, center)))
         {
             await foreach (VirtualParadiseObject vpObject in EnumerateObjectsAsync(cell))
+            {
                 yield return vpObject;
+            }
         }
     }
 
@@ -82,7 +91,9 @@ public sealed partial class VirtualParadiseClient
     public async ValueTask<VirtualParadiseObject> GetObjectAsync(int id)
     {
         if (_objects.TryGetValue(id, out VirtualParadiseObject? virtualParadiseObject))
+        {
             return virtualParadiseObject;
+        }
 
         ReasonCode reason;
 
@@ -97,7 +108,9 @@ public sealed partial class VirtualParadiseClient
                 vp_int_set(NativeInstanceHandle, IntegerAttribute.ReferenceNumber, id);
                 reason = (ReasonCode) vp_object_get(NativeInstanceHandle, id);
                 if (reason != ReasonCode.Success)
+                {
                     goto PreReturn;
+                }
             }
         }
 
@@ -105,7 +118,9 @@ public sealed partial class VirtualParadiseClient
         _objectCompletionSources.TryRemove(id, out _);
 
         if (virtualParadiseObject is not null)
+        {
             _objects.TryAdd(id, virtualParadiseObject);
+        }
 
         PreReturn:
         return reason switch

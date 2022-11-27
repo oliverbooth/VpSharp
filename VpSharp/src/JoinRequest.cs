@@ -45,15 +45,19 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
     public Task AcceptAsync(Location? location = null)
     {
         if (_client.CurrentAvatar is null)
+        {
             ThrowHelper.ThrowNotInWorldException();
-        
+        }
+
         location ??= _client.CurrentAvatar!.Location;
         string worldName = location.Value.World.Name;
         (double x, double y, double z) = location.Value.Position;
         (double pitch, double yaw, double _) = location.Value.Rotation.ToEulerAngles();
 
         lock (_client.Lock)
+        {
             Native.vp_join_accept(_client.NativeInstanceHandle, _requestId, worldName, x, y, z, (float) yaw, (float) pitch);
+        }
 
         return Task.CompletedTask;
     }
@@ -63,7 +67,10 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
     /// </summary>
     public Task DeclineAsync()
     {
-        lock (_client.Lock) Native.vp_join_decline(_client.NativeInstanceHandle, _requestId);
+        lock (_client.Lock)
+        {
+            Native.vp_join_decline(_client.NativeInstanceHandle, _requestId);
+        }
 
         return Task.CompletedTask;
     }
@@ -72,15 +79,27 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
     /// <inheritdoc />
     public bool Equals(JoinRequest? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return _requestId == other._requestId && _client.Equals(other._client);
     }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj is JoinRequest other && Equals(other);
     }
 

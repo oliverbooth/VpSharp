@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
@@ -92,8 +92,15 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// </remarks>
     public async Task ConnectAsync(string? host = null, int port = -1)
     {
-        if (string.IsNullOrWhiteSpace(host)) host = DefaultUniverseHost;
-        if (port < 1) port = DefaultUniversePort;
+        if (string.IsNullOrWhiteSpace(host))
+        {
+            host = DefaultUniverseHost;
+        }
+
+        if (port < 1)
+        {
+            port = DefaultUniversePort;
+        }
 
         ReasonCode reason;
 
@@ -101,9 +108,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
         {
             _connectCompletionSource = new TaskCompletionSource<ReasonCode>();
 
-            reason = (ReasonCode) vp_connect_universe(NativeInstanceHandle, host, port);
+            reason = (ReasonCode)vp_connect_universe(NativeInstanceHandle, host, port);
             if (reason != ReasonCode.Success)
+            {
                 goto NoSuccess;
+            }
         }
 
         reason = await _connectCompletionSource.Task;
@@ -118,7 +127,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
                 throw new SocketException();
 
             default:
-                throw new SocketException((int) reason);
+                throw new SocketException((int)reason);
         }
     }
 
@@ -130,7 +139,10 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="ArgumentException"><paramref name="remoteEP" /> is not a supported endpoint.</exception>
     public Task ConnectAsync(EndPoint remoteEP)
     {
-        if (remoteEP is null) throw new ArgumentNullException(nameof(remoteEP));
+        if (remoteEP is null)
+        {
+            throw new ArgumentNullException(nameof(remoteEP));
+        }
 
         string host;
         int port;
@@ -273,7 +285,10 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
         if (CurrentWorld is not null)
         {
-            lock (Lock) vp_leave(NativeInstanceHandle);
+            lock (Lock)
+            {
+                vp_leave(NativeInstanceHandle);
+            }
         }
 
         ReasonCode reason;
@@ -283,7 +298,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
         lock (Lock)
         {
-            reason = (ReasonCode) vp_enter(NativeInstanceHandle, worldName);
+            reason = (ReasonCode)vp_enter(NativeInstanceHandle, worldName);
             if (reason != ReasonCode.Success)
             {
                 goto NoSuccess;
@@ -321,7 +336,10 @@ public sealed partial class VirtualParadiseClient : IDisposable
         }
 
         int size;
-        lock (Lock) size = vp_int(NativeInstanceHandle, IntegerAttribute.WorldSize);
+        lock (Lock)
+        {
+            size = vp_int(NativeInstanceHandle, IntegerAttribute.WorldSize);
+        }
 
         await _worldSettingsCompletionSource.Task;
 
@@ -332,8 +350,15 @@ public sealed partial class VirtualParadiseClient : IDisposable
             world = new VirtualParadiseWorld(this, worldName);
         }
 
-        if (CurrentAvatar is not null) CurrentAvatar.Location = new Location(world);
-        lock (Lock) vp_state_change(NativeInstanceHandle);
+        if (CurrentAvatar is not null)
+        {
+            CurrentAvatar.Location = new Location(world);
+        }
+
+        lock (Lock)
+        {
+            vp_state_change(NativeInstanceHandle);
+        }
 
         world.Size = new Size(size, size);
 
@@ -356,7 +381,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
             _ = Task.Run(async () =>
             {
                 await foreach (VirtualParadiseObject virtualParadiseObject in EnumerateObjectsAsync(default, radius: size))
+                {
                     AddOrUpdateObject(virtualParadiseObject);
+                }
             });
         }
 
@@ -375,7 +402,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
     public IAsyncEnumerable<VirtualParadiseWorld> EnumerateWorldsAsync()
     {
         _worldListChannel = Channel.CreateUnbounded<VirtualParadiseWorld>();
-        lock (Lock) vp_world_list(NativeInstanceHandle, 0);
+        lock (Lock)
+        {
+            vp_world_list(NativeInstanceHandle, 0);
+        }
+
         return _worldListChannel.Reader.ReadAllAsync();
     }
 
@@ -389,9 +420,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
     {
         lock (Lock)
         {
-            var reason = (ReasonCode) vp_leave(NativeInstanceHandle);
+            var reason = (ReasonCode)vp_leave(NativeInstanceHandle);
             if (reason == ReasonCode.NotInWorld)
+            {
                 return Task.FromException(ThrowHelper.NotInWorldException());
+            }
         }
 
         _avatars.Clear();
@@ -438,7 +471,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
         _configuration.BotName = botName;
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(botName))
+        {
             throw new ArgumentException("Cannot login due to incomplete configuration.");
+        }
 
         _loginCompletionSource = new TaskCompletionSource<ReasonCode>();
 
@@ -454,9 +489,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
                 }
             }
 
-            reason = (ReasonCode) vp_login(NativeInstanceHandle, username, password, botName);
+            reason = (ReasonCode)vp_login(NativeInstanceHandle, username, password, botName);
             if (reason != ReasonCode.Success)
+            {
                 goto NoSuccess;
+            }
         }
 
         reason = await _loginCompletionSource.Task;

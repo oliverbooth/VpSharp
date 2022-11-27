@@ -26,7 +26,9 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
     protected internal override void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
         if (virtualParadiseObject is not VirtualParadisePathObject path)
+        {
             return;
+        }
 
         Path = (VirtualParadisePath)path.Path.Clone();
     }
@@ -55,7 +57,9 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
         buffer.Clear();
 
         if (version != 1)
+        {
             throw new NotSupportedException($"Unsupported path version {version}");
+        }
 
         // path name
         var name = string.Empty;

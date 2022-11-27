@@ -209,7 +209,9 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
     protected internal override void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
         if (virtualParadiseObject is not VirtualParadiseParticleEmitterObject emitter)
+        {
             return;
+        }
 
         const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
         PropertyInfo[] properties = typeof(VirtualParadiseParticleEmitterObject).GetProperties(bindingFlags);
@@ -217,7 +219,9 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
         foreach (PropertyInfo property in properties)
         {
             if (property.GetCustomAttribute<SerializationKeyAttribute>() is null)
+            {
                 continue;
+            }
 
             property.SetValue(this, property.GetValue(emitter));
         }
@@ -235,7 +239,9 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
         {
             var serializationKeyAttribute = property.GetCustomAttribute<SerializationKeyAttribute>();
             if (serializationKeyAttribute is null)
+            {
                 continue;
+            }
 
             keymap.Add(serializationKeyAttribute.Key, property);
 
@@ -244,7 +250,9 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
             {
                 Type converterType = converterAttribute.ConverterType;
                 if (Activator.CreateInstance(converterType) is ValueConverter converter)
+                {
                     converterMap.Add(serializationKeyAttribute.Key, converter);
+                }
             }
         }
 #pragma warning restore 612

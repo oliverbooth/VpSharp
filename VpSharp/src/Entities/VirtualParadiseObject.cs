@@ -77,13 +77,21 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
 
         ValueTask SendBegin()
         {
-            lock (Client.Lock) vp_object_bump_begin(Client.NativeInstanceHandle, Id, session);
+            lock (Client.Lock)
+            {
+                vp_object_bump_begin(Client.NativeInstanceHandle, Id, session);
+            }
+
             return ValueTask.CompletedTask;
         }
 
         ValueTask SendEnd()
         {
-            lock (Client.Lock) vp_object_bump_end(Client.NativeInstanceHandle, Id, session);
+            lock (Client.Lock)
+            {
+                vp_object_bump_end(Client.NativeInstanceHandle, Id, session);
+            }
+
             return ValueTask.CompletedTask;
         }
 
@@ -115,7 +123,9 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     public Task ClickAsync(Vector3d? position = null, VirtualParadiseAvatar? target = null)
     {
         if (target == Client.CurrentAvatar)
+        {
             ThrowHelper.ThrowCannotUseSelfException();
+        }
 
         lock (Client.Lock)
         {
@@ -159,17 +169,37 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <returns><see langword="true" /> if the two objects are equal; otherwise, <see langword="false" />.</returns>
     public bool Equals(VirtualParadiseObject? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return Location.World.Equals(other.Location.World) && Id == other.Id;
     }
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != GetType()) return false;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj.GetType() != GetType())
+        {
+            return false;
+        }
+
         return Equals((VirtualParadiseObject) obj);
     }
 

@@ -70,11 +70,15 @@ internal static class SpanExtensions
             {
                 buffer.Append(current);
                 if (index < value.Length - 1)
+                {
                     continue;
+                }
             }
 
             if (current != ' ')
+            {
                 continue;
+            }
 
             ReadOnlySpan<byte> span = buffer.AsSpan();
             var floatValue = span.ToSingle();
@@ -111,11 +115,15 @@ internal static class SpanExtensions
             {
                 buffer.Append(current);
                 if (index < value.Length - 1)
+                {
                     continue;
+                }
             }
 
             if (current != ' ')
+            {
                 continue;
+            }
 
             ReadOnlySpan<byte> span = buffer.AsSpan();
             var floatValue = span.ToSingle();
@@ -155,11 +163,15 @@ internal static class SpanExtensions
             {
                 buffer.Append(current);
                 if (index < value.Length - 1)
+                {
                     continue;
+                }
             }
 
             if (current != ' ')
+            {
                 continue;
+            }
 
             ReadOnlySpan<byte> span = buffer.AsSpan();
             var floatValue = span.ToDouble();
@@ -200,11 +212,15 @@ internal static class SpanExtensions
             {
                 buffer.Append(current);
                 if (index < value.Length - 1)
+                {
                     continue;
+                }
             }
 
             if (current != ' ')
+            {
                 continue;
+            }
 
             ReadOnlySpan<byte> span = buffer.AsSpan();
             var floatValue = span.ToSingle();

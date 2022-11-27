@@ -60,7 +60,11 @@ internal class Connection
         GCHandle handle = GCHandle.FromIntPtr(ptr);
         var connection = handle.Target as Connection;
         string host = Marshal.PtrToStringAnsi(hostPtr);
-        if (connection is not null) return connection.Connect(host, port);
+        if (connection is not null)
+        {
+            return connection.Connect(host, port);
+        }
+
         return 0;
     }
 
@@ -83,7 +87,10 @@ internal class Connection
 
     private void HandleTimeout()
     {
-        if (_timer != null) Notify(NetworkNotification.Timeout, 0);
+        if (_timer != null)
+        {
+            Notify(NetworkNotification.Timeout, 0);
+        }
     }
 
     private static void HandleTimeout(object state)
@@ -96,13 +103,18 @@ internal class Connection
         lock (_lockObject)
         {
             if (_vpConnection != IntPtr.Zero)
+            {
                 Native.vp_net_notify(_vpConnection, (int) notification, rc);
+            }
         }
     }
 
     public int Receive(IntPtr data, uint length)
     {
-        if (_readyBuffers.Count == 0) return (int) NetworkReturnCode.WouldBlock;
+        if (_readyBuffers.Count == 0)
+        {
+            return (int) NetworkReturnCode.WouldBlock;
+        }
 
         var spaceLeft = (int) length;
         IntPtr destination = data;
@@ -134,7 +146,11 @@ internal class Connection
 
     private static void ReceiveCallback(IAsyncResult ar)
     {
-        if (ar.AsyncState is not Connection connection) return;
+        if (ar.AsyncState is not Connection connection)
+        {
+            return;
+        }
+
         int bytesRead;
 
         try
@@ -176,14 +192,18 @@ internal class Connection
                 }
             }
             else
+            {
                 connection.Notify(NetworkNotification.Disconnect, 0);
+            }
         }
     }
 
     public static int ReceiveNative(IntPtr ptr, IntPtr data, uint length)
     {
         if (GCHandle.FromIntPtr(ptr).Target is Connection connection)
+        {
             return connection.Receive(data, length);
+        }
 
         return 0;
     }
@@ -205,7 +225,9 @@ internal class Connection
     public static int SendNative(IntPtr ptr, IntPtr data, uint length)
     {
         if (GCHandle.FromIntPtr(ptr).Target is Connection connection)
+        {
             return connection.Send(data, length);
+        }
 
         return 0;
     }
@@ -213,9 +235,13 @@ internal class Connection
     public int Timeout(int seconds)
     {
         if (seconds < 0)
+        {
             _timer = null;
+        }
         else
+        {
             _timer = new Timer(HandleTimeout, this, seconds * 1000, global::System.Threading.Timeout.Infinite);
+        }
 
         return 0;
     }
@@ -223,7 +249,9 @@ internal class Connection
     public static int TimeoutNative(IntPtr ptr, int seconds)
     {
         if (GCHandle.FromIntPtr(ptr).Target is Connection connection)
+        {
             return connection.Timeout(seconds);
+        }
 
         return 0;
     }

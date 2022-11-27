@@ -107,9 +107,20 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     {
         IntPtr handle = Client.NativeInstanceHandle;
 
-        if (Action is { } action) vp_string_set(handle, StringAttribute.ObjectAction, action);
-        if (Description is { } description) vp_string_set(handle, StringAttribute.ObjectDescription, description);
-        if (Model is { } model) vp_string_set(handle, StringAttribute.ObjectModel, model);
+        if (Action is { } action)
+        {
+            vp_string_set(handle, StringAttribute.ObjectAction, action);
+        }
+
+        if (Description is { } description)
+        {
+            vp_string_set(handle, StringAttribute.ObjectDescription, description);
+        }
+
+        if (Model is { } model)
+        {
+            vp_string_set(handle, StringAttribute.ObjectModel, model);
+        }
 
         if (Position is { } position)
         {
@@ -147,7 +158,9 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
         if (ModificationTimestamp is { } modificationTimestamp)
         {
             if (Mode != ObjectBuilderMode.Load)
+            {
                 throw new InvalidOperationException("Modification timestamp can only be assigned during an object load.");
+            }
 
             vp_int_set(handle, IntegerAttribute.ObjectTime, (int) modificationTimestamp.ToUnixTimeSeconds());
         }
@@ -155,7 +168,9 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
         if (Owner is { } owner)
         {
             if (Mode != ObjectBuilderMode.Load)
+            {
                 throw new InvalidOperationException("Owner can only be assigned during an object load.");
+            }
 
             vp_int_set(handle, IntegerAttribute.ObjectUserId, owner.Id);
         }

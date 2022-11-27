@@ -89,8 +89,16 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     /// </returns>
     public bool Equals(VirtualParadiseWorld? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         return IsNowhere == other.IsNowhere && Name == other.Name;
     }
 

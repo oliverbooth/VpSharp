@@ -67,7 +67,9 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     public Vector3d(ReadOnlySpan<double> values)
     {
         if (values.Length < 3)
+        {
             throw new IndexOutOfRangeException("The specified span has an insufficient number of elements.");
+        }
 
         this = Unsafe.ReadUnaligned<Vector3d>(ref Unsafe.As<double, byte>(ref MemoryMarshal.GetReference(values)));
     }
@@ -428,13 +430,19 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     public readonly void CopyTo(double[] array, int index = 0)
     {
         if (array is null)
+        {
             throw new ArgumentNullException(nameof(array));
+        }
 
         if (index < 0 || index >= array.Length)
+        {
             throw new ArgumentOutOfRangeException(nameof(index), "Specified index was out of the bounds of the array.");
+        }
 
         if (array.Length - index < 3)
+        {
             throw new ArgumentException("The number of elements in source vector is greater than the destination array.");
+        }
 
         array[index] = X;
         array[index + 1] = Y;

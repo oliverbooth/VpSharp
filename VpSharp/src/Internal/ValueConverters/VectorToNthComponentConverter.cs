@@ -24,13 +24,19 @@ internal sealed class VectorToNthComponentConverter : ValueConverter<float>
             int readChar = reader.Read();
 
             if (readChar == -1)
+            {
                 break;
+            }
 
             var currentChar = (char) readChar;
             if (currentChar == ' ')
+            {
                 spaceCount++;
+            }
             else if (spaceCount == _componentNumber - 1)
+            {
                 builder.Append(currentChar);
+            }
         }
 
         result = builder.AsSpan().ToSingle();

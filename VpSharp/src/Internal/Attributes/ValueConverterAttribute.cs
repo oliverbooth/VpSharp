@@ -17,13 +17,19 @@ internal sealed class ValueConverterAttribute : Attribute
     public ValueConverterAttribute(Type converterType, params object?[]? args)
     {
         if (converterType is null)
+        {
             throw new ArgumentNullException(nameof(converterType));
+        }
 
         if (converterType.IsAbstract)
+        {
             throw new ArgumentException("Cannot use abstract converter.");
+        }
 
         if (!converterType.IsSubclassOf(typeof(ValueConverter)))
+        {
             throw new ArgumentException($"Converter does not inherit {typeof(ValueConverter)}");
+        }
 
         ConverterType = converterType;
         Args = args;

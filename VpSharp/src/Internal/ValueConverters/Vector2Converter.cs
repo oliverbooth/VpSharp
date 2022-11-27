@@ -18,10 +18,14 @@ internal sealed class Vector2Converter : ValueConverter<Vector2>
 
             var currentChar = (char) readChar;
             if (currentChar == ' ')
+            {
                 spaceCount++;
+            }
 
             if (spaceCount < 2 && readChar != -1)
+            {
                 continue;
+            }
 
             result = builder.AsSpan().ToVector2();
             break;

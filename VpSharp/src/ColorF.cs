@@ -116,10 +116,25 @@ public readonly struct ColorF : IEquatable<ColorF>
     /// </exception>
     public static ColorF FromArgb(float a, float r, float g, float b)
     {
-        if (a is < 0 or > 1) throw ThrowHelper.ZeroThroughOneException(nameof(a));
-        if (r is < 0 or > 1) throw ThrowHelper.ZeroThroughOneException(nameof(r));
-        if (g is < 0 or > 1) throw ThrowHelper.ZeroThroughOneException(nameof(g));
-        if (b is < 0 or > 1) throw ThrowHelper.ZeroThroughOneException(nameof(b));
+        if (a is < 0 or > 1)
+        {
+            throw ThrowHelper.ZeroThroughOneException(nameof(a));
+        }
+
+        if (r is < 0 or > 1)
+        {
+            throw ThrowHelper.ZeroThroughOneException(nameof(r));
+        }
+
+        if (g is < 0 or > 1)
+        {
+            throw ThrowHelper.ZeroThroughOneException(nameof(g));
+        }
+
+        if (b is < 0 or > 1)
+        {
+            throw ThrowHelper.ZeroThroughOneException(nameof(b));
+        }
 
         return new ColorF(a, r, g, b);
     }

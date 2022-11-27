@@ -65,7 +65,9 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
     protected internal override void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
         if (virtualParadiseObject is not VirtualParadiseModelObject model)
+        {
             return;
+        }
 
         Action = model.Action;
         Description = model.Description;

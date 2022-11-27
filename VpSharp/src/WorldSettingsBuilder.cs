@@ -388,12 +388,16 @@ public sealed class WorldSettingsBuilder
             foreach ((string key, string? value) in dictionary)
             {
                 if (value is null)
+                {
                     continue;
+                }
 
                 var reason = (ReasonCode)Native.vp_world_setting_set(_client.NativeInstanceHandle, key, value, session);
 
                 if (reason == ReasonCode.NotAllowed)
+                {
                     throw new UnauthorizedAccessException("Not allowed to modify world settings.");
+                }
             }
         }
     }

@@ -14,8 +14,14 @@ public sealed class Application
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
 
-        if (string.IsNullOrWhiteSpace(version)) Version = null;
-        else Version = version;
+        if (string.IsNullOrWhiteSpace(version))
+        {
+            Version = null;
+        }
+        else
+        {
+            Version = version;
+        }
     }
 
     /// <summary>

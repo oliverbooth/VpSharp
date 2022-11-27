@@ -41,7 +41,9 @@ public sealed partial class VirtualParadiseClient
     private async void OnObjectGetNativeCallback(IntPtr sender, ReasonCode reason, int reference)
     {
         if (!_objectCompletionSources.TryGetValue(reference, out TaskCompletionSource<(ReasonCode, VirtualParadiseObject)>? taskCompletionSource))
+        {
             return;
+        }
 
         VirtualParadiseObject virtualParadiseObject = reason == ReasonCode.Success ? await ExtractObjectAsync(sender) : null;
         taskCompletionSource.SetResult((reason, virtualParadiseObject));

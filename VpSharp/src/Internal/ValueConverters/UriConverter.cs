@@ -13,6 +13,8 @@ internal sealed class UriConverter : ValueConverter<Uri>
     public override void Serialize(TextWriter writer, Uri value)
     {
         if (value is not null)
+        {
             writer.Write(value.ToString());
+        }
     }
 }

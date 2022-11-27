@@ -104,8 +104,15 @@ public abstract class FluentActionComponent
         var builder = new StringBuilder();
         builder.Append($"texture {texture}");
 
-        if (!string.IsNullOrWhiteSpace(mask)) builder.Append($" mask={mask}");
-        if (!string.IsNullOrWhiteSpace(tag)) builder.Append($" tag={tag}");
+        if (!string.IsNullOrWhiteSpace(mask))
+        {
+            builder.Append($" mask={mask}");
+        }
+
+        if (!string.IsNullOrWhiteSpace(tag))
+        {
+            builder.Append($" tag={tag}");
+        }
 
         return new FluentActionCommand(Action, Command.Texture);
     }

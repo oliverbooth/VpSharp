@@ -17,10 +17,14 @@ internal sealed class Vector4ToColorConverter : ValueConverter<ColorF>
 
             var currentChar = (char) readChar;
             if (currentChar == ' ')
+            {
                 spaceCount++;
+            }
 
             if (spaceCount < 4 && readChar != -1)
+            {
                 continue;
+            }
 
             (float x, float y, float z, float w) = builder.AsSpan().ToVector4();
             result = ColorF.FromArgb(w, x, y, z);

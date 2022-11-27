@@ -17,10 +17,14 @@ internal sealed class Vector3dConverter : ValueConverter<Vector3d>
 
             var currentChar = (char) readChar;
             if (currentChar == ' ')
+            {
                 spaceCount++;
+            }
 
             if (spaceCount < 3 && readChar != -1)
+            {
                 continue;
+            }
 
             result = builder.AsSpan().ToVector3d();
             break;

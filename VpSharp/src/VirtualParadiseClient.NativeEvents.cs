@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Channels;
@@ -167,7 +167,9 @@ public sealed partial class VirtualParadiseClient
         if (session == 0)
         {
             if (_cellChannels.TryGetValue(cell, out Channel<VirtualParadiseObject>? channel))
+            {
                 await channel.Writer.WriteAsync(virtualParadiseObject);
+            }
         }
         else
         {
@@ -201,7 +203,9 @@ public sealed partial class VirtualParadiseClient
         }
 
         if (virtualParadiseObject is not null)
+        {
             AddOrUpdateObject(virtualParadiseObject);
+        }
 
         var args = new ObjectChangedEventArgs(avatar, cachedObject, virtualParadiseObject);
         RaiseEvent(ObjectChanged, args);
@@ -277,7 +281,9 @@ public sealed partial class VirtualParadiseClient
         }
 
         if (_worldListChannel is not null)
+        {
             await _worldListChannel.Writer.WriteAsync(world);
+        }
     }
 
     private void OnWorldSettingNativeEvent(IntPtr sender)
@@ -311,7 +317,10 @@ public sealed partial class VirtualParadiseClient
     private void OnWorldDisconnectNativeEvent(IntPtr sender)
     {
         DisconnectReason reason;
-        lock (Lock) reason = (DisconnectReason) vp_int(sender, IntegerAttribute.DisconnectErrorCode);
+        lock (Lock)
+        {
+            reason = (DisconnectReason) vp_int(sender, IntegerAttribute.DisconnectErrorCode);
+        }
 
         var args = new DisconnectedEventArgs(reason);
         RaiseEvent(WorldServerDisconnected, args);
@@ -320,7 +329,10 @@ public sealed partial class VirtualParadiseClient
     private void OnUniverseDisconnectNativeEvent(IntPtr sender)
     {
         DisconnectReason reason;
-        lock (Lock) reason = (DisconnectReason) vp_int(sender, IntegerAttribute.DisconnectErrorCode);
+        lock (Lock)
+        {
+            reason = (DisconnectReason) vp_int(sender, IntegerAttribute.DisconnectErrorCode);
+        }
 
         var args = new DisconnectedEventArgs(reason);
         RaiseEvent(UniverseServerDisconnected, args);
@@ -352,7 +364,9 @@ public sealed partial class VirtualParadiseClient
         }
 
         if (_usersCompletionSources.TryGetValue(userId, out TaskCompletionSource<VirtualParadiseUser>? taskCompletionSource))
+        {
             taskCompletionSource.SetResult(user);
+        }
     }
 
     private void OnQueryCellEndNativeEvent(IntPtr sender)
@@ -368,7 +382,9 @@ public sealed partial class VirtualParadiseClient
         }
 
         if (_cellChannels.TryRemove(cell, out Channel<VirtualParadiseObject>? channel))
+        {
             channel.Writer.TryComplete();
+        }
     }
 
     private void OnAvatarClickNativeEvent(IntPtr sender)
@@ -456,7 +472,9 @@ public sealed partial class VirtualParadiseClient
         }
 
         if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+        {
             return;
+        }
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
         var uri = new Uri(url);

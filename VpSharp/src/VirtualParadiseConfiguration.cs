@@ -19,10 +19,15 @@ public sealed class VirtualParadiseConfiguration
     /// <param name="configuration">The configuration to copy.</param>
     public VirtualParadiseConfiguration(VirtualParadiseConfiguration configuration)
     {
-        if (configuration is null) throw new ArgumentNullException(nameof(configuration));
+        if (configuration is null)
+        {
+            throw new ArgumentNullException(nameof(configuration));
+        }
 
         if (configuration.Application is ({ } name, { } version))
+        {
             Application = new Application(name, version);
+        }
 
         AutoQuery = configuration.AutoQuery;
         BotName = new string(configuration.BotName);
