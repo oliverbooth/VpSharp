@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Channels;
+using VpSharp.ClientExtensions;
 using VpSharp.Entities;
 using VpSharp.EventData;
 using VpSharp.Internal;
@@ -79,6 +80,11 @@ public sealed partial class VirtualParadiseClient
 
         var args = new MessageReceivedEventArgs(message);
         RaiseEvent(MessageReceived, args);
+        
+        foreach (VirtualParadiseClientExtension extension in _extensions)
+        {
+            extension.OnMessageReceived(args);
+        }
     }
 
     private async void OnAvatarAddNativeEvent(IntPtr sender)
