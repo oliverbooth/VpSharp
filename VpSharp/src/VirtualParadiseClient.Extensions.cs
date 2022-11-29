@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using VpSharp.ClientExtensions;
@@ -7,6 +8,15 @@ namespace VpSharp;
 public sealed partial class VirtualParadiseClient
 {
     private readonly List<VirtualParadiseClientExtension> _extensions = new();
+
+    /// <summary>
+    ///     Gets a read-only view of the extensions currently added to this client.
+    /// </summary>
+    /// <value>A read-only view of the extensions.</value>
+    public IReadOnlyList<VirtualParadiseClientExtension> Extensions
+    {
+        get => _extensions.AsReadOnly();
+    }
 
     /// <summary>
     ///     Adds an extension to this client.
@@ -64,5 +74,75 @@ public sealed partial class VirtualParadiseClient
 
         _extensions.Add(extension);
         return extension;
+    }
+
+    /// <summary>
+    ///     Gets the extension whose type matches a specified type.
+    /// </summary>
+    /// <param name="type">The type of the extension to get.</param>
+    /// <returns>The extension instance whose type matches <paramref name="type" />.</returns>
+    /// <exception cref="InvalidOperationException">No extension with the specified type is added to this client.</exception>
+    public VirtualParadiseClientExtension GetExtension(Type type)
+    {
+        ArgumentNullException.ThrowIfNull(type);
+
+        VirtualParadiseClientExtension? result = _extensions.Find(e => e.GetType() == type);
+        if (result is null)
+        {
+            throw new InvalidOperationException($"No extension with the type {type} is added to this client.");
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Gets the extension whose type matches a specified type.
+    /// </summary>
+    /// <typeparam name="T">The type of the extension to get.</typeparam>
+    /// <returns>The extension instance whose type matches <typeparamref name="T" />.</returns>
+    /// <exception cref="InvalidOperationException">No extension with the specified type is added to this client.</exception>
+    public T GetExtension<T>() where T : VirtualParadiseClientExtension
+    {
+        var result = _extensions.Find(e => e.GetType() == typeof(T)) as T;
+        if (result is null)
+        {
+            throw new InvalidOperationException($"No extension with the type {typeof(T)} is added to this client.");
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    ///     Attempts to get the extension whose type matches a specified type.
+    /// </summary>
+    /// <param name="type">The type of the extension to get.</param>
+    /// <param name="extension">
+    ///     When this method returns, contains the extension instance whose type matches <paramref name="type" />, or
+    ///     <see langword="null" /> if no such extension exists.
+    /// </param>
+    /// <returns><see langword="true" /> if a matching extension was found; otherwise, <see langword="false" />.</returns>
+    /// <exception cref="InvalidOperationException">No extension with the specified type is added to this client.</exception>
+    public bool TryGetExtension(Type type, [NotNullWhen(true)] out VirtualParadiseClientExtension? extension)
+    {
+        ArgumentNullException.ThrowIfNull(type);
+
+        extension = _extensions.Find(e => e.GetType() == type);
+        return extension is not null;
+    }
+
+    /// <summary>
+    ///     Attempts to get the extension whose type matches a specified type.
+    /// </summary>
+    /// <typeparam name="T">The type of the extension to get.</typeparam>
+    /// <param name="extension">
+    ///     When this method returns, contains the extension instance whose type matches <paramref name="type" />, or
+    ///     <see langword="null" /> if no such extension exists.
+    /// </param>
+    /// <returns><see langword="true" /> if a matching extension was found; otherwise, <see langword="false" />.</returns>
+    /// <exception cref="InvalidOperationException">No extension with the specified type is added to this client.</exception>
+    public bool TryGetExtension<T>([NotNullWhen(true)] out T? extension) where T : VirtualParadiseClientExtension
+    {
+        extension = _extensions.Find(e => e.GetType() == typeof(T)) as T;
+        return extension is not null;
     }
 }
