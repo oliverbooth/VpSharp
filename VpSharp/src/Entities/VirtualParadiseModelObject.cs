@@ -1,4 +1,4 @@
-using VpSharp.Internal;
+﻿using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using static VpSharp.Internal.Native;
 
@@ -54,10 +54,10 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
         lock (Client.Lock)
         {
             IntPtr handle = Client.NativeInstanceHandle;
-            vp_int_set(handle, IntegerAttribute.ObjectId, Id);
+            _ = vp_int_set(handle, IntegerAttribute.ObjectId, Id);
             builder.ApplyChanges();
 
-            vp_object_change(handle);
+            _ = vp_object_change(handle);
         }
     }
 

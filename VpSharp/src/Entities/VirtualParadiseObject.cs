@@ -86,7 +86,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         {
             lock (Client.Lock)
             {
-                vp_object_bump_begin(Client.NativeInstanceHandle, Id, session);
+                _ = vp_object_bump_begin(Client.NativeInstanceHandle, Id, session);
             }
 
             return ValueTask.CompletedTask;
@@ -96,7 +96,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         {
             lock (Client.Lock)
             {
-                vp_object_bump_end(Client.NativeInstanceHandle, Id, session);
+                _ = vp_object_bump_end(Client.NativeInstanceHandle, Id, session);
             }
 
             return ValueTask.CompletedTask;
@@ -139,7 +139,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
             int session = target?.Session ?? 0;
             (float x, float y, float z) = (Vector3) (position ?? Vector3d.Zero);
 
-            vp_object_click(Client.NativeInstanceHandle, Id, session, x, y, z);
+            _ = vp_object_click(Client.NativeInstanceHandle, Id, session, x, y, z);
         }
 
         return Task.CompletedTask;
