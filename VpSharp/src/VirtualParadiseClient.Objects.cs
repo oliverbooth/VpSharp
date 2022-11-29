@@ -88,7 +88,7 @@ public sealed partial class VirtualParadiseClient
     ///     <para>An unknown error occurred retrieving the object.</para>
     /// </exception>
     /// <exception cref="ObjectNotFoundException">No object with the ID <paramref name="id" /> was found.</exception>
-    public async ValueTask<VirtualParadiseObject> GetObjectAsync(int id)
+    public async Task<VirtualParadiseObject> GetObjectAsync(int id)
     {
         if (_objects.TryGetValue(id, out VirtualParadiseObject? virtualParadiseObject))
         {

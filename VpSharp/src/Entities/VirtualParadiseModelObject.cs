@@ -44,7 +44,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
     ///     -or-
     ///     <para><see cref="VirtualParadiseModelObjectBuilder.Owner" /> was assigned.</para>
     /// </exception>
-    public async ValueTask ModifyAsync(Action<VirtualParadiseModelObjectBuilder> action)
+    public async Task ModifyAsync(Action<VirtualParadiseModelObjectBuilder> action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
