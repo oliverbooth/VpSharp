@@ -1,4 +1,4 @@
-namespace VpSharp;
+﻿namespace VpSharp;
 
 /// <summary>
 ///     Represents a set of coordinates.
@@ -79,11 +79,27 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>
     /// <value>The Z coordinate.</value>
     public double Z { get; init; }
 
-    public static bool operator ==(Coordinates left, Coordinates right) =>
-        left.Equals(right);
+    /// <summary>
+    ///     Returns a value indicating whether two instances of <see cref="Coordinates" /> are equal.
+    /// </summary>
+    /// <param name="left">The first instance.</param>
+    /// <param name="right">The second instance.</param>
+    /// <returns><see langword="true" /> if the two instances are equal; otherwise, <see langword="false" />.</returns>
+    public static bool operator ==(in Coordinates left, in Coordinates right)
+    {
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(Coordinates left, Coordinates right) =>
-        !(left == right);
+    /// <summary>
+    ///     Returns a value indicating whether two instances of <see cref="Coordinates" /> are not equal.
+    /// </summary>
+    /// <param name="left">The first instance.</param>
+    /// <param name="right">The second instance.</param>
+    /// <returns><see langword="true" /> if the two instances are not equal; otherwise, <see langword="false" />.</returns>
+    public static bool operator !=(in Coordinates left, in Coordinates right)
+    {
+        return !(left == right);
+    }
 
     /// <summary>
     ///     Parses a coordinate string.
@@ -110,7 +126,7 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>
                Z.Equals(other.Z) &&
                Yaw.Equals(other.Yaw) &&
                IsRelative.Equals(other.IsRelative) &&
-               string.Equals(World, other.World);
+               string.Equals(World, other.World, StringComparison.Ordinal);
     }
 
     /// <inheritdoc />
