@@ -11,9 +11,10 @@ public abstract class VirtualParadiseClientExtension
     ///     Initializes a new instance of the <see cref="VirtualParadiseClientExtension" /> class.
     /// </summary>
     /// <param name="client">The owning client.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     protected VirtualParadiseClientExtension(VirtualParadiseClient client)
     {
-        Client = client;
+        Client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
     /// <summary>

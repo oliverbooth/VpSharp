@@ -22,7 +22,9 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     /// </summary>
     /// <param name="client">The owning client.</param>
     /// <param name="configuration">The configuration to use.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="configuration" /> is <see langword="null" />.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     <paramref name="client" /> or <paramref name="configuration" /> is <see langword="null" />.
+    /// </exception>
     public CommandsExtension(VirtualParadiseClient client, CommandsExtensionConfiguration configuration)
         : base(client)
     {
