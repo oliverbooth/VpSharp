@@ -2,10 +2,21 @@
 
     <PropertyGroup>
         <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+        <LangVersion>10.0</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <VersionPrefix>0.1.0</VersionPrefix>
+        <Authors>Oliver Booth</Authors>
+        <NeutralLanguage>en</NeutralLanguage>
+        <RepositoryUrl>https://github.com/oliverbooth/VpSharp</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <Description>A modern Virtual Paradise SDK wrapper for .NET</Description>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageIconUrl/>
+        <PackageTags>bot wrapper sdk dotnet wrapper-api wrapper-library virtual-paradise</PackageTags>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(VersionSuffix)' != '' And '$(BuildNumber)' == ''">
