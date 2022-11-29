@@ -30,23 +30,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-        <PackageReference Include="ZString" Version="2.5.0" />
+        <PackageReference Include="System.Drawing.Common" Version="7.0.0"/>
+        <PackageReference Include="X10D" Version="3.2.0-nightly.136"/>
+        <PackageReference Include="ZString" Version="2.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="res\ExceptionMessages.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="res\ExceptionMessages.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="res\ExceptionMessages.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>ExceptionMessages.resx</DependentUpon>
-      </Compile>
+        <Compile Update="res\ExceptionMessages.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ExceptionMessages.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>
