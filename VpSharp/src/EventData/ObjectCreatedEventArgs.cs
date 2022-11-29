@@ -11,11 +11,11 @@ public sealed class ObjectCreatedEventArgs : EventArgs
     ///     Initializes a new instance of the <see cref="ObjectClickedEventArgs" /> class.
     /// </summary>
     /// <param name="avatar">The avatar responsible for the object being created.</param>
-    /// <param name="virtualParadiseObject">The created object.</param>
-    public ObjectCreatedEventArgs(VirtualParadiseAvatar avatar, VirtualParadiseObject virtualParadiseObject)
+    /// <param name="createdObject">The created object.</param>
+    public ObjectCreatedEventArgs(VirtualParadiseAvatar avatar, VirtualParadiseObject createdObject)
     {
         Avatar = avatar;
-        Object = virtualParadiseObject;
+        CreatedObject = createdObject;
     }
 
     /// <summary>
@@ -28,5 +28,5 @@ public sealed class ObjectCreatedEventArgs : EventArgs
     ///     Gets the object which was created.
     /// </summary>
     /// <value>The object which was created.</value>
-    public VirtualParadiseObject Object { get; }
+    public VirtualParadiseObject CreatedObject { get; }
 }

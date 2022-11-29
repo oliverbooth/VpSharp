@@ -11,12 +11,12 @@ public sealed class ObjectBumpEventArgs : EventArgs
     ///     Initializes a new instance of the <see cref="ObjectBumpEventArgs" /> class.
     /// </summary>
     /// <param name="avatar">The avatar.</param>
-    /// <param name="virtualParadiseObject">The object.</param>
+    /// <param name="bumpedObject">The bumped object.</param>
     /// <param name="phase">The bump phase.</param>
-    public ObjectBumpEventArgs(VirtualParadiseAvatar avatar, VirtualParadiseObject virtualParadiseObject, BumpPhase phase)
+    public ObjectBumpEventArgs(VirtualParadiseAvatar avatar, VirtualParadiseObject bumpedObject, BumpPhase phase)
     {
         Avatar = avatar;
-        Object = virtualParadiseObject;
+        BumpedObject = bumpedObject;
         Phase = phase;
     }
 
@@ -30,7 +30,7 @@ public sealed class ObjectBumpEventArgs : EventArgs
     ///     Gets the object to which this event pertains.
     /// </summary>
     /// <value>The object to which this event pertains.</value>
-    public VirtualParadiseObject Object { get; }
+    public VirtualParadiseObject BumpedObject { get; }
 
     /// <summary>
     ///     Gets the bump phase.

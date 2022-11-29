@@ -12,14 +12,14 @@ public sealed class ObjectChangedEventArgs : EventArgs
     /// </summary>
     /// <param name="avatar">The avatar which changed the object.</param>
     /// <param name="objectBefore">The state of the object prior to the change.</param>
-    /// <param name="virtualParadiseObject">The object which was changed, containing updated values.</param>
+    /// <param name="objectAfter">The object which was changed, containing updated values.</param>
     public ObjectChangedEventArgs(
         VirtualParadiseAvatar avatar,
-        VirtualParadiseObject objectBefore,
-        VirtualParadiseObject virtualParadiseObject)
+        VirtualParadiseObject? objectBefore,
+        VirtualParadiseObject objectAfter)
     {
         Avatar = avatar;
-        Object = virtualParadiseObject;
+        ObjectAfter = objectAfter;
         ObjectBefore = objectBefore;
     }
 
@@ -34,7 +34,7 @@ public sealed class ObjectChangedEventArgs : EventArgs
     /// </summary>
     /// <value>The object which was changed.</value>
     /// <remarks>This instance will contain the updated values of the object.</remarks>
-    public VirtualParadiseObject Object { get; }
+    public VirtualParadiseObject ObjectAfter { get; }
 
     /// <summary>
     ///     Gets the state of the object prior to the change.
@@ -43,5 +43,5 @@ public sealed class ObjectChangedEventArgs : EventArgs
     ///     The state of the object prior to the change. This value may be <see langword="null" /> if the client did not
     ///     previously have the object cached.
     /// </value>
-    public VirtualParadiseObject ObjectBefore { get; }
+    public VirtualParadiseObject? ObjectBefore { get; }
 }

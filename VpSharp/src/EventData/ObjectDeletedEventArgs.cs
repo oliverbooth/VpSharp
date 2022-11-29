@@ -12,12 +12,12 @@ public sealed class ObjectDeletedEventArgs : EventArgs
     /// </summary>
     /// <param name="avatar">The avatar responsible for the object being deleted.</param>
     /// <param name="objectId">The ID of the deleted object.</param>
-    /// <param name="virtualParadiseObject">The deleted object.</param>
-    public ObjectDeletedEventArgs(VirtualParadiseAvatar avatar, int objectId, VirtualParadiseObject virtualParadiseObject)
+    /// <param name="deletedObject">The deleted object.</param>
+    public ObjectDeletedEventArgs(VirtualParadiseAvatar avatar, int objectId, VirtualParadiseObject deletedObject)
     {
         Avatar = avatar;
         ObjectId = objectId;
-        Object = virtualParadiseObject;
+        DeletedObject = deletedObject;
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public sealed class ObjectDeletedEventArgs : EventArgs
     ///     <see cref="ObjectId" /> will always be assigned.
     /// </remarks>
     /// <seealso cref="ObjectId" />
-    public VirtualParadiseObject Object { get; }
+    public VirtualParadiseObject DeletedObject { get; }
 
     /// <summary>
     ///     Gets the ID of the object which was deleted.
@@ -44,6 +44,6 @@ public sealed class ObjectDeletedEventArgs : EventArgs
     /// <remarks>
     ///     This value will always be assigned, regardless of whether or not the client had previously cached the object.
     /// </remarks>
-    /// <seealso cref="Object" />
+    /// <seealso cref="DeletedObject" />
     public int ObjectId { get; }
 }

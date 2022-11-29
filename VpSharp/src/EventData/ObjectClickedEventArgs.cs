@@ -11,15 +11,15 @@ public sealed class ObjectClickedEventArgs : EventArgs
     ///     Initializes a new instance of the <see cref="ObjectClickedEventArgs" /> class.
     /// </summary>
     /// <param name="avatar">The avatar responsible for the click.</param>
-    /// <param name="virtualParadiseObject">The clicked object.</param>
+    /// <param name="clickedObject">The clicked object.</param>
     /// <param name="clickPoint">The click point.</param>
     public ObjectClickedEventArgs(
         VirtualParadiseAvatar avatar,
-        VirtualParadiseObject virtualParadiseObject,
+        VirtualParadiseObject clickedObject,
         Vector3d clickPoint)
     {
         Avatar = avatar;
-        Object = virtualParadiseObject;
+        ClickedObject = clickedObject;
         ClickPoint = clickPoint;
     }
 
@@ -30,14 +30,14 @@ public sealed class ObjectClickedEventArgs : EventArgs
     public VirtualParadiseAvatar Avatar { get; }
 
     /// <summary>
+    ///     Gets the clicked object.
+    /// </summary>
+    /// <value>The clicked object.</value>
+    public VirtualParadiseObject ClickedObject { get; }
+
+    /// <summary>
     ///     Gets the point at which the avatar clicked the object.
     /// </summary>
     /// <value>The click point.</value>
     public Vector3d ClickPoint { get; }
-
-    /// <summary>
-    ///     Gets the clicked object.
-    /// </summary>
-    /// <value>The clicked object.</value>
-    public VirtualParadiseObject Object { get; }
 }
