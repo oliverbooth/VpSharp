@@ -1,9 +1,9 @@
-﻿namespace VpSharp;
+namespace VpSharp;
 
 /// <summary>
 ///     Represents a set of coordinates.
 /// </summary>
-public readonly partial struct Coordinates
+public readonly partial struct Coordinates : IEquatable<Coordinates>
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="Coordinates" /> struct.
