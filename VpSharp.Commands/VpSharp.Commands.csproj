@@ -4,7 +4,19 @@
         <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>10.0</LangVersion>
         <VersionPrefix>0.1.0</VersionPrefix>
+        <Authors>Oliver Booth</Authors>
+        <NeutralLanguage>en</NeutralLanguage>
+        <RepositoryUrl>https://github.com/oliverbooth/VpSharp</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <Description>A modern Virtual Paradise SDK wrapper for .NET</Description>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageIconUrl/>
+        <PackageTags>bot wrapper sdk dotnet wrapper-api wrapper-library virtual-paradise</PackageTags>
+        <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(VersionSuffix)' != '' And '$(BuildNumber)' == ''">
@@ -27,6 +39,21 @@
         <FileVersion>$(VersionPrefix).0</FileVersion>
         <PackageVersion>$(VersionPrefix)</PackageVersion>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\icon.png">
+            <Pack>True</Pack>
+            <PackagePath/>
+        </None>
+        <None Include="..\LICENSE.md">
+            <Pack>True</Pack>
+            <PackagePath/>
+        </None>
+        <None Include="..\CHANGELOG.md">
+            <Pack>True</Pack>
+            <PackagePath/>
+        </None>
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\VpSharp\VpSharp.csproj"/>
