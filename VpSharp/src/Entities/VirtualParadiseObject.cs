@@ -217,6 +217,11 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         return HashCode.Combine(Location.World, Id);
     }
 
+    /// <summary>
+    ///     Copies the properties from another object into this object.
+    /// </summary>
+    /// <param name="virtualParadiseObject">The object to copy.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="virtualParadiseObject" /> is <see langword="null" />.</exception>
     protected internal virtual void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
         ArgumentNullException.ThrowIfNull(virtualParadiseObject);
@@ -224,6 +229,10 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         Owner = virtualParadiseObject.Owner;
     }
 
+    /// <summary>
+    ///     Extracts the properties of an object from the current buffer held by an instance.
+    /// </summary>
+    /// <param name="handle">The native SDK instance.</param>
     protected internal virtual void ExtractFromInstance(nint handle)
     {
         var data = Span<byte>.Empty;
@@ -240,6 +249,10 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         ExtractFromData(data);
     }
 
+    /// <summary>
+    ///     Extracts the properties of an object from the specified span of bytes.
+    /// </summary>
+    /// <param name="data">A span of bytes containing the object data.</param>
     protected virtual void ExtractFromData(ReadOnlySpan<byte> data)
     {
     }
