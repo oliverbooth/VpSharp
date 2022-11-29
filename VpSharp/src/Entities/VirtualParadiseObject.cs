@@ -105,16 +105,16 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         switch (phase)
         {
             case BumpPhase.Begin:
-                await SendBegin().ConfigureAwait(true);
+                await SendBegin().ConfigureAwait(false);
                 break;
 
             case BumpPhase.End:
-                await SendEnd().ConfigureAwait(true);
+                await SendEnd().ConfigureAwait(false);
                 break;
 
             case null:
-                await SendBegin().ConfigureAwait(true);
-                await SendEnd().ConfigureAwait(true);
+                await SendBegin().ConfigureAwait(false);
+                await SendEnd().ConfigureAwait(false);
                 break;
         }
     }
