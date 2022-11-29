@@ -12,8 +12,15 @@ namespace VpSharp.Entities;
 /// </summary>
 public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="VirtualParadiseObject" /> class.
+    /// </summary>
+    /// <param name="client">The owning client.</param>
+    /// <param name="id">The object ID.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     protected internal VirtualParadiseObject(VirtualParadiseClient client, int id)
     {
+        ArgumentNullException.ThrowIfNull(client);
         Client = client;
         Id = id;
     }
@@ -212,6 +219,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
 
     protected internal virtual void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
+        ArgumentNullException.ThrowIfNull(virtualParadiseObject);
         Location = virtualParadiseObject.Location;
         Owner = virtualParadiseObject.Owner;
     }
