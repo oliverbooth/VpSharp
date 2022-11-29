@@ -6,11 +6,16 @@
 public sealed class WorldNotFoundException : Exception
 {
     /// <inheritdoc />
+    public WorldNotFoundException()
+    {
+    }
+
+    /// <inheritdoc />
     public WorldNotFoundException(string worldName)
         : base($"No world with the name {worldName} was found.")
     {
     }
-        
+
     /// <inheritdoc />
     public WorldNotFoundException(string worldName, Exception innerException)
         : base($"No world with the name {worldName} was found.", innerException)
