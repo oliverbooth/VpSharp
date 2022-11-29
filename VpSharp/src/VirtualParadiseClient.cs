@@ -115,7 +115,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        reason = await _connectCompletionSource.Task;
+        reason = await _connectCompletionSource.Task.ConfigureAwait(false);
 
         NoSuccess:
         switch (reason)
@@ -187,8 +187,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position)
     {
-        await EnterAsync(worldName);
-        await CurrentAvatar!.TeleportAsync(position, Quaternion.Identity);
+        await EnterAsync(worldName).ConfigureAwait(false);
+        await CurrentAvatar!.TeleportAsync(position, Quaternion.Identity).ConfigureAwait(false);
         return CurrentWorld!;
     }
 
@@ -207,8 +207,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position, Quaternion rotation)
     {
-        await EnterAsync(worldName);
-        await CurrentAvatar!.TeleportAsync(position, rotation);
+        await EnterAsync(worldName).ConfigureAwait(false);
+        await CurrentAvatar!.TeleportAsync(position, rotation).ConfigureAwait(false);
         return CurrentWorld!;
     }
 
@@ -226,8 +226,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position)
     {
-        await EnterAsync(world);
-        await CurrentAvatar!.TeleportAsync(position, Quaternion.Identity);
+        await EnterAsync(world).ConfigureAwait(false);
+        await CurrentAvatar!.TeleportAsync(position, Quaternion.Identity).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -245,8 +245,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position, Quaternion rotation)
     {
-        await EnterAsync(world);
-        await CurrentAvatar!.TeleportAsync(position, rotation);
+        await EnterAsync(world).ConfigureAwait(false);
+        await CurrentAvatar!.TeleportAsync(position, rotation).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -263,7 +263,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     public async Task EnterAsync(VirtualParadiseWorld world)
     {
         ArgumentNullException.ThrowIfNull(world);
-        await EnterAsync(world.Name);
+        await EnterAsync(world.Name).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -305,7 +305,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        reason = await _enterCompletionSource.Task;
+        reason = await _enterCompletionSource.Task.ConfigureAwait(false);
 
         NoSuccess:
         switch (reason)
@@ -341,9 +341,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
             size = vp_int(NativeInstanceHandle, IntegerAttribute.WorldSize);
         }
 
-        await _worldSettingsCompletionSource.Task;
+        await _worldSettingsCompletionSource.Task.ConfigureAwait(false);
 
-        VirtualParadiseWorld? world = await GetWorldAsync(worldName);
+        VirtualParadiseWorld? world = await GetWorldAsync(worldName).ConfigureAwait(false);
         if (world is null)
         {
             // we entered the world but it wasn't listed. unlisted world. we'll try our best to create details for it
@@ -496,7 +496,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        reason = await _loginCompletionSource.Task;
+        reason = await _loginCompletionSource.Task.ConfigureAwait(false);
         NoSuccess:
         switch (reason)
         {
@@ -520,7 +520,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             userId = vp_int(NativeInstanceHandle, IntegerAttribute.MyUserId);
         }
 
-        CurrentUser = await GetUserAsync(userId);
+        CurrentUser = await GetUserAsync(userId).ConfigureAwait(false);
         vp_friends_get(NativeInstanceHandle);
     }
 

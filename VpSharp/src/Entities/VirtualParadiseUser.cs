@@ -150,7 +150,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             vp_invite(_client.NativeInstanceHandle, Id, world, x, y, z, (float) yaw, (float) pitch);
         }
 
-        ReasonCode reason = await taskCompletionSource.Task;
+        ReasonCode reason = await taskCompletionSource.Task.ConfigureAwait(false);
         return reason switch
         {
             ReasonCode.Success => InviteResponse.Accepted,
@@ -194,7 +194,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             taskCompletionSource = _client.AddJoinCompletionSource(reference);
         }
 
-        ReasonCode reason = await taskCompletionSource.Task;
+        ReasonCode reason = await taskCompletionSource.Task.ConfigureAwait(false);
         Location? location = null;
 
         if (reason == ReasonCode.Success)
@@ -217,13 +217,13 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
 
             var position = new Vector3d(x, y, z);
             var rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);
-            VirtualParadiseWorld world = (await _client.GetWorldAsync(worldName))!;
+            VirtualParadiseWorld world = (await _client.GetWorldAsync(worldName).ConfigureAwait(false))!;
 
             location = new Location(world, position, rotation);
 
             if (!suppressTeleport)
             {
-                await avatar.TeleportAsync(location.Value);
+                await avatar.TeleportAsync(location.Value).ConfigureAwait(false);
             }
         }
 

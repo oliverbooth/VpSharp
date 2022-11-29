@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Numerics;
 using VpSharp.Extensions;
 using VpSharp.Internal;
@@ -334,7 +334,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 
         if (isSelf && isNewWorld)
         {
-            await _client.EnterAsync(world);
+            await _client.EnterAsync(world).ConfigureAwait(false);
         }
 
         nint handle = _client.NativeInstanceHandle;
@@ -343,7 +343,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
         {
             if (!string.IsNullOrWhiteSpace(world))
             {
-                await _client.EnterAsync(world);
+                await _client.EnterAsync(world).ConfigureAwait(false);
             }
 
             // state change self

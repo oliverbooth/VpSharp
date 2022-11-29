@@ -126,7 +126,7 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
         ArgumentNullException.ThrowIfNull(action);
 
         var builder = new WorldSettingsBuilder(_client);
-        await Task.Run(() => action(builder));
+        await Task.Run(() => action(builder)).ConfigureAwait(false);
 
         builder.SendChanges();
     }

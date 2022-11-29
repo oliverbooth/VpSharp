@@ -91,7 +91,7 @@ public sealed partial class VirtualParadiseClient
     {
         VirtualParadiseAvatar avatar = ExtractAvatar(sender);
         avatar = AddOrUpdateAvatar(avatar);
-        avatar.User = await GetUserAsync(vp_int(sender, IntegerAttribute.UserId));
+        avatar.User = await GetUserAsync(vp_int(sender, IntegerAttribute.UserId)).ConfigureAwait(false);
 
         var args = new AvatarJoinedEventArgs(avatar);
         RaiseEvent(AvatarJoined, args);
@@ -165,7 +165,7 @@ public sealed partial class VirtualParadiseClient
             session = vp_int(sender, IntegerAttribute.AvatarSession);
         }
 
-        VirtualParadiseObject? virtualParadiseObject = await ExtractObjectAsync(sender);
+        VirtualParadiseObject? virtualParadiseObject = await ExtractObjectAsync(sender).ConfigureAwait(false);
         var cell = virtualParadiseObject.Location.Cell;
 
         virtualParadiseObject = AddOrUpdateObject(virtualParadiseObject);
@@ -174,7 +174,7 @@ public sealed partial class VirtualParadiseClient
         {
             if (_cellChannels.TryGetValue(cell, out Channel<VirtualParadiseObject>? channel))
             {
-                await channel.Writer.WriteAsync(virtualParadiseObject);
+                await channel.Writer.WriteAsync(virtualParadiseObject).ConfigureAwait(false);
             }
         }
         else
@@ -202,7 +202,7 @@ public sealed partial class VirtualParadiseClient
 
         if (_objects.TryGetValue(objectId, out VirtualParadiseObject? virtualParadiseObject))
         {
-            cachedObject = await ExtractObjectAsync(sender); // data discarded, but used to pull type
+            cachedObject = await ExtractObjectAsync(sender).ConfigureAwait(false); // data discarded, but used to pull type
             cachedObject.ExtractFromOther(virtualParadiseObject);
 
             virtualParadiseObject.ExtractFromInstance(sender); // update existing instance
@@ -233,7 +233,7 @@ public sealed partial class VirtualParadiseClient
 
         try
         {
-            virtualParadiseObject = await GetObjectAsync(objectId);
+            virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
         }
         catch // any exception: we don't care about GetObject failing. ID is always available
         {
@@ -264,7 +264,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
-        var virtualParadiseObject = await GetObjectAsync(objectId);
+        var virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
         var args = new ObjectClickedEventArgs(avatar, virtualParadiseObject, clickPoint);
         RaiseEvent(ObjectClicked, args);
     }
@@ -288,7 +288,7 @@ public sealed partial class VirtualParadiseClient
 
         if (_worldListChannel is not null)
         {
-            await _worldListChannel.Writer.WriteAsync(world);
+            await _worldListChannel.Writer.WriteAsync(world).ConfigureAwait(false);
         }
     }
 
@@ -316,7 +316,7 @@ public sealed partial class VirtualParadiseClient
             userId = vp_int(sender, IntegerAttribute.FriendUserId);
         }
 
-        VirtualParadiseUser? user = await GetUserAsync(userId);
+        VirtualParadiseUser? user = await GetUserAsync(userId).ConfigureAwait(false);
         _friends.AddOrUpdate(userId, user, (_, _) => user);
     }
 
@@ -438,7 +438,7 @@ public sealed partial class VirtualParadiseClient
             worldName = vp_string(sender, StringAttribute.TeleportWorld);
         }
 
-        VirtualParadiseWorld? world = string.IsNullOrWhiteSpace(worldName) ? CurrentWorld : await GetWorldAsync(worldName);
+        VirtualParadiseWorld? world = string.IsNullOrWhiteSpace(worldName) ? CurrentWorld : await GetWorldAsync(worldName).ConfigureAwait(false);
         var location = new Location(world, position, rotation);
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
@@ -458,7 +458,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
-        var vpObject = await GetObjectAsync(objectId);
+        var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
 
         var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.End);
         RaiseEvent(ObjectBump, args);
@@ -500,7 +500,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
-        var vpObject = await GetObjectAsync(objectId);
+        var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
 
         var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.Begin);
         RaiseEvent(ObjectBump, args);
@@ -519,7 +519,7 @@ public sealed partial class VirtualParadiseClient
             name = vp_string(NativeInstanceHandle, StringAttribute.JoinName);
         }
 
-        VirtualParadiseUser? user = await GetUserAsync(userId);
+        VirtualParadiseUser? user = await GetUserAsync(userId).ConfigureAwait(false);
         var joinRequest = new JoinRequest(this, requestId, name, user);
         var args = new JoinRequestReceivedEventArgs(joinRequest);
         RaiseEvent(JoinRequestReceived, args);
@@ -553,8 +553,8 @@ public sealed partial class VirtualParadiseClient
             worldName = vp_string(sender, StringAttribute.InviteWorld);
         }
 
-        VirtualParadiseWorld? world = await GetWorldAsync(worldName);
-        VirtualParadiseUser? user = await GetUserAsync(userId);
+        VirtualParadiseWorld? world = await GetWorldAsync(worldName).ConfigureAwait(false);
+        VirtualParadiseUser? user = await GetUserAsync(userId).ConfigureAwait(false);
 
         var location = new Location(world, position, rotation);
         var request = new InviteRequest(this, requestId, avatarName, user, location);

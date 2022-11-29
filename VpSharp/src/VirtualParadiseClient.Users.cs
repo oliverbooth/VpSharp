@@ -25,7 +25,7 @@ public sealed partial class VirtualParadiseClient
 
         if (_usersCompletionSources.TryGetValue(userId, out TaskCompletionSource<VirtualParadiseUser>? taskCompletionSource))
         {
-            return await taskCompletionSource.Task;
+            return await taskCompletionSource.Task.ConfigureAwait(false);
         }
 
         taskCompletionSource = new TaskCompletionSource<VirtualParadiseUser>();
@@ -36,7 +36,7 @@ public sealed partial class VirtualParadiseClient
             vp_user_attributes_by_id(NativeInstanceHandle, userId);
         }
 
-        user = await taskCompletionSource.Task;
+        user = await taskCompletionSource.Task.ConfigureAwait(false);
         user = AddOrUpdateUser(user);
 
         _usersCompletionSources.TryRemove(userId, out TaskCompletionSource<VirtualParadiseUser>? _);
