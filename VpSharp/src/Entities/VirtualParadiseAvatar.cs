@@ -148,7 +148,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 
         lock (_client.Lock)
         {
-            IntPtr handle = _client.NativeInstanceHandle;
+            nint handle = _client.NativeInstanceHandle;
 
             vp_double_set(handle, FloatAttribute.ClickHitX, x);
             vp_double_set(handle, FloatAttribute.ClickHitY, y);
@@ -337,7 +337,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             await _client.EnterAsync(world);
         }
 
-        IntPtr handle = _client.NativeInstanceHandle;
+        nint handle = _client.NativeInstanceHandle;
 
         if (this == _client.CurrentAvatar)
         {

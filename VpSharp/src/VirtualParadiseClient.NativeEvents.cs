@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Channels;
@@ -50,7 +50,7 @@ public sealed partial class VirtualParadiseClient
         vp_event_set(NativeInstanceHandle, nativeEvent, handler);
     }
 
-    private void OnChatNativeEvent(IntPtr sender)
+    private void OnChatNativeEvent(nint sender)
     {
         VirtualParadiseMessage message;
 
@@ -87,7 +87,7 @@ public sealed partial class VirtualParadiseClient
         }
     }
 
-    private async void OnAvatarAddNativeEvent(IntPtr sender)
+    private async void OnAvatarAddNativeEvent(nint sender)
     {
         VirtualParadiseAvatar avatar = ExtractAvatar(sender);
         avatar = AddOrUpdateAvatar(avatar);
@@ -97,7 +97,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(AvatarJoined, args);
     }
 
-    private void OnAvatarChangeNativeEvent(IntPtr sender)
+    private void OnAvatarChangeNativeEvent(nint sender)
     {
         int session;
         int type;
@@ -140,7 +140,7 @@ public sealed partial class VirtualParadiseClient
         }
     }
 
-    private void OnAvatarDeleteNativeEvent(IntPtr sender)
+    private void OnAvatarDeleteNativeEvent(nint sender)
     {
         int session;
 
@@ -156,7 +156,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(AvatarLeft, args);
     }
 
-    private async void OnObjectNativeEvent(IntPtr sender)
+    private async void OnObjectNativeEvent(nint sender)
     {
         int session;
 
@@ -185,7 +185,7 @@ public sealed partial class VirtualParadiseClient
         }
     }
 
-    private async void OnObjectChangeNativeEvent(IntPtr sender)
+    private async void OnObjectChangeNativeEvent(nint sender)
     {
         int objectId;
         int session;
@@ -217,7 +217,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(ObjectChanged, args);
     }
 
-    private async void OnObjectDeleteNativeEvent(IntPtr sender)
+    private async void OnObjectDeleteNativeEvent(nint sender)
     {
         int objectId;
         int session;
@@ -229,7 +229,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
-        VirtualParadiseObject virtualParadiseObject;
+        VirtualParadiseObject? virtualParadiseObject;
 
         try
         {
@@ -240,13 +240,13 @@ public sealed partial class VirtualParadiseClient
             virtualParadiseObject = null;
         }
 
-        _objects.TryRemove(objectId, out VirtualParadiseObject _);
+        _objects.TryRemove(objectId, out VirtualParadiseObject? _);
 
-        var args = new ObjectDeletedEventArgs(avatar, objectId, virtualParadiseObject);
+        var args = new ObjectDeletedEventArgs(avatar!, objectId, virtualParadiseObject!);
         RaiseEvent(ObjectDeleted, args);
     }
 
-    private async void OnObjectClickNativeEvent(IntPtr sender)
+    private async void OnObjectClickNativeEvent(nint sender)
     {
         Vector3d clickPoint;
         int objectId;
@@ -269,7 +269,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(ObjectClicked, args);
     }
 
-    private async void OnWorldListNativeEvent(IntPtr sender)
+    private async void OnWorldListNativeEvent(nint sender)
     {
         VirtualParadiseWorld world;
 
@@ -292,7 +292,7 @@ public sealed partial class VirtualParadiseClient
         }
     }
 
-    private void OnWorldSettingNativeEvent(IntPtr sender)
+    private void OnWorldSettingNativeEvent(nint sender)
     {
         lock (Lock)
         {
@@ -302,12 +302,12 @@ public sealed partial class VirtualParadiseClient
         }
     }
 
-    private void OnWorldSettingsChangedNativeEvent(IntPtr sender)
+    private void OnWorldSettingsChangedNativeEvent(nint sender)
     {
         _worldSettingsCompletionSource.SetResult();
     }
 
-    private async void OnFriendNativeEvent(IntPtr sender)
+    private async void OnFriendNativeEvent(nint sender)
     {
         int userId;
 
@@ -320,7 +320,7 @@ public sealed partial class VirtualParadiseClient
         _friends.AddOrUpdate(userId, user, (_, _) => user);
     }
 
-    private void OnWorldDisconnectNativeEvent(IntPtr sender)
+    private void OnWorldDisconnectNativeEvent(nint sender)
     {
         DisconnectReason reason;
         lock (Lock)
@@ -332,7 +332,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(WorldServerDisconnected, args);
     }
 
-    private void OnUniverseDisconnectNativeEvent(IntPtr sender)
+    private void OnUniverseDisconnectNativeEvent(nint sender)
     {
         DisconnectReason reason;
         lock (Lock)
@@ -344,7 +344,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(UniverseServerDisconnected, args);
     }
 
-    private void OnUserAttributesNativeEvent(IntPtr sender)
+    private void OnUserAttributesNativeEvent(nint sender)
     {
         int userId;
         VirtualParadiseUser user;
@@ -375,7 +375,7 @@ public sealed partial class VirtualParadiseClient
         }
     }
 
-    private void OnQueryCellEndNativeEvent(IntPtr sender)
+    private void OnQueryCellEndNativeEvent(nint sender)
     {
         Cell cell;
 
@@ -393,7 +393,7 @@ public sealed partial class VirtualParadiseClient
         }
     }
 
-    private void OnAvatarClickNativeEvent(IntPtr sender)
+    private void OnAvatarClickNativeEvent(nint sender)
     {
         int session, clickedSession;
         Vector3d clickPoint;
@@ -415,7 +415,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(AvatarClicked, args);
     }
 
-    private async void OnTeleportNativeEvent(IntPtr sender)
+    private async void OnTeleportNativeEvent(nint sender)
     {
         int session;
         string worldName;
@@ -446,7 +446,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(Teleported, args);
     }
 
-    private async void OnObjectBumpEndNativeEvent(IntPtr sender)
+    private async void OnObjectBumpEndNativeEvent(nint sender)
     {
         int session;
         int objectId;
@@ -464,7 +464,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(ObjectBump, args);
     }
 
-    private void OnUrlNativeEvent(IntPtr sender)
+    private void OnUrlNativeEvent(nint sender)
     {
         int session;
         string url;
@@ -488,7 +488,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(UriReceived, args);
     }
 
-    private async void OnObjectBumpBeginNativeEvent(IntPtr sender)
+    private async void OnObjectBumpBeginNativeEvent(nint sender)
     {
         int session;
         int objectId;
@@ -506,7 +506,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(ObjectBump, args);
     }
 
-    private async void OnJoinNativeEvent(IntPtr sender)
+    private async void OnJoinNativeEvent(nint sender)
     {
         int requestId;
         int userId;
@@ -525,7 +525,7 @@ public sealed partial class VirtualParadiseClient
         RaiseEvent(JoinRequestReceived, args);
     }
 
-    private async void OnInviteNativeEvent(IntPtr sender)
+    private async void OnInviteNativeEvent(nint sender)
     {
         Vector3d position;
         Quaternion rotation;

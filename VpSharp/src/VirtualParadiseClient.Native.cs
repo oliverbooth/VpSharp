@@ -11,7 +11,7 @@ public sealed partial class VirtualParadiseClient
 
     internal object Lock { get; } = new();
 
-    internal IntPtr NativeInstanceHandle { get; private set; }
+    internal nint NativeInstanceHandle { get; private set; }
 
     private void Initialize()
     {

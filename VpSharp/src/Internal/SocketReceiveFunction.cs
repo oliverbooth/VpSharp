@@ -3,4 +3,4 @@
 namespace VpSharp.Internal;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-internal delegate int SocketReceiveFunction(IntPtr socket, IntPtr data, uint length);
+internal delegate int SocketReceiveFunction(nint socket, nint data, uint length);

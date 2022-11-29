@@ -38,7 +38,7 @@ public sealed partial class VirtualParadiseClient
         });
     }
 
-    private VirtualParadiseAvatar ExtractAvatar(IntPtr sender)
+    private VirtualParadiseAvatar ExtractAvatar(nint sender)
     {
         lock (Lock)
         {

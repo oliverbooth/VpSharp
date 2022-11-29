@@ -182,7 +182,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
         }
 
         // ReSharper disable InconsistentlySynchronizedField
-        IntPtr handle = _client.NativeInstanceHandle;
+        nint handle = _client.NativeInstanceHandle;
         TaskCompletionSource<ReasonCode> taskCompletionSource;
 
         lock (_client.Lock)

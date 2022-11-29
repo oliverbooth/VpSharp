@@ -3,4 +3,4 @@
 namespace VpSharp.Internal;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-internal delegate int SocketWaitFunction(IntPtr context, int duration);
+internal delegate int SocketWaitFunction(nint context, int duration);

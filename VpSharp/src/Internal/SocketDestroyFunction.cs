@@ -3,4 +3,4 @@
 namespace VpSharp.Internal;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-internal delegate void SocketDestroyFunction(IntPtr socket);
+internal delegate void SocketDestroyFunction(nint socket);

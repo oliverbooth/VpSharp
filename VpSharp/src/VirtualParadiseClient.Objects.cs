@@ -146,7 +146,7 @@ public sealed partial class VirtualParadiseClient
         });
     }
 
-    private async Task<VirtualParadiseObject> ExtractObjectAsync(IntPtr sender)
+    private async Task<VirtualParadiseObject> ExtractObjectAsync(nint sender)
     {
         var type = (ObjectType) vp_int(sender, IntegerAttribute.ObjectType);
         int id = vp_int(sender, IntegerAttribute.ObjectId);

@@ -16,7 +16,7 @@ internal sealed class Utf8StringToNative : ICustomMarshaler
     {
     }
 
-    public void CleanUpNativeData(IntPtr pNativeData)
+    public void CleanUpNativeData(nint pNativeData)
     {
         Marshal.FreeHGlobal(pNativeData);
     }
@@ -26,16 +26,16 @@ internal sealed class Utf8StringToNative : ICustomMarshaler
         return -1;
     }
 
-    public IntPtr MarshalManagedToNative(object managedObj)
+    public nint MarshalManagedToNative(object managedObj)
     {
         byte[] utf8Data = Encoding.UTF8.GetBytes((string)managedObj);
-        IntPtr buffer = Marshal.AllocHGlobal(utf8Data.Length + 1);
+        nint buffer = Marshal.AllocHGlobal(utf8Data.Length + 1);
         Marshal.Copy(utf8Data, 0, buffer, utf8Data.Length);
         Marshal.WriteByte(buffer, utf8Data.Length, 0);
         return buffer;
     }
 
-    public object MarshalNativeToManaged(IntPtr pNativeData)
+    public object MarshalNativeToManaged(nint pNativeData)
     {
         throw new NotImplementedException();
     }

@@ -12,5 +12,5 @@ internal struct NetConfig
     public SocketReceiveFunction Receive;
     public SocketTimeoutFunction Timeout;
     public SocketWaitFunction Wait;
-    public IntPtr Context;
+    public nint Context;
 }

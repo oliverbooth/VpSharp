@@ -3,4 +3,4 @@
 namespace VpSharp.Internal;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-internal delegate IntPtr SocketCreateFunction(IntPtr connection, IntPtr context);
+internal delegate nint SocketCreateFunction(nint connection, nint context);

@@ -224,10 +224,10 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         Owner = virtualParadiseObject.Owner;
     }
 
-    protected internal virtual void ExtractFromInstance(IntPtr handle)
+    protected internal virtual void ExtractFromInstance(nint handle)
     {
         var data = Span<byte>.Empty;
-        IntPtr dataPtr = vp_data(handle, DataAttribute.ObjectData, out int length);
+        nint dataPtr = vp_data(handle, DataAttribute.ObjectData, out int length);
 
         if (length > 0)
         {

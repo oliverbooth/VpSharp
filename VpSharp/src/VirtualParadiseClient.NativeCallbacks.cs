@@ -38,7 +38,7 @@ public sealed partial class VirtualParadiseClient
         vp_callback_set(NativeInstanceHandle, nativeCallback, handler);
     }
 
-    private async void OnObjectGetNativeCallback(IntPtr sender, ReasonCode reason, int reference)
+    private async void OnObjectGetNativeCallback(nint sender, ReasonCode reason, int reference)
     {
         if (!_objectCompletionSources.TryGetValue(reference, out TaskCompletionSource<(ReasonCode, VirtualParadiseObject)>? taskCompletionSource))
         {
@@ -49,22 +49,22 @@ public sealed partial class VirtualParadiseClient
         taskCompletionSource.SetResult((reason, virtualParadiseObject));
     }
 
-    private void OnLoginNativeCallback(IntPtr sender, ReasonCode reason, int reference)
+    private void OnLoginNativeCallback(nint sender, ReasonCode reason, int reference)
     {
         _loginCompletionSource?.SetResult(reason);
     }
 
-    private void OnEnterNativeCallback(IntPtr sender, ReasonCode reason, int reference)
+    private void OnEnterNativeCallback(nint sender, ReasonCode reason, int reference)
     {
         _enterCompletionSource?.SetResult(reason);
     }
 
-    private void OnConnectUniverseNativeCallback(IntPtr sender, ReasonCode reason, int reference)
+    private void OnConnectUniverseNativeCallback(nint sender, ReasonCode reason, int reference)
     {
         _connectCompletionSource?.SetResult(reason);
     }
 
-    private void OnWorldListNativeCallback(IntPtr sender, ReasonCode reason, int reference)
+    private void OnWorldListNativeCallback(nint sender, ReasonCode reason, int reference)
     {
         _worldListChannel?.Writer.Complete();
     }

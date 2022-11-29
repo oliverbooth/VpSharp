@@ -3,4 +3,4 @@
 namespace VpSharp.Internal;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-internal delegate void NativeEventHandler(IntPtr sender);
+internal delegate void NativeEventHandler(nint sender);

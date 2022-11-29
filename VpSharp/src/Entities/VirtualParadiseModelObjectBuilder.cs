@@ -105,7 +105,7 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
 
     internal void ApplyChanges()
     {
-        IntPtr handle = Client.NativeInstanceHandle;
+        nint handle = Client.NativeInstanceHandle;
 
         if (Action is { } action)
         {

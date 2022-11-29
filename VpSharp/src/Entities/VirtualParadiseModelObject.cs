@@ -53,7 +53,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
 
         lock (Client.Lock)
         {
-            IntPtr handle = Client.NativeInstanceHandle;
+            nint handle = Client.NativeInstanceHandle;
             _ = vp_int_set(handle, IntegerAttribute.ObjectId, Id);
             builder.ApplyChanges();
 
@@ -75,7 +75,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
     }
 
     /// <inheritdoc />
-    protected internal override void ExtractFromInstance(IntPtr handle)
+    protected internal override void ExtractFromInstance(nint handle)
     {
         Action = vp_string(handle, StringAttribute.ObjectAction);
         Description = vp_string(handle, StringAttribute.ObjectDescription);
