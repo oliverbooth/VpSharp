@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Cysharp.Text;
 using VpSharp.Extensions;
 

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using VpSharp.Internal.Attributes;
 
 namespace VpSharp.Internal.ValueConverters;

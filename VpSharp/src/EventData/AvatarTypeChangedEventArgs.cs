@@ -27,13 +27,13 @@ public sealed class AvatarTypeChangedEventArgs : EventArgs
     public VirtualParadiseAvatar Avatar { get; }
 
     /// <summary>
-    ///     Gets the avatar's type after the change. 
+    ///     Gets the avatar's type after the change.
     /// </summary>
     /// <value>The avatar's new type.</value>
     public int TypeAfter { get; }
 
     /// <summary>
-    ///     Gets the avatar's type before the change. 
+    ///     Gets the avatar's type before the change.
     /// </summary>
     /// <value>The avatar's old type.</value>
     public int? TypeBefore { get; }

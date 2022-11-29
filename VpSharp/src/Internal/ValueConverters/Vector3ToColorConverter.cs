@@ -1,4 +1,4 @@
-﻿using Cysharp.Text;
+using Cysharp.Text;
 using VpSharp.Extensions;
 
 namespace VpSharp.Internal.ValueConverters;

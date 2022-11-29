@@ -27,13 +27,13 @@ public sealed class AvatarMovedEventArgs : EventArgs
     public VirtualParadiseAvatar Avatar { get; }
 
     /// <summary>
-    ///     Gets the avatar's location after the change. 
+    ///     Gets the avatar's location after the change.
     /// </summary>
     /// <value>The avatar's new location.</value>
     public Location LocationAfter { get; }
 
     /// <summary>
-    ///     Gets the avatar's location before the change. 
+    ///     Gets the avatar's location before the change.
     /// </summary>
     /// <value>The avatar's old location.</value>
     public Location? LocationBefore { get; }

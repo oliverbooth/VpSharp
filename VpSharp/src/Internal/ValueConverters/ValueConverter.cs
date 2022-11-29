@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Internal.ValueConverters;
+namespace VpSharp.Internal.ValueConverters;
 
 [Obsolete]
 internal abstract class ValueConverter
