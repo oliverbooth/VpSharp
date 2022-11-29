@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 using VpSharp.Entities;
+using VpSharp.Extensions;
+using X10D.Math;
 
 namespace VpSharp;
 
@@ -12,6 +14,23 @@ public readonly struct Location : IEquatable<Location>
     ///     A location that represents nowhere in the universe.
     /// </summary>
     public static readonly Location Nowhere = new(VirtualParadiseWorld.Nowhere);
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Location" /> struct.
+    /// </summary>
+    /// <param name="world">The world.</param>
+    /// <param name="coordinates">
+    ///     The coordinates which contains the position and rotation. The <see cref="Coordinates.World" /> property in this value
+    ///     is ignored. Fetch the world using <see cref="VirtualParadiseClient.GetWorldAsync" />, and pass that into the
+    ///     <paramref name="world" /> parameter.
+    /// </param>
+    /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
+    public Location(VirtualParadiseWorld world, in Coordinates coordinates)
+    {
+        World = world ?? throw new ArgumentNullException(nameof(world));
+        Position = new Vector3d(coordinates.X, coordinates.Y, coordinates.Z);
+        Rotation = Quaternion.CreateFromYawPitchRoll((float)coordinates.Yaw.DegreesToRadians(), 0, 0);
+    }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Location" /> struct.
@@ -34,8 +53,8 @@ public readonly struct Location : IEquatable<Location>
     {
         get
         {
-            var x = (int) Math.Floor(Position.X);
-            var z = (int) Math.Floor(Position.Z);
+            var x = (int)Math.Floor(Position.X);
+            var z = (int)Math.Floor(Position.Z);
             return new Cell(x, z);
         }
     }
@@ -108,6 +127,17 @@ public readonly struct Location : IEquatable<Location>
     public override int GetHashCode()
     {
         return HashCode.Combine(Position, Rotation, World);
+    }
+
+    /// <summary>
+    ///     Converts this <see cref="Location" /> to an instance of <see cref="Coordinates" />.
+    /// </summary>
+    /// <returns>The result of the conversion to <see cref="Coordinates" />.</returns>
+    public Coordinates ToCoordinates()
+    {
+        (double x, double y, double z) = Position;
+        (_, double yaw, _) = Rotation.ToEulerAngles();
+        return new Coordinates(World?.Name, x, y, z, yaw);
     }
 
     /// <inheritdoc />
