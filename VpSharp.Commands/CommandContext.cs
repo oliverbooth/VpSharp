@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.ObjectModel;
+using System.Drawing;
 using VpSharp.Entities;
 
 namespace VpSharp.Commands;
@@ -18,7 +19,7 @@ public sealed class CommandContext
         CommandName = commandName;
         Alias = alias;
         RawArguments = rawArguments;
-        Arguments = rawArguments.Split();
+        Arguments = new ReadOnlyCollection<string>(rawArguments.Split());
     }
 
     /// <summary>
@@ -31,7 +32,7 @@ public sealed class CommandContext
     ///     Gets the arguments of the command.
     /// </summary>
     /// <value>The arguments passed by the avatar.</value>
-    public string[] Arguments { get; }
+    public IReadOnlyList<string> Arguments { get; }
 
     /// <summary>
     ///     Gets the avatar who executed the command.

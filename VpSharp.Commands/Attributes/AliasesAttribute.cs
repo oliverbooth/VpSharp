@@ -1,4 +1,6 @@
-﻿namespace VpSharp.Commands.Attributes;
+﻿using System.Collections.ObjectModel;
+
+namespace VpSharp.Commands.Attributes;
 
 /// <summary>
 ///     Defines the aliases of a command.
@@ -39,14 +41,15 @@ public sealed class AliasesAttribute : Attribute
             }
         }
 
-        Aliases = new string[aliases.Length + 1];
-        Aliases[0] = alias;
-        Array.Copy(aliases, 0, Aliases, 1, aliases.Length);
+        var buffer = new string[aliases.Length + 1];
+        buffer[0] = alias;
+        Array.Copy(aliases, 0, buffer, 1, aliases.Length);
+        Aliases = new ReadOnlyCollection<string>(buffer);
     }
 
     /// <summary>
     ///     Gets the command aliases.
     /// </summary>
     /// <value>The command aliases.</value>
-    public string[] Aliases { get; }
+    public IReadOnlyList<string> Aliases { get; }
 }

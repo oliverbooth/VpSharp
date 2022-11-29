@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace VpSharp.Commands;
 
@@ -10,7 +11,7 @@ public sealed class Command
     internal Command(string name, string[] aliases, MethodInfo method, CommandModule module)
     {
         Name = name;
-        Aliases = aliases[..];
+        Aliases = new ReadOnlyCollection<string>(aliases);
         Method = method;
         Module = module;
         Parameters = method.GetParameters()[1..];
@@ -20,7 +21,7 @@ public sealed class Command
     ///     Gets the aliases for this command.
     /// </summary>
     /// <value>The aliases.</value>
-    public string[] Aliases { get; }
+    public IReadOnlyList<string> Aliases { get; }
 
     /// <summary>
     ///     Gets the name of this command.
