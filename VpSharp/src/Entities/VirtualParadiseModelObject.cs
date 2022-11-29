@@ -1,4 +1,4 @@
-﻿using VpSharp.Internal;
+using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using static VpSharp.Internal.Native;
 
@@ -49,7 +49,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
         ArgumentNullException.ThrowIfNull(action);
 
         var builder = new VirtualParadiseModelObjectBuilder(Client, ObjectBuilderMode.Modify);
-        await Task.Run(() => action(builder));
+        await Task.Run(() => action(builder)).ConfigureAwait(true);
 
         lock (Client.Lock)
         {

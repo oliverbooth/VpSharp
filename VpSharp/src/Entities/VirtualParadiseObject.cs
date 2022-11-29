@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using VpSharp.Exceptions;
 using VpSharp.Extensions;
 using VpSharp.Internal;
@@ -98,16 +98,16 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         switch (phase)
         {
             case BumpPhase.Begin:
-                await SendBegin();
+                await SendBegin().ConfigureAwait(true);
                 break;
 
             case BumpPhase.End:
-                await SendEnd();
+                await SendEnd().ConfigureAwait(true);
                 break;
 
             case null:
-                await SendBegin();
-                await SendEnd();
+                await SendBegin().ConfigureAwait(true);
+                await SendEnd().ConfigureAwait(true);
                 break;
         }
     }
