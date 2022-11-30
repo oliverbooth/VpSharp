@@ -1,4 +1,4 @@
-﻿using VpSharp.Entities;
+using VpSharp.Entities;
 using VpSharp.Extensions;
 using VpSharp.Internal;
 
@@ -32,9 +32,27 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
     /// <value>The user which sent the request.</value>
     public VirtualParadiseUser User { get; }
 
-    public static bool operator ==(JoinRequest left, JoinRequest right) => Equals(left, right);
+    /// <summary>
+    ///     Returns a value indicating whether two <see cref="JoinRequest" /> instances are equal.
+    /// </summary>
+    /// <param name="left">The first instance.</param>
+    /// <param name="right">The second instance.</param>
+    /// <returns><see langword="true" /> if the two instances are equal; otherwise, <see langword="false" />.</returns>
+    public static bool operator ==(JoinRequest? left, JoinRequest? right)
+    {
+        return Equals(left, right);
+    }
 
-    public static bool operator !=(JoinRequest left, JoinRequest right) => !Equals(left, right);
+    /// <summary>
+    ///     Returns a value indicating whether two <see cref="JoinRequest" /> instances are not equal.
+    /// </summary>
+    /// <param name="left">The first instance.</param>
+    /// <param name="right">The second instance.</param>
+    /// <returns><see langword="true" /> if the two instances are not equal; otherwise, <see langword="false" />.</returns>
+    public static bool operator !=(JoinRequest? left, JoinRequest? right)
+    {
+        return !Equals(left, right);
+    }
 
     /// <summary>
     ///     Accepts this join request.
@@ -75,7 +93,6 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
         return Task.CompletedTask;
     }
 
-
     /// <inheritdoc />
     public bool Equals(JoinRequest? other)
     {
@@ -104,5 +121,8 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
     }
 
     /// <inheritdoc />
-    public override int GetHashCode() => HashCode.Combine(_client, _requestId);
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_client, _requestId);
+    }
 }

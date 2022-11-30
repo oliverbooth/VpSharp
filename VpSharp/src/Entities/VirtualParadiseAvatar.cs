@@ -30,7 +30,10 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     ///     Gets a value indicating whether this avatar is a bot.
     /// </summary>
     /// <value><see langword="true" /> if this avatar is a bot; otherwise, <see langword="false" />.</value>
-    public bool IsBot => Name is {Length: > 1} name && name[0] == '[' && name[^1] == ']';
+    public bool IsBot
+    {
+        get => Name is {Length: > 1} name && name[0] == '[' && name[^1] == ']';
+    }
 
     /// <summary>
     ///     Gets the location of this avatar.

@@ -79,14 +79,20 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// </summary>
     /// <value>The length of the vector.</value>
     /// <seealso cref="LengthSquared" />
-    public double Length => Distance(this, Zero);
+    public double Length
+    {
+        get => Distance(this, Zero);
+    }
 
     /// <summary>
     ///     Gets the squared length of the vector.
     /// </summary>
     /// <value>The length of the vector, squared.</value>
     /// <seealso cref="Length" />
-    public double LengthSquared => DistanceSquared(this, Zero);
+    public double LengthSquared
+    {
+        get => DistanceSquared(this, Zero);
+    }
 
     /// <summary>
     ///     Gets or sets the X component of the vector.
@@ -227,7 +233,10 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if the two vectors are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(Vector3d left, Vector3d right) => left.Equals(right);
+    public static bool operator ==(in Vector3d left, in Vector3d right)
+    {
+        return left.Equals(right);
+    }
 
     /// <summary>
     ///     Returns a value indicating whether the two given vectors are not equal.
@@ -235,7 +244,10 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
     /// <returns><see langword="true" /> if the two vectors are not equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator !=(Vector3d left, Vector3d right) => !left.Equals(right);
+    public static bool operator !=(in Vector3d left, in Vector3d right)
+    {
+        return !left.Equals(right);
+    }
 
     /// <summary>
     ///     Implicitly converts a <see cref="Vector3" /> to a new instance of <see cref="Vector3d" />, by implicitly converting
@@ -482,13 +494,22 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// </summary>
     /// <param name="other">The vector to compare with this instance.</param>
     /// <returns><see langword="true" /> if the two vectors are equal; otherwise, <see langword="false" />.</returns>
-    public readonly bool Equals(Vector3d other) => X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
+    public readonly bool Equals(Vector3d other)
+    {
+        return X.Equals(other.X) && Y.Equals(other.Y) && Z.Equals(other.Z);
+    }
 
     /// <inheritdoc />
-    public override readonly bool Equals(object? obj) => obj is Vector3d other && Equals(other);
+    public override readonly bool Equals(object? obj)
+    {
+        return obj is Vector3d other && Equals(other);
+    }
 
     /// <inheritdoc />
-    public override readonly int GetHashCode() => HashCode.Combine(X, Y, Z);
+    public override readonly int GetHashCode()
+    {
+        return HashCode.Combine(X, Y, Z);
+    }
 
     /// <summary>
     ///     Returns a <see cref="string" /> representing this <see cref="Vector3d" /> instance.

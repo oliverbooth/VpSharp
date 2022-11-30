@@ -38,7 +38,10 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     /// <param name="left">The first cell to compare.</param>
     /// <param name="right">The second cell to compare.</param>
     /// <returns><see langword="true" /> if the two cells are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(Cell left, Cell right) => left.Equals(right);
+    public static bool operator ==(Cell left, Cell right)
+    {
+        return left.Equals(right);
+    }
 
     /// <summary>
     ///     Returns a value indicating whether the two given cells are equal.
@@ -46,7 +49,10 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     /// <param name="left">The first cell to compare.</param>
     /// <param name="right">The second cell to compare.</param>
     /// <returns><see langword="true" /> if the two cells are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator !=(Cell left, Cell right) => !left.Equals(right);
+    public static bool operator !=(Cell left, Cell right)
+    {
+        return !left.Equals(right);
+    }
 
     /// <summary>
     ///     Explicitly converts an instance of <see cref="Vector2" /> to an instance of <see cref="Cell" />.
@@ -148,13 +154,22 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     /// </summary>
     /// <param name="other">The cell to compare with this instance.</param>
     /// <returns><see langword="true" /> if the two cells are equal; otherwise, <see langword="false" />.</returns>
-    public bool Equals(Cell other) => X == other.X && Z == other.Z;
+    public bool Equals(Cell other)
+    {
+        return X == other.X && Z == other.Z;
+    }
 
     /// <inheritdoc />
-    public override bool Equals(object obj) => obj is Cell other && Equals(other);
+    public override bool Equals(object? obj)
+    {
+        return obj is Cell other && Equals(other);
+    }
 
     /// <inheritdoc />
-    public override int GetHashCode() => HashCode.Combine(X, Z);
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(X, Z);
+    }
 
     /// <summary>
     ///     Returns a <see cref="string" /> representing this <see cref="Vector3d" /> instance.
