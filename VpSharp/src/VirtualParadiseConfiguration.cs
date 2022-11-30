@@ -61,6 +61,12 @@ public sealed class VirtualParadiseConfiguration
     /// </summary>
     /// <value>The login password.</value>
     public string Password { get; set; } = string.Empty;
+    
+    /// <summary>
+    ///     Gets or sets the service provider.
+    /// </summary>
+    /// <value>The service provider.</value>
+    public IServiceProvider? Services { get; set; }
 
     /// <summary>
     ///     Gets or sets the login username.

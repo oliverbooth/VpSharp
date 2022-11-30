@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using VpSharp.ClientExtensions;
 using VpSharp.Commands.Attributes;
 using VpSharp.Entities;
@@ -30,6 +31,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
         : base(client)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _configuration.Services ??= client.Services;
     }
 
     /// <summary>
@@ -37,6 +39,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     /// </summary>
     /// <param name="assembly">The assembly whose command modules to register.</param>
     /// <exception cref="ArgumentException">
+    ///     A module in the specified assembly does not have a public constructor, or has more than one public constructor.
     /// </exception>
     /// <exception cref="TypeInitializationException">A command module could not be instantiated.</exception>
     /// <exception cref="InvalidOperationException">
@@ -47,6 +50,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     ///     <para>
     ///         A command in the specified assembly has <see cref="RemainderAttribute" /> on a parameter that is not the last in
     ///         the parameter list.
+    ///     </para>
+    ///     -or-
+    ///     <para>
+    ///         A module is expecting services but no <see cref="IServiceProvider" /> was registered.
     ///     </para>
     /// </exception>
     public void RegisterCommands(Assembly assembly)
@@ -66,7 +73,11 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     ///     Registers the commands defined in the specified type.
     /// </summary>
     /// <exception cref="ArgumentException">
-    ///     <typeparamref name="T" /> refers to a type that does not inherit <see cref="CommandModule" />.
+    ///     <para><typeparamref name="T" /> refers to a type that does not inherit <see cref="CommandModule" />.</para>
+    ///     -or-
+    ///     <para>
+    ///         <typeparamref name="T" /> does not have a public constructor, or has more than one public constructor.
+    ///     </para>
     /// </exception>
     /// <exception cref="TypeInitializationException"><typeparamref name="T" /> could not be instantiated.</exception>
     /// <exception cref="InvalidOperationException">
@@ -77,6 +88,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     ///     <para>
     ///         A command in the specified module has <see cref="RemainderAttribute" /> on a parameter that is not the last in the
     ///         parameter list.
+    ///     </para>
+    ///     -or-
+    ///     <para>
+    ///         The module is expecting services but no <see cref="IServiceProvider" /> was registered.
     ///     </para>
     /// </exception>
     public void RegisterCommands<T>() where T : CommandModule
@@ -93,6 +108,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     ///     <para><paramref name="moduleType" /> refers to an <c>abstract</c> type.</para>
     ///     -or-
     ///     <para><paramref name="moduleType" /> refers to a type that does not inherit <see cref="CommandModule" />.</para>
+    ///     -or-
+    ///     <para>
+    ///         <paramref name="moduleType" /> does not have a public constructor, or has more than one public constructor.
+    ///     </para>
     /// </exception>
     /// <exception cref="TypeInitializationException"><paramref name="moduleType" /> could not be instantiated.</exception>
     /// <exception cref="InvalidOperationException">
@@ -103,6 +122,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     ///     <para>
     ///         A command in the specified module has <see cref="RemainderAttribute" /> on a parameter that is not the last in the
     ///         parameter list.
+    ///     </para>
+    ///     -or-
+    ///     <para>
+    ///         The module is expecting services but no <see cref="IServiceProvider" /> was registered.
     ///     </para>
     /// </exception>
     public void RegisterCommands(Type moduleType)
@@ -119,7 +142,29 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             throw new ArgumentException($"Module type is not a subclass of {typeof(CommandModule)}");
         }
 
-        if (Activator.CreateInstance(moduleType) is not CommandModule module)
+        ConstructorInfo[] constructors = moduleType.GetTypeInfo().DeclaredConstructors.Where(c => c.IsPublic).ToArray();
+        if (constructors.Length != 0)
+        {
+            throw new ArgumentException(
+                $"Constructor for {moduleType} is not public, or {moduleType} has more than one public constructor.");
+        }
+
+        ConstructorInfo constructor = constructors[0];
+        ParameterInfo[] parameters = constructor.GetParameters();
+
+        IServiceProvider? serviceProvider = _configuration.Services;
+        if (parameters.Length != 0 && serviceProvider is null)
+        {
+            throw new InvalidOperationException("No ServiceProvider has been registered!");
+        }
+
+        var args = new object[parameters.Length];
+        for (var index = 0; index < args.Length; index++)
+        {
+            args[index] = serviceProvider!.GetRequiredService(parameters[index].ParameterType);
+        }
+
+        if (Activator.CreateInstance(moduleType, args) is not CommandModule module)
         {
             throw new TypeInitializationException(moduleType.FullName, null);
         }

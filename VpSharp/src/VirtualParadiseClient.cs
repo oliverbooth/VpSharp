@@ -46,6 +46,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <value>The configuration for this client.</value>
     public VirtualParadiseClient(VirtualParadiseConfiguration configuration)
     {
+        Services = configuration.Services;
         _configuration = new VirtualParadiseConfiguration(configuration);
         Initialize();
     }
@@ -83,6 +84,12 @@ public sealed partial class VirtualParadiseClient : IDisposable
     {
         get => CurrentAvatar?.Location.World;
     }
+
+    /// <summary>
+    ///     Gets the service provider.
+    /// </summary>
+    /// <value>The service provider.</value>
+    public IServiceProvider? Services { get; }
 
     /// <summary>
     ///     Gets a read-only view of the cached worlds.
