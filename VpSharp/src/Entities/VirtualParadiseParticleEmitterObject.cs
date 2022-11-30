@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+using System.Drawing;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 using Cysharp.Text;
@@ -288,7 +289,7 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
                         }
                         else if (property.PropertyType != typeof(string))
                         {
-                            value = Convert.ChangeType(value, property.PropertyType);
+                            value = Convert.ChangeType(value, property.PropertyType, CultureInfo.InvariantCulture);
                         }
 
                         property.SetValue(this, value);

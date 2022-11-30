@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+using System.Globalization;
+using System.Numerics;
 using System.Text;
 using Cysharp.Text;
 using VpSharp.Extensions;
@@ -81,8 +82,8 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
         int spaceIndex = chars[index..].IndexOf(' ');
         int newLineIndex = chars[index..].IndexOf('\n');
 
-        int pathType = int.Parse(chars[index..(index + spaceIndex)]);
-        int closed = int.Parse(chars[(index + spaceIndex + 1)..(index + newLineIndex)]);
+        int pathType = int.Parse(chars[index..(index + spaceIndex)], provider: CultureInfo.InvariantCulture);
+        int closed = int.Parse(chars[(index + spaceIndex + 1)..(index + newLineIndex)], provider: CultureInfo.InvariantCulture);
         index += newLineIndex;
 
         // points from here onwards

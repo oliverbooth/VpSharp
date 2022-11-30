@@ -13,13 +13,13 @@ internal sealed class HexToColorConverter : ValueConverter<Color>
         Span<char> buffer = stackalloc char[2];
 
         reader.Read(buffer);
-        int r = int.Parse(buffer, NumberStyles.HexNumber);
+        int r = int.Parse(buffer, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
 
         reader.Read(buffer);
-        int g = int.Parse(buffer, NumberStyles.HexNumber);
+        int g = int.Parse(buffer, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
 
         reader.Read(buffer);
-        int b = int.Parse(buffer, NumberStyles.HexNumber);
+        int b = int.Parse(buffer, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
 
         result = Color.FromArgb(r, g, b);
     }

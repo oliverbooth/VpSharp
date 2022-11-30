@@ -128,7 +128,7 @@ internal static class WorldSettingsConverter
                 }
                 else if (propertyType.IsEnum && int.TryParse(value, out int result))
                 {
-                    propertyValue = Convert.ChangeType(result, propertyType);
+                    propertyValue = Convert.ChangeType(result, propertyType, CultureInfo.InvariantCulture);
                 }
             }
 

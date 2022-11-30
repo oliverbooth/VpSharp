@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using System.Text;
 using Cysharp.Text;
@@ -10,21 +11,21 @@ internal static class SpanExtensions
     {
         Span<char> chars = stackalloc char[value.Length];
         Encoding.UTF8.GetChars(value, chars);
-        return double.Parse(chars.Trim());
+        return double.Parse(chars.Trim(), provider: CultureInfo.InvariantCulture);
     }
 
     public static int ToInt32(this ReadOnlySpan<byte> value)
     {
         Span<char> chars = stackalloc char[value.Length];
         Encoding.UTF8.GetChars(value, chars);
-        return int.Parse(chars.Trim());
+        return int.Parse(chars.Trim(), provider: CultureInfo.InvariantCulture);
     }
 
     public static float ToSingle(this ReadOnlySpan<byte> value)
     {
         Span<char> chars = stackalloc char[value.Length];
         Encoding.UTF8.GetChars(value, chars);
-        return float.Parse(chars.Trim());
+        return float.Parse(chars.Trim(), provider: CultureInfo.InvariantCulture);
     }
 
     public static Vector2 ToVector2(this ReadOnlySpan<byte> value)
