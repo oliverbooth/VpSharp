@@ -292,8 +292,10 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// </summary>
     /// <param name="world">The name of the world to which this avatar should be teleported.</param>
     /// <param name="position">The position to which this avatar should be teleported.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
     public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position)
     {
+        ArgumentNullException.ThrowIfNull(world);
         return TeleportAsync(world.Name, position, Quaternion.Identity);
     }
 
@@ -303,8 +305,10 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="world">The name of the world to which this avatar should be teleported.</param>
     /// <param name="position">The position to which this avatar should be teleported.</param>
     /// <param name="rotation">The rotation to which this avatar should be teleported.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
     public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position, Quaternion rotation)
     {
+        ArgumentNullException.ThrowIfNull(world);
         return TeleportAsync(world.Name, position, rotation);
     }
 
@@ -326,6 +330,16 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="rotation">The rotation to which this avatar should be teleported.</param>
     public async Task TeleportAsync(string world, Vector3d position, Quaternion rotation)
     {
+        ArgumentNullException.ThrowIfNull(world);
+#if NET7_0_OR_GREATER
+        ArgumentException.ThrowIfNullOrEmpty(world);
+#else
+        if (string.IsNullOrEmpty(world))
+        {
+            throw new ArgumentException("World cannot be empty");
+        }
+#endif
+
         // ReSharper disable InconsistentlySynchronizedField
         bool isSelf = this == _client.CurrentAvatar;
         bool isNewWorld = world != Location.World.Name;

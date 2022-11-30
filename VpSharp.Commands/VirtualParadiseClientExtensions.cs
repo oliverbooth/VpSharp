@@ -11,8 +11,10 @@ public static class VirtualParadiseClientExtensions
     /// <param name="client">The <see cref="VirtualParadiseClient" />.</param>
     /// <param name="configuration">The configuration required for the extensions.</param>
     /// <returns>The commands extension instance.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     public static CommandsExtension UseCommands(this VirtualParadiseClient client, CommandsExtensionConfiguration configuration)
     {
+        ArgumentNullException.ThrowIfNull(client);
         return client.AddExtension<CommandsExtension>(configuration);
     }
 }

@@ -134,6 +134,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     /// <inheritdoc />
     protected override Task OnMessageReceived(MessageReceivedEventArgs args)
     {
+        ArgumentNullException.ThrowIfNull(args);
         var message = args.Message;
 
         if (message.Type != MessageType.ChatMessage)
