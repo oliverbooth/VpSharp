@@ -120,7 +120,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The summed vector.</returns>
     public static Vector3d operator +(in Vector3d left, in Vector3d right)
     {
-        return new(
+        return new Vector3d(
             left.X + right.X,
             left.Y + right.Y,
             left.Z + right.Z
@@ -135,7 +135,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The difference vector.</returns>
     public static Vector3d operator -(in Vector3d left, in Vector3d right)
     {
-        return new(
+        return new Vector3d(
             left.X - right.X,
             left.Y - right.Y,
             left.Z - right.Z
@@ -150,7 +150,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The product vector.</returns>
     public static Vector3d operator *(in Vector3d left, in Vector3d right)
     {
-        return new(
+        return new Vector3d(
             left.X * right.X,
             left.Y * right.Y,
             left.Z * right.Z
@@ -165,7 +165,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The scaled vector.</returns>
     public static Vector3d operator *(in Vector3d left, double right)
     {
-        return new(
+        return new Vector3d(
             left.X * right,
             left.Y * right,
             left.Z * right
@@ -180,7 +180,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The scaled vector.</returns>
     public static Vector3d operator *(double left, in Vector3d right)
     {
-        return new(
+        return new Vector3d(
             left * right.X,
             left * right.Y,
             left * right.Z
@@ -195,7 +195,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The vector resulting from the division.</returns>
     public static Vector3d operator /(in Vector3d left, in Vector3d right)
     {
-        return new(
+        return new Vector3d(
             left.X / right.X,
             left.Y / right.Y,
             left.Z / right.Z
@@ -210,7 +210,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The vector resulting from the division.</returns>
     public static Vector3d operator /(in Vector3d left, double right)
     {
-        return new(
+        return new Vector3d(
             left.X / right,
             left.Y / right,
             left.Z / right
@@ -278,7 +278,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The absolute value vector.</returns>
     public static Vector3d Abs(in Vector3d value)
     {
-        return new(
+        return new Vector3d(
             Math.Abs(value.X),
             Math.Abs(value.Y),
             Math.Abs(value.Z)
@@ -435,7 +435,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The square root vector.</returns>
     public static Vector3d SquareRoot(in Vector3d value)
     {
-        return new(
+        return new Vector3d(
             Math.Sqrt(value.X),
             Math.Sqrt(value.Y),
             Math.Sqrt(value.Z)
