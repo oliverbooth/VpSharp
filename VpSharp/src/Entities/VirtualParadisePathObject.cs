@@ -26,7 +26,7 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
     ///     Gets the path in this object.
     /// </summary>
     /// <value>The path in this object.</value>
-    public VirtualParadisePath Path { get; set; }
+    public VirtualParadisePath Path { get; set; } = null!;
 
     /// <inheritdoc />
     protected internal override void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
