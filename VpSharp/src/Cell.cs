@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Numerics;
 using System.Text;
 
@@ -186,7 +186,7 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     /// </summary>
     /// <param name="format">The format of individual elements.</param>
     /// <returns>The string representation.</returns>
-    public readonly string ToString(string? format)
+    public string ToString(string? format)
     {
         return ToString(format, CultureInfo.CurrentCulture);
     }
@@ -198,9 +198,9 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     /// <param name="format">The format of individual elements.</param>
     /// <param name="formatProvider">The format provider to use when formatting elements.</param>
     /// <returns>The string representation.</returns>
-    public readonly string ToString(string? format, IFormatProvider? formatProvider)
+    public string ToString(string? format, IFormatProvider? formatProvider)
     {
-        var builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
         builder.Append('<');
         builder.Append(X.ToString(format, formatProvider));
