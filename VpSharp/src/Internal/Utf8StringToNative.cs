@@ -34,7 +34,7 @@ internal sealed class Utf8StringToNative : ICustomMarshaler
 
         fixed (byte* data = &MemoryMarshal.GetReference(utf8Bytes))
         {
-            IntPtr buffer = Marshal.AllocHGlobal(utf8Bytes.Length + 1);
+            nint buffer = Marshal.AllocHGlobal(utf8Bytes.Length + 1);
             Buffer.MemoryCopy(data, (void*)buffer, utf8Bytes.Length, utf8Bytes.Length);
             Marshal.WriteByte(buffer, utf8Bytes.Length, 0);
             return buffer;
