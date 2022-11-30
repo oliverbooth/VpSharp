@@ -1,4 +1,6 @@
-﻿namespace VpSharp.Internal.ValueConverters;
+namespace VpSharp.Internal.ValueConverters;
+
+#pragma warning disable CA1812
 
 internal sealed class UriConverter : ValueConverter<Uri>
 {

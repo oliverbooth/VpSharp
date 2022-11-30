@@ -4,6 +4,8 @@ using VpSharp.Extensions;
 
 namespace VpSharp.Internal.ValueConverters;
 
+#pragma warning disable CA1812
+
 internal sealed class Vector2Converter : ValueConverter<Vector2>
 {
     /// <inheritdoc />

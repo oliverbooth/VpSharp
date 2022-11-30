@@ -3,6 +3,8 @@ using System.Globalization;
 
 namespace VpSharp.Internal.ValueConverters;
 
+#pragma warning disable CA1812
+
 internal sealed class HexToColorConverter : ValueConverter<Color>
 {
     /// <inheritdoc />

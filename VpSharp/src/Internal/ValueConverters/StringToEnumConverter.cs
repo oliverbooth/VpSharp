@@ -3,6 +3,8 @@ using VpSharp.Internal.Attributes;
 
 namespace VpSharp.Internal.ValueConverters;
 
+#pragma warning disable CA1812
+
 internal sealed class StringToEnumConverter<T> : ValueConverter<T>
     where T : struct, Enum
 {

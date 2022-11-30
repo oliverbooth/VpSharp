@@ -3,6 +3,8 @@ using VpSharp.Extensions;
 
 namespace VpSharp.Internal.ValueConverters;
 
+#pragma warning disable CA1812
+
 internal sealed class VectorToNthComponentConverter : ValueConverter<float>
 {
     private readonly int _componentNumber;
