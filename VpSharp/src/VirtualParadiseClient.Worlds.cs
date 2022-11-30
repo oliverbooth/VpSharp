@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Threading.Channels;
 using VpSharp.Entities;
 
@@ -30,7 +30,7 @@ public sealed partial class VirtualParadiseClient
 
         await foreach (VirtualParadiseWorld world in EnumerateWorldsAsync())
         {
-            if (string.Equals(world.Name, name))
+            if (string.Equals(world.Name, name, StringComparison.Ordinal))
             {
                 return world;
             }
