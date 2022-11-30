@@ -1,4 +1,4 @@
-﻿namespace VpSharp;
+namespace VpSharp;
 
 /// <summary>
 ///     Represents a join result.
@@ -22,9 +22,4 @@ public readonly struct JoinResult
     /// </summary>
     /// <value>The join response.</value>
     public JoinResponse Response { get; }
-
-    public static implicit operator bool(JoinResult result)
-    {
-        return result.Response == JoinResponse.Accepted;
-    }
 }
