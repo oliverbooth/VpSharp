@@ -12,9 +12,9 @@ internal class Connection
     private byte[] _pendingBuffer;
     private readonly List<byte[]> _readyBuffers = new();
     private Timer _timer;
-    private IntPtr _vpConnection;
+    private nint _vpConnection;
 
-    public Connection(IntPtr vpConnection, object lockObject)
+    public Connection(nint vpConnection, object lockObject)
     {
         _vpConnection = vpConnection;
         _lockObject = lockObject;
@@ -24,7 +24,7 @@ internal class Connection
     public void BeforeDestroy()
     {
         // ReSharper disable once InconsistentlySynchronizedField
-        _vpConnection = IntPtr.Zero;
+        _vpConnection = nint.Zero;
     }
 
     public int Connect(string host, ushort port)
@@ -55,7 +55,7 @@ internal class Connection
         }
     }
 
-    public static int ConnectNative(IntPtr ptr, IntPtr hostPtr, ushort port)
+    public static int ConnectNative(nint ptr, nint hostPtr, ushort port)
     {
         GCHandle handle = GCHandle.FromIntPtr(ptr);
         var connection = handle.Target as Connection;
@@ -68,7 +68,7 @@ internal class Connection
         return 0;
     }
 
-    public static IntPtr CreateNative(IntPtr vpConnection, IntPtr context)
+    public static nint CreateNative(nint vpConnection, nint context)
     {
         GCHandle contextHandle = GCHandle.FromIntPtr(context);
         var connection = new Connection(vpConnection, contextHandle.Target);
@@ -77,7 +77,7 @@ internal class Connection
         return ptr;
     }
 
-    public static void DestroyNative(IntPtr ptr)
+    public static void DestroyNative(nint ptr)
     {
         GCHandle handle = GCHandle.FromIntPtr(ptr);
         var connection = handle.Target as Connection;
@@ -109,7 +109,7 @@ internal class Connection
         }
     }
 
-    public int Receive(IntPtr data, uint length)
+    public int Receive(nint data, uint length)
     {
         if (_readyBuffers.Count == 0)
         {
@@ -117,7 +117,7 @@ internal class Connection
         }
 
         var spaceLeft = (int) length;
-        IntPtr destination = data;
+        nint destination = data;
 
         int i;
         for (i = 0; i < _readyBuffers.Count && spaceLeft > 0; ++i)
@@ -175,7 +175,7 @@ internal class Connection
             connection._pendingBuffer = new byte[1024];
         }
 
-        if (connection._vpConnection != IntPtr.Zero)
+        if (connection._vpConnection != nint.Zero)
         {
             if (bytesRead > 0)
             {
@@ -198,7 +198,7 @@ internal class Connection
         }
     }
 
-    public static int ReceiveNative(IntPtr ptr, IntPtr data, uint length)
+    public static int ReceiveNative(nint ptr, nint data, uint length)
     {
         if (GCHandle.FromIntPtr(ptr).Target is Connection connection)
         {
@@ -208,7 +208,7 @@ internal class Connection
         return 0;
     }
 
-    public int Send(IntPtr data, uint length)
+    public int Send(nint data, uint length)
     {
         var buffer = new byte[length];
         Marshal.Copy(data, buffer, 0, (int) length);
@@ -222,7 +222,7 @@ internal class Connection
         }
     }
 
-    public static int SendNative(IntPtr ptr, IntPtr data, uint length)
+    public static int SendNative(nint ptr, nint data, uint length)
     {
         if (GCHandle.FromIntPtr(ptr).Target is Connection connection)
         {
