@@ -285,6 +285,7 @@ public sealed partial class VirtualParadiseClient
             var state = (WorldState)vp_int(sender, IntegerAttribute.WorldState);
 
             world = new VirtualParadiseWorld(this, name) {AvatarCount = avatarCount, State = state};
+            _worlds[name] = world;
         }
 
         if (_worldListChannel is not null)
