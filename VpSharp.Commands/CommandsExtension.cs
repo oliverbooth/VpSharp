@@ -146,7 +146,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
         }
 
         ConstructorInfo[] constructors = moduleType.GetTypeInfo().DeclaredConstructors.Where(c => c.IsPublic).ToArray();
-        if (constructors.Length != 0)
+        if (constructors.Length != 1)
         {
             throw new ArgumentException(
                 $"Constructor for {moduleType} is not public, or {moduleType} has more than one public constructor.");
