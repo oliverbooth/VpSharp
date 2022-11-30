@@ -1,10 +1,22 @@
-﻿using System.Numerics;
+using System.Numerics;
 
 namespace VpSharp.Extensions;
 
+/// <summary>
+///     Extension methods for <see cref="Quaternion" />.
+/// </summary>
 public static class QuaternionExtensions
 {
-    // https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
+    /// <summary>
+    ///     Converts this quaternion to a <see cref="Vector3d" /> containing an Euler representation of the rotation. 
+    /// </summary>
+    /// <param name="value">The quaternion to convert.</param>
+    /// <param name="radians">
+    ///     <see langword="true" /> if the resulting vector should be in radians; or <see langword="false" /> if the resulting
+    ///     vector should be in degrees.
+    /// </param>
+    /// <returns>The Euler representation of <paramref name="value" />.</returns>
+    /// <see href="https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/" />
     public static Vector3d ToEulerAngles(this Quaternion value, bool radians = true)
     {
         double a = 2.0 * value.Y * value.W - 2.0 * value.X * value.Z;
@@ -29,6 +41,15 @@ public static class QuaternionExtensions
         return new Vector3d(x, y, z);
     }
 
+    /// <summary>
+    ///     Converts this quaternion to a <see cref="Vector3d" /> containing an Euler representation of the rotation. 
+    /// </summary>
+    /// <param name="value">The quaternion to convert.</param>
+    /// <param name="radians">
+    ///     <see langword="true" /> if the resulting vector should be in radians; or <see langword="false" /> if the resulting
+    ///     vector should be in degrees.
+    /// </param>
+    /// <returns>The Euler representation of <paramref name="value" />.</returns>
     public static Vector3d ToEulerAnglesF(this Quaternion value, bool radians = true)
     {
         float a = 2.0f * value.Y * value.W - 2.0f * value.X * value.Z;
@@ -53,7 +74,14 @@ public static class QuaternionExtensions
         return new Vector3d(x, y, z);
     }
 
-    // https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm
+    // 
+    /// <summary>
+    ///     Converts this quaternion to an axis/angle pair.
+    /// </summary>
+    /// <param name="value">The quaternion to convert.</param>
+    /// <param name="axis">The axis value.</param>
+    /// <param name="angle">The angle value.</param>
+    /// <see href="https://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToAngle/index.htm"/>
     public static void ToAxisAngle(this Quaternion value, out Vector3 axis, out float angle)
     {
         angle = 2.0f * MathF.Acos(value.W);
@@ -65,6 +93,12 @@ public static class QuaternionExtensions
         axis = new Vector3(x, y, z);
     }
 
+    /// <summary>
+    ///     Converts this quaternion to an axis/angle pair.
+    /// </summary>
+    /// <param name="value">The quaternion to convert.</param>
+    /// <param name="axis">The axis value.</param>
+    /// <param name="angle">The angle value.</param>
     public static void ToAxisAngle(this Quaternion value, out Vector3d axis, out double angle)
     {
         angle = 2.0 * Math.Acos(value.W);

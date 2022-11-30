@@ -62,7 +62,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     }
 
     /// <summary>
-    ///     Registers the command 
+    ///     Registers the commands defined in the specified type.
     /// </summary>
     /// <exception cref="ArgumentException">
     ///     <typeparamref name="T" /> refers to a type that does not inherit <see cref="CommandModule" />.
@@ -84,9 +84,9 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     }
 
     /// <summary>
-    ///     Registers the command 
+    ///     Registers the commands defined in the specified type.
     /// </summary>
-    /// <param name="moduleType"></param>
+    /// <param name="moduleType">The type whose command methods to register.</param>
     /// <exception cref="ArgumentNullException"><paramref name="moduleType" /> is <see langword="null" />.</exception>
     /// <exception cref="ArgumentException">
     ///     <para><paramref name="moduleType" /> refers to an <c>abstract</c> type.</para>

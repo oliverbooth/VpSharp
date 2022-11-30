@@ -11,7 +11,12 @@ namespace VpSharp.Entities;
 /// </summary>
 public sealed class VirtualParadisePathObject : VirtualParadiseObject
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="VirtualParadisePathObject" /> class.
+    /// </summary>
+    /// <param name="client">The owning client.</param>
+    /// <param name="id">The object ID.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     internal VirtualParadisePathObject(VirtualParadiseClient client, int id)
         : base(client, id)
     {
@@ -34,6 +39,7 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
         Path = (VirtualParadisePath)path.Path.Clone();
     }
 
+    /// <inheritdoc />
     protected override void ExtractFromData(ReadOnlySpan<byte> data)
     {
         Span<char> chars = stackalloc char[data.Length];

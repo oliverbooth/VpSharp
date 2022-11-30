@@ -40,7 +40,7 @@ public sealed partial class VirtualParadiseClient
     }
 
     /// <summary>
-    ///     Gets a read-only view of the worlds returned by the universe server. 
+    ///     Gets a read-only view of the worlds returned by the universe server.
     /// </summary>
     /// <returns>An <see cref="IReadOnlyCollection{T}" /> containing <see cref="VirtualParadiseWorld" /> values.</returns>
     /// <remarks>

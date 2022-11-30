@@ -10,9 +10,17 @@ using VpSharp.Internal.ValueConverters;
 
 namespace VpSharp.Entities;
 
+/// <summary>
+///     Represents a particle emitter object.
+/// </summary>
 public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="VirtualParadiseParticleEmitterObject" /> class.
+    /// </summary>
+    /// <param name="client">The owning client.</param>
+    /// <param name="id">The object ID.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     internal VirtualParadiseParticleEmitterObject(VirtualParadiseClient client, int id)
         : base(client, id)
     {
@@ -228,6 +236,7 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
         }
     }
 
+    /// <inheritdoc />
     protected override void ExtractFromData(ReadOnlySpan<byte> data)
     {
 #pragma warning disable 612

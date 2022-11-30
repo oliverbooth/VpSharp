@@ -1,4 +1,4 @@
-﻿using VpSharp.Internal;
+using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using static VpSharp.Internal.Native;
 
@@ -10,7 +10,12 @@ namespace VpSharp.Entities;
 /// </summary>
 public class VirtualParadiseModelObject : VirtualParadiseObject
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="VirtualParadiseModelObject" /> class.
+    /// </summary>
+    /// <param name="client">The owning client.</param>
+    /// <param name="id">The object ID.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     internal VirtualParadiseModelObject(VirtualParadiseClient client, int id)
         : base(client, id)
     {
