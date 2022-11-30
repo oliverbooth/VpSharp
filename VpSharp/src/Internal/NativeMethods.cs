@@ -1,8 +1,9 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using VpSharp.Internal.NativeAttributes;
 using static System.Runtime.InteropServices.DllImportSearchPath;
 
 // ReSharper disable InconsistentNaming
+#pragma warning disable CA2101
 #pragma warning disable CA5393
 
 namespace VpSharp.Internal;
