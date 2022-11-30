@@ -109,7 +109,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, obj) || obj is VirtualParadiseUser other && Equals(other);
+        return ReferenceEquals(this, obj) || (obj is VirtualParadiseUser other && Equals(other));
     }
 
     /// <inheritdoc />

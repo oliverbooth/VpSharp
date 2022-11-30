@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 
 namespace VpSharp.Entities;
 
@@ -105,7 +105,7 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, obj) || obj is VirtualParadiseWorld other && Equals(other);
+        return ReferenceEquals(this, obj) || (obj is VirtualParadiseWorld other && Equals(other));
     }
 
     /// <inheritdoc />

@@ -305,10 +305,10 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The cross product.</returns>
     public static Vector3d Cross(Vector3d left, Vector3d right)
     {
-        return new(
-            left.Y * right.Z - left.Z * right.Y,
-            left.Z * right.X - left.X * right.Z,
-            left.X * right.Y - left.Y * right.X
+        return new Vector3d(
+            (left.Y * right.Z) - (left.Z * right.Y),
+            (left.Z * right.X) - (left.X * right.Z),
+            (left.X * right.Y) - (left.Y * right.X)
         );
     }
 
@@ -383,7 +383,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The maximized vector.</returns>
     public static Vector3d Max(Vector3d left, Vector3d right)
     {
-        return new(
+        return new Vector3d(
             Math.Max(left.X, right.X),
             Math.Max(left.Y, right.Y),
             Math.Max(left.Z, right.Z)
@@ -398,7 +398,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The minimized vector.</returns>
     public static Vector3d Min(Vector3d left, Vector3d right)
     {
-        return new(
+        return new Vector3d(
             Math.Min(left.X, right.X),
             Math.Min(left.Y, right.Y),
             Math.Min(left.Z, right.Z)

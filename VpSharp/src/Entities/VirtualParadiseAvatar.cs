@@ -118,7 +118,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, obj) || obj is VirtualParadiseAvatar other && Equals(other);
+        return ReferenceEquals(this, obj) || (obj is VirtualParadiseAvatar other && Equals(other));
     }
 
     /// <inheritdoc />
