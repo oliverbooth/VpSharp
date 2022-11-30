@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -238,22 +238,26 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     public static bool operator !=(Vector3d left, Vector3d right) => !left.Equals(right);
 
     /// <summary>
-    ///     Implicitly converts a <see cref="Vector3" /> to a new instance of <see cref="Vector3d" />, by implicitly
-    ///     converting the <see cref="Vector3.X" />, <see cref="Vector3.Y" /> and <see cref="Vector3.Z" /> fields to
-    ///     <see cref="double" />.
+    ///     Implicitly converts a <see cref="Vector3" /> to a new instance of <see cref="Vector3d" />, by implicitly converting
+    ///     the <see cref="Vector3.X" />, <see cref="Vector3.Y" /> and <see cref="Vector3.Z" /> fields to <see cref="double" />.
     /// </summary>
     /// <param name="vector">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static implicit operator Vector3d(Vector3 vector) => new(vector.X, vector.Y, vector.Z);
+    public static implicit operator Vector3d(in Vector3 vector)
+    {
+        return FromVector3(vector);
+    }
 
     /// <summary>
-    ///     Explicit converts a <see cref="Vector3" /> to a new instance of <see cref="Vector3d" />, by explicitly
-    ///     converting the <see cref="Vector3.X" />, <see cref="Vector3.Y" /> and <see cref="Vector3.Z" /> fields to
-    ///     <see cref="float" />.
+    ///     Explicit converts a <see cref="Vector3d" /> to a new instance of <see cref="Vector3" />, by explicitly converting the
+    ///     <see cref="X" />, <see cref="Y" /> and <see cref="Z" /> fields to <see cref="float" />.
     /// </summary>
     /// <param name="vector">The vector to convert.</param>
     /// <returns>The converted vector.</returns>
-    public static explicit operator Vector3(Vector3d vector) => new((float) vector.X, (float) vector.Y, (float) vector.Z);
+    public static explicit operator Vector3(in Vector3d vector)
+    {
+        return vector.ToVector3();
+    }
 
     /// <summary>
     ///     Returns a vector whose elements are the absolute values of each of the source vector's elements.
@@ -329,9 +333,20 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <returns>The dot product.</returns>
     public static double Dot(Vector3d left, Vector3d right)
     {
-        return left.X * right.X +
-               left.Y * right.Y +
-               left.Z * right.Z;
+        return (left.X * right.X) +
+               (left.Y * right.Y) +
+               (left.Z * right.Z);
+    }
+
+    /// <summary>
+    ///     Converts a <see cref="Vector3" /> to a new instance of <see cref="Vector3d" />, by implicitly converting the
+    ///     <see cref="Vector3.X" />, <see cref="Vector3.Y" /> and <see cref="Vector3.Z" /> fields to <see cref="double" />.
+    /// </summary>
+    /// <param name="vector">The vector to convert.</param>
+    /// <returns>The converted vector.</returns>
+    public static Vector3d FromVector3(in Vector3 vector)
+    {
+        return new Vector3d(vector.X, vector.Y, vector.Z);
     }
 
     /// <summary>
@@ -516,5 +531,15 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
         builder.Append(Z.ToString(format, formatProvider));
         builder.Append('>');
         return builder.ToString();
+    }
+
+    /// <summary>
+    ///     Converts this instance to a new instance of <see cref="Vector3" />, by explicitly converting the <see cref="X" />,
+    ///     <see cref="Y" /> and <see cref="Z" /> fields to <see cref="float" />.
+    /// </summary>
+    /// <returns>The converted vector.</returns>
+    public readonly Vector3 ToVector3()
+    {
+        return new Vector3((float)X, (float)Y, (float)Z);
     }
 }

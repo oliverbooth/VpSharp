@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using VpSharp.Internal;
 
 namespace VpSharp;
@@ -71,7 +71,7 @@ public readonly struct ColorF : IEquatable<ColorF>
     /// <returns>The converted color.</returns>
     public static implicit operator ColorF(Color color)
     {
-        return FromArgb(color.A / 255.0f, color.R / 255.0f, color.G / 255.0f, color.B / 255.0f);
+        return FromColor(color);
     }
 
     /// <summary>
@@ -81,8 +81,7 @@ public readonly struct ColorF : IEquatable<ColorF>
     /// <returns>The converted color.</returns>
     public static explicit operator Color(ColorF color)
     {
-        return Color.FromArgb((int) (color.A * 255.0f), (int) (color.R * 255.0f), (int) (color.G * 255.0f),
-            (int) (color.B * 255.0f));
+        return color.ToColor();
     }
 
     /// <summary>
@@ -140,6 +139,16 @@ public readonly struct ColorF : IEquatable<ColorF>
     }
 
     /// <summary>
+    ///     Converts an instance of <see cref="Color" /> to an instance of <see cref="ColorF" />.
+    /// </summary>
+    /// <param name="color">The color to convert.</param>
+    /// <returns>The converted color.</returns>
+    public static ColorF FromColor(Color color)
+    {
+        return FromArgb(color.A / 255.0f, color.R / 255.0f, color.G / 255.0f, color.B / 255.0f);
+    }
+
+    /// <summary>
     ///     Returns a value indicating whether this color and another color are equal.
     /// </summary>
     /// <param name="other">The color to compare with this instance.</param>
@@ -159,5 +168,14 @@ public readonly struct ColorF : IEquatable<ColorF>
     public override int GetHashCode()
     {
         return HashCode.Combine(A, R, G, B);
+    }
+
+    /// <summary>
+    ///     Converts this instance of <see cref="ColorF" /> to an instance of <see cref="Color" />.
+    /// </summary>
+    /// <returns>The converted color.</returns>
+    public Color ToColor()
+    {
+        return Color.FromArgb((int)(A * 255.0f), (int)(R * 255.0f), (int)(G * 255.0f), (int)(B * 255.0f));
     }
 }

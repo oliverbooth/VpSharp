@@ -49,54 +49,99 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     public static bool operator !=(Cell left, Cell right) => !left.Equals(right);
 
     /// <summary>
-    ///     Explicitly converts an instance of <see cref="Vector2" /> to an instance of <see cref="Cell" />. 
+    ///     Explicitly converts an instance of <see cref="Vector2" /> to an instance of <see cref="Cell" />.
     /// </summary>
     /// <param name="vector">The vector to convert.</param>
     /// <returns>
     ///     A cell whose <see cref="X" /> component is equal to <see cref="Vector2.X" />, and whose <see cref="Z" /> component
     ///     is equal to <see cref="Vector2.Y" />.
     /// </returns>
-    public static explicit operator Cell(Vector2 vector) => new((int)vector.X, (int)vector.Y);
+    public static explicit operator Cell(Vector2 vector)
+    {
+        return FromVector2(vector);
+    }
 
     /// <summary>
-    ///     Implicitly converts an instance of <see cref="Cell" /> to an instance of <see cref="Vector2" />. 
+    ///     Implicitly converts an instance of <see cref="Cell" /> to an instance of <see cref="Vector2" />.
     /// </summary>
     /// <param name="cell">The cell to convert.</param>
     /// <returns>
     ///     A vector whose <see cref="X" /> component is equal to <see cref="Cell.X" />, and whose <see cref="Vector2.Y" />
     ///     component is equal to <see cref="Z" />.
     /// </returns>
-    public static implicit operator Vector2(Cell cell) => new(cell.X, cell.Z);
+    public static implicit operator Vector2(Cell cell)
+    {
+        return cell.ToVector2();
+    }
 
     /// <summary>
-    ///     Explicitly converts an instance of <see cref="Vector3" /> to an instance of <see cref="Cell" />. 
+    ///     Explicitly converts an instance of <see cref="Vector3" /> to an instance of <see cref="Cell" />.
     /// </summary>
     /// <param name="vector">The vector to convert.</param>
     /// <returns>
     ///     A cell whose <see cref="X" /> component is equal to <see cref="Vector3.X" />, and whose <see cref="Z" /> component
     ///     is equal to <see cref="Vector3.Z" />.
     /// </returns>
-    public static explicit operator Cell(Vector3 vector) => new((int)vector.X, (int)vector.Z);
+    public static explicit operator Cell(Vector3 vector)
+    {
+        return FromVector3(vector);
+    }
 
     /// <summary>
-    ///     Implicitly converts an instance of <see cref="Cell" /> to an instance of <see cref="Vector3" />. 
+    ///     Implicitly converts an instance of <see cref="Cell" /> to an instance of <see cref="Vector3" />.
     /// </summary>
     /// <param name="cell">The cell to convert.</param>
     /// <returns>
     ///     A vector whose <see cref="X" /> component is equal to <see cref="Cell.X" />, and whose <see cref="Vector3.Z" />
     ///     component is equal to <see cref="Z" />, and whose <see cref="Vector3.Y" /> component is 0.
     /// </returns>
-    public static implicit operator Vector3(Cell cell) => new(cell.X, 0, cell.Z);
+    public static implicit operator Vector3(Cell cell)
+    {
+        return cell.ToVector3();
+    }
 
     /// <summary>
-    ///     Explicitly converts an instance of <see cref="Vector3d" /> to an instance of <see cref="Cell" />. 
+    ///     Explicitly converts an instance of <see cref="Vector3d" /> to an instance of <see cref="Cell" />.
     /// </summary>
     /// <param name="vector">The vector to convert.</param>
     /// <returns>
     ///     A cell whose <see cref="X" /> component is equal to <see cref="Vector3d.X" />, and whose <see cref="Z" />
     ///     component is equal to <see cref="Vector3d.Z" />.
     /// </returns>
-    public static explicit operator Cell(Vector3d vector) => new((int)vector.X, (int)vector.Z);
+    public static explicit operator Cell(Vector3d vector)
+    {
+        return FromVector3d(vector);
+    }
+
+    /// <summary>
+    ///     Converts an instance of <see cref="Vector2" /> to a new instance of <see cref="Cell" />.
+    /// </summary>
+    /// <param name="vector">The vector to convert.</param>
+    /// <returns>The cell result of the conversion.</returns>
+    public static Cell FromVector2(in Vector2 vector)
+    {
+        return new Cell((int)vector.X, (int)vector.Y);
+    }
+
+    /// <summary>
+    ///     Converts an instance of <see cref="Vector3" /> to a new instance of <see cref="Cell" />.
+    /// </summary>
+    /// <param name="vector">The vector to convert.</param>
+    /// <returns>The cell result of the conversion.</returns>
+    public static Cell FromVector3(in Vector3 vector)
+    {
+        return new Cell((int)vector.X, (int)vector.Y);
+    }
+
+    /// <summary>
+    ///     Converts an instance of <see cref="Vector3d" /> to a new instance of <see cref="Cell" />.
+    /// </summary>
+    /// <param name="vector">The vector to convert.</param>
+    /// <returns>The cell result of the conversion.</returns>
+    public static Cell FromVector3d(in Vector3d vector)
+    {
+        return new Cell((int)vector.X, (int)vector.Y);
+    }
 
     /// <summary>
     ///     Returns a value indicating whether this cell and another cell are equal.
@@ -149,5 +194,32 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
         builder.Append(Z.ToString(format, formatProvider));
         builder.Append('>');
         return builder.ToString();
+    }
+
+    /// <summary>
+    ///     Converts this cell to a <see cref="Vector2" />.
+    /// </summary>
+    /// <returns>The vector result of the conversion.</returns>
+    public Vector2 ToVector2()
+    {
+        return new Vector2(X, Z);
+    }
+
+    /// <summary>
+    ///     Converts this cell to a <see cref="Vector2" />.
+    /// </summary>
+    /// <returns>The vector result of the conversion.</returns>
+    public Vector3 ToVector3()
+    {
+        return new Vector3(X, 0, Z);
+    }
+
+    /// <summary>
+    ///     Converts this cell to a <see cref="Vector2" />.
+    /// </summary>
+    /// <returns>The vector result of the conversion.</returns>
+    public Vector3d ToVector3d()
+    {
+        return new Vector3d(X, 0, Z);
     }
 }
