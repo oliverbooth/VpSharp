@@ -184,7 +184,6 @@ public sealed partial class VirtualParadiseClient : IDisposable
         ReleaseUnmanagedResources();
     }
 
-
     /// <summary>
     ///     Enters a specified world at a specified position.
     /// </summary>

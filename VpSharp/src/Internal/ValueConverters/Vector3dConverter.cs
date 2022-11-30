@@ -1,4 +1,4 @@
-using Cysharp.Text;
+﻿using Cysharp.Text;
 using VpSharp.Extensions;
 
 namespace VpSharp.Internal.ValueConverters;
@@ -17,7 +17,7 @@ internal sealed class Vector3dConverter : ValueConverter<Vector3d>
         {
             int readChar = reader.Read();
 
-            var currentChar = (char) readChar;
+            var currentChar = (char)readChar;
             if (currentChar == ' ')
             {
                 spaceCount++;

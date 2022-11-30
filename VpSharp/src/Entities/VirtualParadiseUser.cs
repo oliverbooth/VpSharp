@@ -131,7 +131,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
         if (_client.CurrentAvatar is not { } avatar)
         {
             ThrowHelper.ThrowNotInWorldException();
-            return (InviteResponse) (-1);
+            return (InviteResponse)(-1);
         }
 
         location ??= avatar.Location;
@@ -209,8 +209,8 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
                 y = vp_double(handle, FloatAttribute.JoinY);
                 z = vp_double(handle, FloatAttribute.JoinZ);
 
-                yaw = (float) vp_double(handle, FloatAttribute.JoinYaw);
-                pitch = (float) vp_double(handle, FloatAttribute.JoinPitch);
+                yaw = (float)vp_double(handle, FloatAttribute.JoinYaw);
+                pitch = (float)vp_double(handle, FloatAttribute.JoinPitch);
 
                 worldName = vp_string(handle, StringAttribute.JoinWorld);
             }

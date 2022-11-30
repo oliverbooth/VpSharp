@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Internal;
+namespace VpSharp.Internal;
 
 internal enum ReasonCode
 {
@@ -45,7 +45,7 @@ internal enum ReasonCode
     WorldLoginError,
 
     /// <summary>
-    ///     A world request was made while not being connected to a world server. 
+    ///     A world request was made while not being connected to a world server.
     /// </summary>
     NotInWorld,
 
@@ -86,12 +86,12 @@ internal enum ReasonCode
     NoSuchUser,
 
     /// <summary>
-    /// Timeout
+    ///     Timeout
     /// </summary>
     Timeout,
 
     /// <summary>
-    ///     The instance is not connected to a universe. 
+    ///     The instance is not connected to a universe.
     /// </summary>
     NotInUniverse,
 

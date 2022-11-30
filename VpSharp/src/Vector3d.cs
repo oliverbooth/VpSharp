@@ -9,7 +9,7 @@ namespace VpSharp;
 /// <summary>
 ///     Represents a vector with three double-precision floating-point values. This structure very closely resembles the API
 ///     provided by <see cref="Vector3" />, however its components and the mathematical operations performed on them use
-///     <see cref="double" /> arithmetic. 
+///     <see cref="double" /> arithmetic.
 /// </summary>
 public struct Vector3d : IEquatable<Vector3d>, IFormattable
 {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Numerics;
 using VpSharp.Entities;
 using VpSharp.Internal.NativeAttributes;
@@ -45,8 +45,8 @@ public sealed partial class VirtualParadiseClient
             double x = vp_double(sender, FloatAttribute.AvatarX);
             double y = vp_double(sender, FloatAttribute.AvatarY);
             double z = vp_double(sender, FloatAttribute.AvatarZ);
-            var pitch = (float) vp_double(sender, FloatAttribute.AvatarPitch);
-            var yaw = (float) vp_double(sender, FloatAttribute.AvatarYaw);
+            var pitch = (float)vp_double(sender, FloatAttribute.AvatarPitch);
+            var yaw = (float)vp_double(sender, FloatAttribute.AvatarYaw);
 
             var position = new Vector3d(x, y, z);
             var rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);

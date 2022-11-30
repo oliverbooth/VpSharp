@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Channels;
@@ -71,7 +71,7 @@ public sealed partial class VirtualParadiseClient
                 int g = vp_int(sender, IntegerAttribute.ChatColorGreen);
                 int b = vp_int(sender, IntegerAttribute.ChatColorBlue);
                 color = Color.FromArgb(r, g, b);
-                style = (FontStyle) vp_int(sender, IntegerAttribute.ChatEffects);
+                style = (FontStyle)vp_int(sender, IntegerAttribute.ChatEffects);
             }
 
             VirtualParadiseAvatar? avatar = GetAvatar(session);
@@ -80,7 +80,7 @@ public sealed partial class VirtualParadiseClient
 
         var args = new MessageReceivedEventArgs(message);
         RaiseEvent(MessageReceived, args);
-        
+
         foreach (VirtualParadiseClientExtension extension in _extensions)
         {
             extension.OnMessageReceived(args);
@@ -114,8 +114,8 @@ public sealed partial class VirtualParadiseClient
             double z = vp_double(sender, FloatAttribute.AvatarZ);
             position = new Vector3d(x, y, z);
 
-            var pitch = (float) vp_double(sender, FloatAttribute.AvatarPitch);
-            var yaw = (float) vp_double(sender, FloatAttribute.AvatarYaw);
+            var pitch = (float)vp_double(sender, FloatAttribute.AvatarPitch);
+            var yaw = (float)vp_double(sender, FloatAttribute.AvatarYaw);
             rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);
         }
 
@@ -325,7 +325,7 @@ public sealed partial class VirtualParadiseClient
         DisconnectReason reason;
         lock (Lock)
         {
-            reason = (DisconnectReason) vp_int(sender, IntegerAttribute.DisconnectErrorCode);
+            reason = (DisconnectReason)vp_int(sender, IntegerAttribute.DisconnectErrorCode);
         }
 
         var args = new DisconnectedEventArgs(reason);
@@ -337,7 +337,7 @@ public sealed partial class VirtualParadiseClient
         DisconnectReason reason;
         lock (Lock)
         {
-            reason = (DisconnectReason) vp_int(sender, IntegerAttribute.DisconnectErrorCode);
+            reason = (DisconnectReason)vp_int(sender, IntegerAttribute.DisconnectErrorCode);
         }
 
         var args = new DisconnectedEventArgs(reason);
@@ -474,7 +474,7 @@ public sealed partial class VirtualParadiseClient
         {
             session = vp_int(sender, IntegerAttribute.AvatarSession);
             url = vp_string(sender, StringAttribute.Url);
-            target = (UriTarget) vp_int(sender, IntegerAttribute.UrlTarget);
+            target = (UriTarget)vp_int(sender, IntegerAttribute.UrlTarget);
         }
 
         if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
@@ -544,8 +544,8 @@ public sealed partial class VirtualParadiseClient
             double y = vp_double(sender, FloatAttribute.InviteY);
             double z = vp_double(sender, FloatAttribute.InviteZ);
 
-            var yaw = (float) vp_double(sender, FloatAttribute.InviteYaw);
-            var pitch = (float) vp_double(sender, FloatAttribute.InvitePitch);
+            var yaw = (float)vp_double(sender, FloatAttribute.InviteYaw);
+            var pitch = (float)vp_double(sender, FloatAttribute.InvitePitch);
 
             position = new Vector3d(x, y, z);
             rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);

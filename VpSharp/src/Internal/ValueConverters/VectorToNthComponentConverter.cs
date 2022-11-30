@@ -1,4 +1,4 @@
-using Cysharp.Text;
+﻿using Cysharp.Text;
 using VpSharp.Extensions;
 
 namespace VpSharp.Internal.ValueConverters;
@@ -30,7 +30,7 @@ internal sealed class VectorToNthComponentConverter : ValueConverter<float>
                 break;
             }
 
-            var currentChar = (char) readChar;
+            var currentChar = (char)readChar;
             if (currentChar == ' ')
             {
                 spaceCount++;

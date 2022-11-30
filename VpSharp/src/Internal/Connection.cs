@@ -30,7 +30,7 @@ internal sealed class Connection : IDisposable
     public int Connect(string host, ushort port)
     {
         _socket.BeginConnect(host, port, ConnectCallback, this);
-        return (int) NetworkReturnCode.Success;
+        return (int)NetworkReturnCode.Success;
     }
 
     public void Dispose()
@@ -120,10 +120,10 @@ internal sealed class Connection : IDisposable
     {
         if (_readyBuffers.Count == 0)
         {
-            return (int) NetworkReturnCode.WouldBlock;
+            return (int)NetworkReturnCode.WouldBlock;
         }
 
-        var spaceLeft = (int) length;
+        var spaceLeft = (int)length;
         nint destination = data;
 
         int i;
@@ -148,7 +148,7 @@ internal sealed class Connection : IDisposable
 
         _readyBuffers.RemoveRange(0, i);
 
-        return (int) (length - spaceLeft);
+        return (int)(length - spaceLeft);
     }
 
     private static void ReceiveCallback(IAsyncResult ar)
@@ -218,7 +218,7 @@ internal sealed class Connection : IDisposable
     public int Send(nint data, uint length)
     {
         var buffer = new byte[length];
-        Marshal.Copy(data, buffer, 0, (int) length);
+        Marshal.Copy(data, buffer, 0, (int)length);
         try
         {
             return _socket.Send(buffer);

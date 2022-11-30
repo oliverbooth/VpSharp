@@ -15,7 +15,7 @@ public sealed partial class VirtualParadiseClient
 
     private void Initialize()
     {
-        var reason = (ReasonCode) Native.vp_init();
+        var reason = (ReasonCode)Native.vp_init();
         if (reason == ReasonCode.VersionMismatch)
         {
             throw new VersionMismatchException();

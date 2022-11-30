@@ -22,7 +22,7 @@ internal abstract class ValueConverter<T> : ValueConverter
     /// <inheritdoc />
     public override void Serialize(TextWriter writer, object value)
     {
-        Serialize(writer, (T) value);
+        Serialize(writer, (T)value);
     }
 
     public abstract void Deserialize(TextReader reader, out T result);

@@ -70,7 +70,10 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <summary>
     ///     Gets or sets a value indicating whether this emitter interpolates its values.
     /// </summary>
-    /// <value><see langword="true" /> if this emitter interpolates its values; otherwise, <see langword="false" />, or <see langword="null" /> to leave unchanged.</value>
+    /// <value>
+    ///     <see langword="true" /> if this emitter interpolates its values; otherwise, <see langword="false" />, or
+    ///     <see langword="null" /> to leave unchanged.
+    /// </value>
     [SerializationKey("interpolate")]
     [ValueConverter(typeof(IntToBoolConverter))]
     public bool? Interpolate { get; set; }

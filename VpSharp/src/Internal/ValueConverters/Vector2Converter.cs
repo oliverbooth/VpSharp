@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Cysharp.Text;
 using VpSharp.Extensions;
 
@@ -18,7 +18,7 @@ internal sealed class Vector2Converter : ValueConverter<Vector2>
         {
             int readChar = reader.Read();
 
-            var currentChar = (char) readChar;
+            var currentChar = (char)readChar;
             if (currentChar == ' ')
             {
                 spaceCount++;

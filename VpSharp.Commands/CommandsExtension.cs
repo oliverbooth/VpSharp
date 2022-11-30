@@ -36,7 +36,6 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     /// </summary>
     /// <param name="assembly">The assembly whose command modules to register.</param>
     /// <exception cref="ArgumentException">
-    ///     
     /// </exception>
     /// <exception cref="TypeInitializationException">A command module could not be instantiated.</exception>
     /// <exception cref="InvalidOperationException">

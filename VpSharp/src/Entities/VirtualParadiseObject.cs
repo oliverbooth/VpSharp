@@ -137,7 +137,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         lock (Client.Lock)
         {
             int session = target?.Session ?? 0;
-            (float x, float y, float z) = (Vector3) (position ?? Vector3d.Zero);
+            (float x, float y, float z) = (Vector3)(position ?? Vector3d.Zero);
 
             _ = vp_object_click(Client.NativeInstanceHandle, Id, session, x, y, z);
         }
@@ -154,7 +154,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     {
         lock (Client.Lock)
         {
-            var reason = (ReasonCode) vp_object_delete(Client.NativeInstanceHandle, Id);
+            var reason = (ReasonCode)vp_object_delete(Client.NativeInstanceHandle, Id);
 
             switch (reason)
             {
@@ -207,7 +207,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
             return false;
         }
 
-        return Equals((VirtualParadiseObject) obj);
+        return Equals((VirtualParadiseObject)obj);
     }
 
     /// <inheritdoc />
