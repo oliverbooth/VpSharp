@@ -270,8 +270,8 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
         Span<char> text = stackalloc char[data.Length];
         Encoding.UTF8.GetChars(data, text);
 
-        using var keyBuffer = new Utf8ValueStringBuilder(false);
-        using var valueBuffer = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder keyBuffer = ZString.CreateUtf8StringBuilder();
+        using Utf8ValueStringBuilder valueBuffer = ZString.CreateUtf8StringBuilder();
         var isKey = true;
 
         for (var index = 0; index < text.Length; index++)

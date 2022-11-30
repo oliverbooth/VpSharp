@@ -62,7 +62,7 @@ internal static class SpanExtensions
         float y = 0;
         byte spaceCount = 0;
 
-        using var buffer = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder buffer = ZString.CreateUtf8StringBuilder();
         for (var index = 0; index < value.Length; index++)
         {
             char current = value[index];
@@ -107,7 +107,7 @@ internal static class SpanExtensions
         float z = 0;
         byte spaceCount = 0;
 
-        using var buffer = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder buffer = ZString.CreateUtf8StringBuilder();
         for (var index = 0; index < value.Length; index++)
         {
             char current = value[index];
@@ -155,7 +155,7 @@ internal static class SpanExtensions
         double z = 0;
         byte spaceCount = 0;
 
-        using var buffer = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder buffer = ZString.CreateUtf8StringBuilder();
         for (var index = 0; index < value.Length; index++)
         {
             char current = value[index];
@@ -204,7 +204,7 @@ internal static class SpanExtensions
         float w = 0;
         byte spaceCount = 0;
 
-        using var buffer = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder buffer = ZString.CreateUtf8StringBuilder();
         for (var index = 0; index < value.Length; index++)
         {
             char current = value[index];

@@ -10,7 +10,7 @@ internal sealed class Vector4ToColorConverter : ValueConverter<ColorF>
     /// <inheritdoc />
     public override void Deserialize(TextReader reader, out ColorF result)
     {
-        using var builder = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
         var spaceCount = 0;
 
         while (true)

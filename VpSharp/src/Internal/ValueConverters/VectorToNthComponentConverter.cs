@@ -18,7 +18,7 @@ internal sealed class VectorToNthComponentConverter : ValueConverter<float>
     /// <inheritdoc />
     public override void Deserialize(TextReader reader, out float result)
     {
-        using var builder = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
         var spaceCount = 0;
 
         while (true)

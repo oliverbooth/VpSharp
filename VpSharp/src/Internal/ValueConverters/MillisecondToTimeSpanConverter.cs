@@ -10,7 +10,7 @@ internal sealed class MillisecondToTimeSpanConverter : ValueConverter<TimeSpan>
     /// <inheritdoc />
     public override void Deserialize(TextReader reader, out TimeSpan result)
     {
-        using var builder = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
         int read;
         while ((read = reader.Read()) != -1)
         {

@@ -10,7 +10,7 @@ internal sealed class Vector3dConverter : ValueConverter<Vector3d>
     /// <inheritdoc />
     public override void Deserialize(TextReader reader, out Vector3d result)
     {
-        using var builder = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
         var spaceCount = 0;
 
         while (true)

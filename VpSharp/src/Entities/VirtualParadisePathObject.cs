@@ -45,7 +45,7 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
         Span<char> chars = stackalloc char[data.Length];
         Encoding.UTF8.GetChars(data, chars);
 
-        using var buffer = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder buffer = ZString.CreateUtf8StringBuilder();
         int index;
 
         // version

@@ -11,7 +11,7 @@ internal sealed class Vector2Converter : ValueConverter<Vector2>
     /// <inheritdoc />
     public override void Deserialize(TextReader reader, out Vector2 result)
     {
-        using var builder = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
         var spaceCount = 0;
 
         while (true)

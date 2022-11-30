@@ -10,7 +10,7 @@ internal sealed class IntToBoolConverter : ValueConverter<bool>
     /// <inheritdoc />
     public override void Deserialize(TextReader reader, out bool result)
     {
-        using var builder = new Utf8ValueStringBuilder(false);
+        using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
         int read;
         while ((read = reader.Read()) != -1)
         {
