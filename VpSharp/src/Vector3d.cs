@@ -118,7 +118,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The summed vector.</returns>
-    public static Vector3d operator +(Vector3d left, Vector3d right)
+    public static Vector3d operator +(in Vector3d left, in Vector3d right)
     {
         return new(
             left.X + right.X,
@@ -133,7 +133,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The difference vector.</returns>
-    public static Vector3d operator -(Vector3d left, Vector3d right)
+    public static Vector3d operator -(in Vector3d left, in Vector3d right)
     {
         return new(
             left.X - right.X,
@@ -148,7 +148,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The product vector.</returns>
-    public static Vector3d operator *(Vector3d left, Vector3d right)
+    public static Vector3d operator *(in Vector3d left, in Vector3d right)
     {
         return new(
             left.X * right.X,
@@ -163,7 +163,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The vector value.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector3d operator *(Vector3d left, double right)
+    public static Vector3d operator *(in Vector3d left, double right)
     {
         return new(
             left.X * right,
@@ -178,7 +178,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The scalar value.</param>
     /// <param name="right">The vector value.</param>
     /// <returns>The scaled vector.</returns>
-    public static Vector3d operator *(double left, Vector3d right)
+    public static Vector3d operator *(double left, in Vector3d right)
     {
         return new(
             left * right.X,
@@ -193,7 +193,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The first source vector.</param>
     /// <param name="right">The second source vector.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector3d operator /(Vector3d left, Vector3d right)
+    public static Vector3d operator /(in Vector3d left, in Vector3d right)
     {
         return new(
             left.X / right.X,
@@ -208,7 +208,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// <param name="left">The vector value.</param>
     /// <param name="right">The scalar value.</param>
     /// <returns>The vector resulting from the division.</returns>
-    public static Vector3d operator /(Vector3d left, double right)
+    public static Vector3d operator /(in Vector3d left, double right)
     {
         return new(
             left.X / right,
@@ -222,7 +222,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The negated vector.</returns>
-    public static Vector3d operator -(Vector3d value)
+    public static Vector3d operator -(in Vector3d value)
     {
         return Zero - value;
     }
@@ -276,7 +276,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The absolute value vector.</returns>
-    public static Vector3d Abs(Vector3d value)
+    public static Vector3d Abs(in Vector3d value)
     {
         return new(
             Math.Abs(value.X),
@@ -433,7 +433,7 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     /// </summary>
     /// <param name="value">The source vector.</param>
     /// <returns>The square root vector.</returns>
-    public static Vector3d SquareRoot(Vector3d value)
+    public static Vector3d SquareRoot(in Vector3d value)
     {
         return new(
             Math.Sqrt(value.X),
