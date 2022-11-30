@@ -286,6 +286,17 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     }
 
     /// <summary>
+    ///     Adds two vectors together.
+    /// </summary>
+    /// <param name="left">The first source vector.</param>
+    /// <param name="right">The second source vector.</param>
+    /// <returns>The summed vector.</returns>
+    public static Vector3d Add(in Vector3d left, in Vector3d right)
+    {
+        return left + right;
+    }
+
+    /// <summary>
     ///     Restricts a vector between a minimum and maximum value.
     /// </summary>
     /// <param name="value">The source vector.</param>
@@ -335,6 +346,28 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     {
         Vector3d difference = left - right;
         return Dot(difference, difference);
+    }
+
+    /// <summary>
+    ///     Divides the first vector by the second.
+    /// </summary>
+    /// <param name="left">The first source vector.</param>
+    /// <param name="right">The second source vector.</param>
+    /// <returns>The vector resulting from the division.</returns>
+    public static Vector3d Divide(in Vector3d left, in Vector3d right)
+    {
+        return left / right;
+    }
+
+    /// <summary>
+    ///     Divides the vector by the given scalar.
+    /// </summary>
+    /// <param name="left">The vector value.</param>
+    /// <param name="right">The scalar value.</param>
+    /// <returns>The vector resulting from the division.</returns>
+    public static Vector3d Divide(in Vector3d left, double right)
+    {
+        return left / right;
     }
 
     /// <summary>
@@ -406,6 +439,49 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     }
 
     /// <summary>
+    ///     Multiples two vectors together.
+    /// </summary>
+    /// <param name="left">The first source vector.</param>
+    /// <param name="right">The second source vector.</param>
+    /// <returns>The product vector.</returns>
+    public static Vector3d Multiply(in Vector3d left, in Vector3d right)
+    {
+        return left * right;
+    }
+
+    /// <summary>
+    ///     Multiples a vector by the given scalar.
+    /// </summary>
+    /// <param name="left">The vector value.</param>
+    /// <param name="right">The scalar value.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector3d Multiply(in Vector3d left, double right)
+    {
+        return left * right;
+    }
+
+    /// <summary>
+    ///     Multiples a vector by the given scalar.
+    /// </summary>
+    /// <param name="left">The scalar value.</param>
+    /// <param name="right">The vector value.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector3d Multiply(double left, in Vector3d right)
+    {
+        return left * right;
+    }
+
+    /// <summary>
+    ///     Negates a given vector.
+    /// </summary>
+    /// <param name="value">The source vector.</param>
+    /// <returns>The negated vector.</returns>
+    public static Vector3d Negate(in Vector3d value)
+    {
+        return -value;
+    }
+
+    /// <summary>
     ///     Returns a vector with the same direction as the given vector, but with a length of 1.
     /// </summary>
     /// <param name="value">The vector to normalize.</param>
@@ -440,6 +516,17 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
             Math.Sqrt(value.Y),
             Math.Sqrt(value.Z)
         );
+    }
+
+    /// <summary>
+    ///     Subtracts the second vector from the first.
+    /// </summary>
+    /// <param name="left">The first source vector.</param>
+    /// <param name="right">The second source vector.</param>
+    /// <returns>The difference vector.</returns>
+    public static Vector3d Subtract(in Vector3d left, in Vector3d right)
+    {
+        return left - right;
     }
 
     /// <summary>
