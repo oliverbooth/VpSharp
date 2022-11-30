@@ -182,6 +182,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     public void Dispose()
     {
         ReleaseUnmanagedResources();
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
