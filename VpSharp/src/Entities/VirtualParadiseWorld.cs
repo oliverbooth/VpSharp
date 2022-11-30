@@ -134,6 +134,6 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"World [Name={Name}]";
+        return $"World {Name}";
     }
 }

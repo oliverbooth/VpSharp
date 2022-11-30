@@ -432,6 +432,6 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"Avatar [Session={Session}, Name={Name}]";
+        return $"Avatar #{Session}; {User.Name} ({Name})";
     }
 }

@@ -244,6 +244,6 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"User [Id={Id}, Name={Name}]";
+        return $"User #{Id}; {Name}";
     }
 }

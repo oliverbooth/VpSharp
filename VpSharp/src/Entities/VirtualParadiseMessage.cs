@@ -58,4 +58,10 @@ public sealed class VirtualParadiseMessage
     /// </summary>
     /// <value>The type of this message.</value>
     public MessageType Type { get; }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"Message {Author}; Type {Type}; Content {Content}";
+    }
 }

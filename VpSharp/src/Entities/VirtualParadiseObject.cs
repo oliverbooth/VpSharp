@@ -217,6 +217,12 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         return HashCode.Combine(Location.World, Id);
     }
 
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"Object {Id}; Owner {Owner}; Location {Location}";
+    }
+
     /// <summary>
     ///     Copies the properties from another object into this object.
     /// </summary>
