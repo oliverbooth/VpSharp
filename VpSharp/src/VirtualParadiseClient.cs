@@ -334,7 +334,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
             case ReasonCode.ConnectionError:
             case ReasonCode.WorldLoginError:
-                throw new Exception("Connection to the universe server was lost, or connecting to the world failed.");
+                throw new VirtualParadiseException(reason,
+                    "Connection to the universe server was lost, or connecting to the world failed.");
 
             case ReasonCode.WorldNotFound:
                 throw new WorldNotFoundException(worldName);
@@ -343,7 +344,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
                 throw new TimeoutException("Connection to the world server timed out.");
 
             default:
-                throw new Exception($"Unknown error: {reason:D} ({reason:G})");
+                throw new VirtualParadiseException(reason, $"Unknown error: {reason:D} ({reason:G})");
         }
 
         int size;

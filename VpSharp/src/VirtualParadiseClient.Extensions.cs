@@ -68,8 +68,7 @@ public sealed partial class VirtualParadiseClient
         object? instance = Activator.CreateInstance(type, bindingFlags, null, argumentsActual, CultureInfo.InvariantCulture);
         if (instance is not VirtualParadiseClientExtension extension)
         {
-            var innerException = new Exception($"Could not instantiate {type}");
-            throw new TypeInitializationException(type.FullName, innerException);
+            throw new TypeInitializationException(type.FullName, null);
         }
 
         _extensions.Add(extension);

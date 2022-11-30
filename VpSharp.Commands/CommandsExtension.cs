@@ -120,8 +120,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
 
         if (Activator.CreateInstance(moduleType) is not CommandModule module)
         {
-            var innerException = new Exception($"Could not instantiate {moduleType.FullName}");
-            throw new TypeInitializationException(moduleType.FullName, innerException);
+            throw new TypeInitializationException(moduleType.FullName, null);
         }
 
         foreach (MethodInfo method in moduleType.GetMethods(BindingFlags))

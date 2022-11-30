@@ -125,10 +125,12 @@ public sealed partial class VirtualParadiseClient
         PreReturn:
         return reason switch
         {
-            ReasonCode.DatabaseError => throw new Exception("Error communicating with the database."),
+            ReasonCode.DatabaseError =>
+                throw new VirtualParadiseException(ReasonCode.DatabaseError, "Error communicating with the database."),
             ReasonCode.ObjectNotFound => throw new ObjectNotFoundException(),
-            ReasonCode.UnknownError => throw new Exception("An unknown error occurred retrieving the object."),
-            _ when reason != ReasonCode.Success => throw new Exception($"{reason:D} ({reason:G})"),
+            ReasonCode.UnknownError =>
+                throw new VirtualParadiseException(ReasonCode.UnknownError, "An unknown error occurred retrieving the object."),
+            _ when reason != ReasonCode.Success => throw new VirtualParadiseException(reason, $"{reason:D} ({reason:G})"),
             _ => virtualParadiseObject!
         };
     }
