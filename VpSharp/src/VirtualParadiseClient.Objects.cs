@@ -109,7 +109,7 @@ public sealed partial class VirtualParadiseClient
             }
         }
 
-        (reason, virtualParadiseObject) = await taskCompletionSource.Task;
+        (reason, virtualParadiseObject) = await taskCompletionSource.Task.ConfigureAwait(false);
         _objectCompletionSources.TryRemove(id, out _);
 
         if (virtualParadiseObject is not null)
@@ -182,7 +182,7 @@ public sealed partial class VirtualParadiseClient
 
         var location = new Location(CurrentWorld!, position, rotation);
         virtualParadiseObject.Location = location;
-        virtualParadiseObject.Owner = await GetUserAsync(owner);
+        virtualParadiseObject.Owner = await GetUserAsync(owner).ConfigureAwait(false);
         return virtualParadiseObject;
     }
 }
