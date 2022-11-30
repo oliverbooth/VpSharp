@@ -1,4 +1,4 @@
-﻿using System.Net.Sockets;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using VpSharp.NativeApi;
 
@@ -93,7 +93,7 @@ internal class Connection
         }
     }
 
-    private static void HandleTimeout(object state)
+    private static void HandleTimeout(object? state)
     {
         (state as Connection)?.HandleTimeout();
     }
