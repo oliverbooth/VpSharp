@@ -15,8 +15,8 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
                                               System.Reflection.BindingFlags.NonPublic |
                                               System.Reflection.BindingFlags.Instance;
 
-    private readonly CommandsExtensionConfiguration _configuration;
     private readonly Dictionary<string, Command> _commandMap = new(StringComparer.OrdinalIgnoreCase);
+    private readonly CommandsExtensionConfiguration _configuration;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="CommandsExtension" /> class.
