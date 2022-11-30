@@ -1,14 +1,36 @@
 using System.Collections.Concurrent;
 using System.Threading.Channels;
 using VpSharp.Entities;
+using static VpSharp.Internal.Native;
 
 namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
     private readonly ConcurrentDictionary<string, string> _worldSettings = new();
+    private readonly ConcurrentDictionary<string, VirtualParadiseWorld> _worlds = new();
     private Channel<VirtualParadiseWorld>? _worldListChannel = Channel.CreateUnbounded<VirtualParadiseWorld>();
     private TaskCompletionSource _worldSettingsCompletionSource = new();
+
+    /// <summary>
+    ///     Gets an enumerable of the worlds returned by the universe server.
+    /// </summary>
+    /// <returns>An <see cref="IAsyncEnumerable{T}" /> containing <see cref="VirtualParadiseWorld" /> values.</returns>
+    /// <remarks>
+    ///     This method will yield results back as they are received from the world server. To access a consumed collection,
+    ///     use <see cref="GetWorldsAsync" />.
+    /// </remarks>
+    /// <seealso cref="GetWorldsAsync" />
+    public IAsyncEnumerable<VirtualParadiseWorld> EnumerateWorldsAsync()
+    {
+        _worldListChannel = Channel.CreateUnbounded<VirtualParadiseWorld>();
+        lock (Lock)
+        {
+            _ = vp_world_list(NativeInstanceHandle, 0);
+        }
+
+        return _worldListChannel.Reader.ReadAllAsync();
+    }
 
     /// <summary>
     ///     Gets a world by its name.
