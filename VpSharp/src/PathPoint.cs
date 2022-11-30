@@ -6,7 +6,9 @@ namespace VpSharp;
 /// <summary>
 ///     Represents a point along a <see cref="VirtualParadisePath" />.
 /// </summary>
+#pragma warning disable CA1815
 public readonly struct PathPoint
+#pragma warning restore CA1815
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="PathPoint" /> struct.

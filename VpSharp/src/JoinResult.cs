@@ -1,9 +1,11 @@
-namespace VpSharp;
+﻿namespace VpSharp;
 
 /// <summary>
 ///     Represents a join result.
 /// </summary>
+#pragma warning disable CA1815
 public readonly struct JoinResult
+#pragma warning restore CA1815
 {
     internal JoinResult(JoinResponse response, Location? location)
     {
