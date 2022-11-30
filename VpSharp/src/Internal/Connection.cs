@@ -4,7 +4,7 @@ using VpSharp.NativeApi;
 
 namespace VpSharp.Internal;
 
-internal class Connection
+internal sealed class Connection
 {
     private readonly object _lockObject;
     private readonly Socket _socket;
