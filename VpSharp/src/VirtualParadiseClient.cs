@@ -44,8 +44,10 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     Initializes a new instance of the <see cref="VirtualParadiseClient" /> class with a specified configuration.
     /// </summary>
     /// <value>The configuration for this client.</value>
+    /// <exception cref="ArgumentNullException"><paramref name="configuration" /> is <see langword="null" />.</exception>
     public VirtualParadiseClient(VirtualParadiseConfiguration configuration)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
         Services = configuration.Services;
         _configuration = new VirtualParadiseConfiguration(configuration);
         Initialize();

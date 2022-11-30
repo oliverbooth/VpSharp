@@ -30,7 +30,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     public CommandsExtension(VirtualParadiseClient client, CommandsExtensionConfiguration configuration)
         : base(client)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentNullException.ThrowIfNull(configuration);
+
+        _configuration = configuration;
         _configuration.Services ??= client.Services;
     }
 
