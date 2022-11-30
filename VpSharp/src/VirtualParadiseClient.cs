@@ -392,7 +392,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
         {
             _ = Task.Run(async () =>
             {
-                await foreach (VirtualParadiseObject virtualParadiseObject in EnumerateObjectsAsync(default, radius: size))
+                await foreach (VirtualParadiseObject virtualParadiseObject in EnumerateObjectsAsync(default, size))
                 {
                     AddOrUpdateObject(virtualParadiseObject);
                 }
