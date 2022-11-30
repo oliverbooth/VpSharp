@@ -6,6 +6,9 @@ using static VpSharp.Internal.NativeMethods;
 
 namespace VpSharp;
 
+// TODO temporarily... I should probably honour this analyzer at some point
+#pragma warning disable CA1506
+
 public sealed partial class VirtualParadiseClient
 {
     private readonly ConcurrentDictionary<int, VirtualParadiseAvatar> _avatars = new();
