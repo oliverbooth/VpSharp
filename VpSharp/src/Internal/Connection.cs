@@ -76,11 +76,13 @@ internal sealed class Connection : IDisposable
 
     public static nint CreateNative(nint vpConnection, nint context)
     {
+#pragma warning disable CA2000
         GCHandle contextHandle = GCHandle.FromIntPtr(context);
         var connection = new Connection(vpConnection, contextHandle.Target!);
         GCHandle handle = GCHandle.Alloc(connection, GCHandleType.Normal);
         var ptr = GCHandle.ToIntPtr(handle);
         return ptr;
+#pragma warning restore CA2000
     }
 
     public static void DestroyNative(nint ptr)
