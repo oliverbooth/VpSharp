@@ -75,6 +75,7 @@ public static class QuaternionExtensions
     }
 
     // 
+#pragma warning disable CA1021
     /// <summary>
     ///     Converts this quaternion to an axis/angle pair.
     /// </summary>
@@ -109,4 +110,5 @@ public static class QuaternionExtensions
 
         axis = new Vector3d(x, y, z);
     }
+#pragma warning restore CA1021
 }
