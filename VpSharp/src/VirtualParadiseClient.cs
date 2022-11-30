@@ -79,7 +79,19 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     The world to which this client is currently connected, or <see langword="null" /> if this client is not currently
     ///     in a world.
     /// </value>
-    public VirtualParadiseWorld? CurrentWorld => CurrentAvatar?.Location.World;
+    public VirtualParadiseWorld? CurrentWorld
+    {
+        get => CurrentAvatar?.Location.World;
+    }
+
+    /// <summary>
+    ///     Gets a read-only view of the cached worlds.
+    /// </summary>
+    /// <value>The cached worlds.</value>
+    public IReadOnlyList<VirtualParadiseWorld> Worlds
+    {
+        get => _worlds.Values.ToArray();
+    }
 
     /// <summary>
     ///     Establishes a connection to the universe at the specified remote endpoint.
