@@ -210,7 +210,9 @@ internal static class NativeMethods
 
     [DllImport(VpSdkLibrary, CallingConvention = CallingConvention.Cdecl)]
     [DefaultDllImportSearchPaths(SearchPaths)]
+#pragma warning disable CA1814
     public static extern int vp_terrain_query(nint instance, int tile_x, int tile_z, int[,] revision);
+#pragma warning restore CA1814
 
 // [DllImport(VpSdkLibrary, CallingConvention=CallingConvention.Cdecl)] public static extern int vp_terrain_node_set(IntPtr instance, int tile_x, int tile_z, int node_x, int node_z, struct vp_terrain_cell_t* cells);
     [DllImport(VpSdkLibrary, CallingConvention = CallingConvention.Cdecl)]
