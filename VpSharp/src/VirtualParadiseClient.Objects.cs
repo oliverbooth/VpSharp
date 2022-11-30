@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Numerics;
 using System.Threading.Channels;
 using VpSharp.Entities;
@@ -11,9 +11,9 @@ namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
-    private readonly ConcurrentDictionary<int, VirtualParadiseObject> _objects = new();
     private readonly ConcurrentDictionary<int, TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>>
         _objectCompletionSources = new();
+    private readonly ConcurrentDictionary<int, VirtualParadiseObject> _objects = new();
 
     /// <summary>
     ///     Enumerates all objects within a specified cell.

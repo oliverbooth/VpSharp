@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
@@ -21,9 +21,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
 {
     private const string DefaultUniverseHost = "universe.virtualparadise.org";
     private const int DefaultUniversePort = 57000;
+    private readonly ConcurrentDictionary<Cell, Channel<VirtualParadiseObject>> _cellChannels = new();
 
     private readonly VirtualParadiseConfiguration _configuration;
-    private readonly ConcurrentDictionary<Cell, Channel<VirtualParadiseObject>> _cellChannels = new();
 
     private readonly ConcurrentDictionary<int, VirtualParadiseUser> _friends = new();
     private readonly Dictionary<int, TaskCompletionSource<ReasonCode>> _inviteCompletionSources = new();

@@ -94,6 +94,44 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     }
 
     /// <summary>
+    ///     Clicks this avatar.
+    /// </summary>
+    /// <param name="clickPoint">The position at which the avatar should be clicked.</param>
+    /// <exception cref="InvalidOperationException">
+    ///     <para>The action cannot be performed on the client's current avatar.</para>
+    ///     -or-
+    ///     <para>An attempt was made to click an avatar outside of a world.</para>
+    /// </exception>
+    public Task ClickAsync(Vector3d? clickPoint = null)
+    {
+        // ReSharper disable once InconsistentlySynchronizedField
+        if (this == _client.CurrentAvatar)
+        {
+            return Task.FromException(ThrowHelper.CannotUseSelfException());
+        }
+
+        clickPoint ??= Location.Position;
+        (double x, double y, double z) = clickPoint.Value;
+
+        lock (_client.Lock)
+        {
+            nint handle = _client.NativeInstanceHandle;
+
+            _ = vp_double_set(handle, FloatAttribute.ClickHitX, x);
+            _ = vp_double_set(handle, FloatAttribute.ClickHitY, y);
+            _ = vp_double_set(handle, FloatAttribute.ClickHitZ, z);
+
+            var reason = (ReasonCode)vp_avatar_click(handle, Session);
+            if (reason == ReasonCode.NotInWorld)
+            {
+                return Task.FromException(ThrowHelper.NotInWorldException());
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
     ///     Determines if two <see cref="VirtualParadiseAvatar" /> instances are equal.
     /// </summary>
     /// <param name="other">The other instance.</param>
@@ -127,44 +165,6 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
         // ReSharper disable NonReadonlyMemberInGetHashCode
         return HashCode.Combine(Session, User);
         // ReSharper restore NonReadonlyMemberInGetHashCode
-    }
-
-    /// <summary>
-    ///     Clicks this avatar.
-    /// </summary>
-    /// <param name="clickPoint">The position at which the avatar should be clicked.</param>
-    /// <exception cref="InvalidOperationException">
-    ///     <para>The action cannot be performed on the client's current avatar.</para>
-    ///     -or-
-    ///     <para>An attempt was made to click an avatar outside of a world.</para>
-    /// </exception>
-    public Task ClickAsync(Vector3d? clickPoint = null)
-    {
-        // ReSharper disable once InconsistentlySynchronizedField
-        if (this == _client.CurrentAvatar)
-        {
-            return Task.FromException(ThrowHelper.CannotUseSelfException());
-        }
-
-        clickPoint ??= Location.Position;
-        (double x, double y, double z) = clickPoint.Value;
-
-        lock (_client.Lock)
-        {
-            nint handle = _client.NativeInstanceHandle;
-
-            vp_double_set(handle, FloatAttribute.ClickHitX, x);
-            vp_double_set(handle, FloatAttribute.ClickHitY, y);
-            vp_double_set(handle, FloatAttribute.ClickHitZ, z);
-
-            var reason = (ReasonCode)vp_avatar_click(handle, Session);
-            if (reason == ReasonCode.NotInWorld)
-            {
-                return Task.FromException(ThrowHelper.NotInWorldException());
-            }
-        }
-
-        return Task.CompletedTask;
     }
 
     /// <summary>

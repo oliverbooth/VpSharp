@@ -6,8 +6,8 @@ namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
-    private NetConfig _netConfig;
     private GCHandle _instanceHandle;
+    private NetConfig _netConfig;
 
     internal object Lock { get; } = new();
 
