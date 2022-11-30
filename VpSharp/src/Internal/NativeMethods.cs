@@ -5,7 +5,7 @@ using VpSharp.Internal.NativeAttributes;
 
 namespace VpSharp.Internal;
 
-internal static class Native
+internal static class NativeMethods
 {
     private const int NativeSdkVersion = 5;
     private const string VpSdkLibrary = "vpsdk";

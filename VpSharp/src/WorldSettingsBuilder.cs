@@ -392,7 +392,7 @@ public sealed class WorldSettingsBuilder
                     continue;
                 }
 
-                var reason = (ReasonCode)Native.vp_world_setting_set(_client.NativeInstanceHandle, key, value, session);
+                var reason = (ReasonCode)NativeMethods.vp_world_setting_set(_client.NativeInstanceHandle, key, value, session);
 
                 if (reason == ReasonCode.NotAllowed)
                 {

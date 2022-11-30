@@ -10,7 +10,7 @@ using VpSharp.Exceptions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using VpSharp.Internal.ValueConverters;
-using static VpSharp.Internal.Native;
+using static VpSharp.Internal.NativeMethods;
 
 namespace VpSharp;
 

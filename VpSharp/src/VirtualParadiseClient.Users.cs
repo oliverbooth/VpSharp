@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using VpSharp.Entities;
-using static VpSharp.Internal.Native;
+using static VpSharp.Internal.NativeMethods;
 
 namespace VpSharp;
 

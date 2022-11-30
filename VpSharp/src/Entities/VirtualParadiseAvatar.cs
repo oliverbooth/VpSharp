@@ -3,7 +3,7 @@ using System.Numerics;
 using VpSharp.Extensions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
-using static VpSharp.Internal.Native;
+using static VpSharp.Internal.NativeMethods;
 
 namespace VpSharp.Entities;
 

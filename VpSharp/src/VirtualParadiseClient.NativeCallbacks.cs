@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using VpSharp.Entities;
 using VpSharp.Internal;
-using static VpSharp.Internal.Native;
+using static VpSharp.Internal.NativeMethods;
 
 namespace VpSharp;
 

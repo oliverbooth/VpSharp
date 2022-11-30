@@ -81,7 +81,7 @@ public sealed class InviteRequest : IEquatable<InviteRequest>
 
         lock (_client.Lock)
         {
-            _ = Native.vp_invite_accept(_client.NativeInstanceHandle, _requestId);
+            _ = NativeMethods.vp_invite_accept(_client.NativeInstanceHandle, _requestId);
         }
 
         if (suppressTeleport)
@@ -99,7 +99,7 @@ public sealed class InviteRequest : IEquatable<InviteRequest>
     {
         lock (_client.Lock)
         {
-            _ = Native.vp_invite_decline(_client.NativeInstanceHandle, _requestId);
+            _ = NativeMethods.vp_invite_decline(_client.NativeInstanceHandle, _requestId);
         }
 
         return Task.CompletedTask;

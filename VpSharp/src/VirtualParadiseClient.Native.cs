@@ -15,7 +15,7 @@ public sealed partial class VirtualParadiseClient
 
     private void Initialize()
     {
-        var reason = (ReasonCode)Native.vp_init();
+        var reason = (ReasonCode)NativeMethods.vp_init();
         if (reason == ReasonCode.VersionMismatch)
         {
             throw new VersionMismatchException();
@@ -30,7 +30,7 @@ public sealed partial class VirtualParadiseClient
         _netConfig.Send = Connection.SendNative;
         _netConfig.Timeout = Connection.TimeoutNative;
 
-        NativeInstanceHandle = Native.vp_create(ref _netConfig);
+        NativeInstanceHandle = NativeMethods.vp_create(ref _netConfig);
 
         SetNativeEvents();
         SetNativeCallbacks();
