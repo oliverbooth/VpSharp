@@ -1,4 +1,5 @@
 using VpSharp.Entities;
+using VpSharp.Exceptions;
 using VpSharp.Extensions;
 using VpSharp.Internal;
 
@@ -67,7 +68,12 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
             ThrowHelper.ThrowNotInWorldException();
         }
 
-        location ??= _client.CurrentAvatar!.Location;
+        if (_client.CurrentAvatar is null)
+        {
+            throw new NotInWorldException();
+        }
+
+        location ??= _client.CurrentAvatar.Location;
         string worldName = location.Value.World.Name;
         (double x, double y, double z) = location.Value.Position;
         (double pitch, double yaw, double _) = location.Value.Rotation.ToEulerAngles();

@@ -1,4 +1,5 @@
-using VpSharp.Entities;
+﻿using VpSharp.Entities;
+using VpSharp.Exceptions;
 using VpSharp.Internal;
 
 namespace VpSharp;
@@ -73,6 +74,11 @@ public sealed class InviteRequest : IEquatable<InviteRequest>
     /// </param>
     public Task AcceptAsync(bool suppressTeleport = false)
     {
+        if (_client.CurrentAvatar is null)
+        {
+            throw new NotInWorldException();
+        }
+
         lock (_client.Lock)
         {
             _ = Native.vp_invite_accept(_client.NativeInstanceHandle, _requestId);
