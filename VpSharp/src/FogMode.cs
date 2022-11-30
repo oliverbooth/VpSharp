@@ -1,5 +1,7 @@
 ﻿namespace VpSharp;
 
+#pragma warning disable CA1027
+
 /// <summary>
 ///     An enumeration of fog modes.
 /// </summary>
