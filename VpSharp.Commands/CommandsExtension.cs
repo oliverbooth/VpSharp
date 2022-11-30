@@ -260,7 +260,6 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
                 }
             }
 
-            Console.WriteLine(string.Join(';', arguments));
             object? returnValue = command.Method.Invoke(command.Module, arguments);
             if (returnValue is Task task)
             {
