@@ -11,7 +11,7 @@ internal sealed class Connection : IDisposable
 
     private byte[] _pendingBuffer;
     private readonly List<byte[]> _readyBuffers = new();
-    private Timer _timer;
+    private Timer? _timer;
     private nint _vpConnection;
 
     public Connection(nint vpConnection, object lockObject)
@@ -65,8 +65,8 @@ internal sealed class Connection : IDisposable
     {
         GCHandle handle = GCHandle.FromIntPtr(ptr);
         var connection = handle.Target as Connection;
-        string host = Marshal.PtrToStringAnsi(hostPtr);
-        if (connection is not null)
+        string? host = Marshal.PtrToStringAnsi(hostPtr);
+        if (connection is not null && host is not null)
         {
             return connection.Connect(host, port);
         }

@@ -244,7 +244,7 @@ public sealed partial class VirtualParadiseClient
             virtualParadiseObject = null;
         }
 
-        _objects.TryRemove(objectId, out VirtualParadiseObject? _);
+        _objects.TryRemove(objectId, out VirtualParadiseObject _);
 
         var args = new ObjectDeletedEventArgs(avatar!, objectId, virtualParadiseObject!);
         RaiseEvent(ObjectDeleted, args);

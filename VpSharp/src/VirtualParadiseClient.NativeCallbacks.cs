@@ -45,7 +45,7 @@ public sealed partial class VirtualParadiseClient
             return;
         }
 
-        VirtualParadiseObject virtualParadiseObject = reason == ReasonCode.Success ? await ExtractObjectAsync(sender) : null;
+        VirtualParadiseObject? virtualParadiseObject = reason == ReasonCode.Success ? await ExtractObjectAsync(sender).ConfigureAwait(true) : null;
         taskCompletionSource.SetResult((reason, virtualParadiseObject));
     }
 
