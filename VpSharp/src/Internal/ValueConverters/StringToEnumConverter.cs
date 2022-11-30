@@ -27,6 +27,8 @@ internal sealed class StringToEnumConverter<T> : ValueConverter<T>
     /// <inheritdoc />
     public override void Serialize(TextWriter writer, T value)
     {
+#pragma warning disable CA1308
         writer.Write(value.ToString().ToLowerInvariant());
+#pragma warning restore CA1308
     }
 }
