@@ -197,8 +197,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
-
-        VirtualParadiseObject cachedObject = null;
+        VirtualParadiseObject? cachedObject = null;
 
         if (_objects.TryGetValue(objectId, out VirtualParadiseObject? virtualParadiseObject))
         {
@@ -207,7 +206,12 @@ public sealed partial class VirtualParadiseClient
 
             virtualParadiseObject.ExtractFromInstance(sender); // update existing instance
         }
+        else
+        {
+            virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+        }
 
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (virtualParadiseObject is not null)
         {
             AddOrUpdateObject(virtualParadiseObject);
@@ -316,7 +320,7 @@ public sealed partial class VirtualParadiseClient
             userId = vp_int(sender, IntegerAttribute.FriendUserId);
         }
 
-        VirtualParadiseUser? user = await GetUserAsync(userId).ConfigureAwait(false);
+        VirtualParadiseUser user = await GetUserAsync(userId).ConfigureAwait(false);
         _friends.AddOrUpdate(userId, user, (_, _) => user);
     }
 
@@ -519,7 +523,7 @@ public sealed partial class VirtualParadiseClient
             name = vp_string(NativeInstanceHandle, StringAttribute.JoinName);
         }
 
-        VirtualParadiseUser? user = await GetUserAsync(userId).ConfigureAwait(false);
+        VirtualParadiseUser user = await GetUserAsync(userId).ConfigureAwait(false);
         var joinRequest = new JoinRequest(this, requestId, name, user);
         var args = new JoinRequestReceivedEventArgs(joinRequest);
         RaiseEvent(JoinRequestReceived, args);
@@ -554,7 +558,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseWorld? world = await GetWorldAsync(worldName).ConfigureAwait(false);
-        VirtualParadiseUser? user = await GetUserAsync(userId).ConfigureAwait(false);
+        VirtualParadiseUser user = await GetUserAsync(userId).ConfigureAwait(false);
 
         var location = new Location(world, position, rotation);
         var request = new InviteRequest(this, requestId, avatarName, user, location);

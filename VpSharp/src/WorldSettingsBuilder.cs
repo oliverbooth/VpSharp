@@ -208,14 +208,14 @@ public sealed class WorldSettingsBuilder
     /// </summary>
     /// <value>The texture for the first sky cloud layer.</value>
     [SerializationKey("sky_clouds1")]
-    public string SkyClouds1Texture { get; set; }
+    public string? SkyClouds1Texture { get; set; }
 
     /// <summary>
     ///     Gets or sets the texture for the second sky cloud layer.
     /// </summary>
     /// <value>The texture for the second sky cloud layer.</value>
     [SerializationKey("sky_clouds2")]
-    public string SkyClouds2Texture { get; set; }
+    public string? SkyClouds2Texture { get; set; }
 
     /// <summary>
     ///     Gets or sets the velocity for the first sky cloud layer.
@@ -278,14 +278,14 @@ public sealed class WorldSettingsBuilder
     /// </summary>
     /// <value>The skybox texture.</value>
     [SerializationKey("skybox")]
-    public string Skybox { get; set; }
+    public string? Skybox { get; set; }
 
     /// <summary>
     ///     Gets or sets the file extension for skybox textures.
     /// </summary>
     /// <value>The file extension for skybox textures.</value>
     [SerializationKey("skybox_extension")]
-    public string SkyboxExtension { get; set; }
+    public string? SkyboxExtension { get; set; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether the X axis of skybox textures should be swapped.
@@ -330,14 +330,14 @@ public sealed class WorldSettingsBuilder
     /// </summary>
     /// <value>The URL of the in-world web overlay.</value>
     [SerializationKey("web_overlay")]
-    public string WebOverlay { get; set; }
+    public string? WebOverlay { get; set; }
 
     /// <summary>
     ///     Gets or sets the welcome message.
     /// </summary>
     /// <value>The welcome message.</value>
     [SerializationKey("welcome")]
-    public string WelcomeMessage { get; set; }
+    public string? WelcomeMessage { get; set; }
 
     /// <summary>
     ///     Gets or sets the ambient light color of the world.
@@ -376,7 +376,7 @@ public sealed class WorldSettingsBuilder
     /// </summary>
     /// <value>The name of the world.</value>
     [SerializationKey("worldname")]
-    public string WorldName { get; set; }
+    public string? WorldName { get; set; }
 
     internal void SendChanges()
     {

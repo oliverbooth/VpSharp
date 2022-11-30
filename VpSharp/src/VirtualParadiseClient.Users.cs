@@ -39,7 +39,7 @@ public sealed partial class VirtualParadiseClient
         user = await taskCompletionSource.Task.ConfigureAwait(false);
         user = AddOrUpdateUser(user);
 
-        _usersCompletionSources.TryRemove(userId, out TaskCompletionSource<VirtualParadiseUser>? _);
+        _usersCompletionSources.TryRemove(userId, out TaskCompletionSource<VirtualParadiseUser> _);
         return user;
     }
 
