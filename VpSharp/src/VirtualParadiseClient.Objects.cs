@@ -33,14 +33,9 @@ public sealed partial class VirtualParadiseClient
 
         lock (Lock)
         {
-            if (revision is not null)
-            {
-                vp_query_cell_revision(NativeInstanceHandle, cell.X, cell.Z, revision.Value);
-            }
-            else
-            {
-                vp_query_cell(NativeInstanceHandle, cell.X, cell.Z);
-            }
+            _ = revision is not null
+                ? vp_query_cell_revision(NativeInstanceHandle, cell.X, cell.Z, revision.Value)
+                : vp_query_cell(NativeInstanceHandle, cell.X, cell.Z);
         }
 
         return channel.Reader.ReadAllAsync();
@@ -106,7 +101,7 @@ public sealed partial class VirtualParadiseClient
             lock (Lock)
             {
                 _ = vp_int_set(NativeInstanceHandle, IntegerAttribute.ReferenceNumber, id);
-                reason = (ReasonCode) vp_object_get(NativeInstanceHandle, id);
+                reason = (ReasonCode)vp_object_get(NativeInstanceHandle, id);
                 if (reason != ReasonCode.Success)
                 {
                     goto PreReturn;
