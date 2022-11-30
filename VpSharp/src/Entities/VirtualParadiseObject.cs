@@ -242,7 +242,11 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         {
             unsafe
             {
+#if NET7_0_OR_GREATER
                 data = new Span<byte>(dataPtr.ToPointer(), length);
+#else
+                data = new Span<byte>(((IntPtr)dataPtr).ToPointer(), length);
+#endif
             }
         }
 
