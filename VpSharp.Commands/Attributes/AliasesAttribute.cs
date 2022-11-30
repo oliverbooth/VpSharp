@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace VpSharp.Commands.Attributes;
 
@@ -6,6 +6,7 @@ namespace VpSharp.Commands.Attributes;
 ///     Defines the aliases of a command.
 /// </summary>
 [AttributeUsage(AttributeTargets.Method)]
+[CLSCompliant(false)]
 public sealed class AliasesAttribute : Attribute
 {
     /// <summary>
