@@ -10,7 +10,7 @@ internal sealed class Connection : IDisposable
     private readonly List<byte[]> _readyBuffers = new();
     private readonly Socket _socket;
 
-    private byte[] _pendingBuffer;
+    private byte[] _pendingBuffer = Array.Empty<byte>();
     private Timer? _timer;
     private nint _vpConnection;
 
