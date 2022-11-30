@@ -99,7 +99,7 @@ public readonly partial struct Coordinates
 
         public static Coordinates Deserialize(ReadOnlySpan<char> value)
         {
-            using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
+            Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
             string? world = null;
             var isRelative = false;
             double x = 0.0, y = 0.0, z = 0.0, yaw = 0.0;
@@ -119,7 +119,7 @@ public readonly partial struct Coordinates
                             builder.Append(current);
                         }
 
-                        ProcessBuffer();
+                        ProcessBuffer(ref builder, ref world, word, ref isRelative, ref z, ref x, ref y, ref yaw);
                         word++;
                     }
 
@@ -131,73 +131,8 @@ public readonly partial struct Coordinates
                 }
             }
 
+            builder.Dispose();
             return new Coordinates(world, x, y, z, yaw, isRelative);
-
-            void ProcessBuffer()
-            {
-                ReadOnlySpan<byte> bytes = builder.AsSpan();
-                Span<char> chars = stackalloc char[bytes.Length];
-                Encoding.UTF8.GetChars(bytes, chars);
-                bool hasWorld = !string.IsNullOrWhiteSpace(world);
-
-                if (word == 0 && !IsUnitString(bytes))
-                {
-                    world = chars.ToString().AsNullIfWhiteSpace();
-                }
-                else if (IsRelativeUnit(bytes))
-                {
-                    isRelative = true;
-
-                    switch (word)
-                    {
-                        case 0 when !hasWorld:
-                        case 1 when hasWorld:
-                            double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out z);
-                            break;
-                        case 1 when !hasWorld:
-                        case 2 when hasWorld:
-                            double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out x);
-                            break;
-                        case 2 when !hasWorld:
-                        case 3 when hasWorld:
-                            double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out y);
-                            break;
-                        case 3 when !hasWorld:
-                        case 4 when hasWorld:
-                            double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out yaw);
-                            break;
-                    }
-                }
-                else
-                {
-                    if (((!hasWorld && word == 1) || (hasWorld && word == 2)) && chars[^1] is 'x' or 'X' or 'w' or 'W')
-                    {
-                        _ = double.TryParse(chars[..^1], NumberStyles.Float, CultureInfo.InvariantCulture, out x);
-                    }
-                    else if (((!hasWorld && word == 0) || (hasWorld && word == 1)) && chars[^1] is 'z' or 'Z' or 'n' or 'N')
-                    {
-                        _ = double.TryParse(chars[..^1], NumberStyles.Float, CultureInfo.InvariantCulture, out z);
-                    }
-                    else if (((!hasWorld && word == 1) || (hasWorld && word == 2)) && chars[^1] is 'e' or 'E')
-                    {
-                        _ = double.TryParse(chars[..^1], NumberStyles.Float, CultureInfo.InvariantCulture, out x);
-                        x = -x;
-                    }
-                    else if (((!hasWorld && word == 0) || (hasWorld && word == 1)) && chars[^1] is 's' or 'S')
-                    {
-                        _ = double.TryParse(chars[..^1], NumberStyles.Float, CultureInfo.InvariantCulture, out z);
-                        z = -z;
-                    }
-                    else if (((!hasWorld && word == 2) || (hasWorld && word == 3)) && chars[^1] is 'a' or 'A')
-                    {
-                        _ = double.TryParse(chars[..^1], NumberStyles.Float, CultureInfo.InvariantCulture, out y);
-                    }
-                    else if (((!hasWorld && word == 3) || (hasWorld && word == 4)) && double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out double temp))
-                    {
-                        yaw = temp;
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -299,6 +234,148 @@ public readonly partial struct Coordinates
 
             //                              thicc char span
             return IsRelativeUnit(chars) || IsAbsoluteUnit(chars);
+        }
+
+
+        private static bool IsAtWordIndex(int expected, int actual, bool hasWorld)
+        {
+            return hasWorld ? actual == expected + 1 : actual == expected;
+        }
+
+        private static void ProcessBuffer(
+            ref Utf8ValueStringBuilder builder,
+            ref string? world,
+            int word,
+            ref bool isRelative,
+            ref double z,
+            ref double x,
+            ref double y,
+            ref double yaw
+        )
+        {
+            ReadOnlySpan<byte> bytes = builder.AsSpan();
+            Span<char> chars = stackalloc char[bytes.Length];
+            Encoding.UTF8.GetChars(bytes, chars);
+            bool hasWorld = !string.IsNullOrWhiteSpace(world);
+
+            if (word == 0 && !IsUnitString(bytes))
+            {
+                world = chars.ToString().AsNullIfWhiteSpace();
+            }
+            else if (IsRelativeUnit(bytes))
+            {
+                isRelative = true;
+                ProcessRelativeUnit(word, ref z, ref x, ref y, ref yaw, hasWorld, chars);
+            }
+            else
+            {
+                ProcessAbsoluteUnit(word, ref z, ref x, ref y, ref yaw, hasWorld, chars);
+            }
+        }
+
+        private static void ProcessAbsoluteUnit(int word, ref double z, ref double x, ref double y, ref double yaw, bool hasWorld,
+            Span<char> chars)
+        {
+            const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
+            char lastChar = chars[^1];
+
+            bool isAt0 = IsAtWordIndex(0, word, hasWorld);
+            bool isAt1 = IsAtWordIndex(1, word, hasWorld);
+            bool isAt2 = IsAtWordIndex(2, word, hasWorld);
+            bool isAt3 = IsAtWordIndex(3, word, hasWorld);
+
+            Span<char> charsExceptLast = chars[..^1];
+            double.TryParse(charsExceptLast, NumberStyles.Float, CultureInfo.InvariantCulture, out double value);
+
+            if (isAt0)
+            {
+                if ("nzNZ".AsSpan().Contains(lastChar))
+                {
+                    z = value;
+                }
+                else if ("sS".AsSpan().Contains(lastChar))
+                {
+                    z = -value;
+                }
+            }
+            else if (isAt1)
+            {
+                if ("xwXW".AsSpan().Contains(lastChar))
+                {
+                    x = value;
+                }
+                else if ("eE".AsSpan().Contains(lastChar))
+                {
+                    x = -value;
+                }
+            }
+            else if (isAt2 && "aA".AsSpan().Contains(lastChar))
+            {
+                y = value;
+            }
+            else if (isAt3 && double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+            {
+                yaw = value;
+            }
+
+            /*
+            if (isAt1 && "XW".Contains(lastChar, comparison))
+            {
+                x = value;
+            }
+            else if (isAt0 && "ZN".Contains(lastChar, comparison))
+            {
+                z = value;
+            }
+            else if (isAt1 && "E".Contains(lastChar, comparison))
+            {
+                x = -value;
+            }
+            else if (isAt0 && "S".Contains(lastChar, comparison))
+            {
+                z = -value;
+            }
+            else if (isAt2 && "A".Contains(lastChar, comparison))
+            {
+                y = value;
+            }
+            else if (isAt3 && double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+            {
+                yaw = value;
+            }*/
+        }
+
+        private static void ProcessRelativeUnit(
+            int word,
+            ref double z,
+            ref double x,
+            ref double y,
+            ref double yaw,
+            bool hasWorld,
+            Span<char> chars
+        )
+        {
+            if (!double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+            {
+                return;
+            }
+
+            if (IsAtWordIndex(0, word, hasWorld))
+            {
+                z = value;
+            }
+            else if (IsAtWordIndex(1, word, hasWorld))
+            {
+                x = value;
+            }
+            else if (IsAtWordIndex(2, word, hasWorld))
+            {
+                y = value;
+            }
+            else if (IsAtWordIndex(3, word, hasWorld))
+            {
+                yaw = value;
+            }
         }
     }
 }
