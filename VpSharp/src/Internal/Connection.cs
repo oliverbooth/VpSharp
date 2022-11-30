@@ -77,7 +77,7 @@ internal sealed class Connection : IDisposable
     public static nint CreateNative(nint vpConnection, nint context)
     {
         GCHandle contextHandle = GCHandle.FromIntPtr(context);
-        var connection = new Connection(vpConnection, contextHandle.Target);
+        var connection = new Connection(vpConnection, contextHandle.Target!);
         GCHandle handle = GCHandle.Alloc(connection, GCHandleType.Normal);
         var ptr = GCHandle.ToIntPtr(handle);
         return ptr;
