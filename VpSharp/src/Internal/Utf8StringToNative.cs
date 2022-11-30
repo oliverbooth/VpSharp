@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
 
 namespace VpSharp.Internal;
@@ -26,13 +26,19 @@ internal sealed class Utf8StringToNative : ICustomMarshaler
         return -1;
     }
 
-    public nint MarshalManagedToNative(object managedObj)
+    public unsafe nint MarshalManagedToNative(object managedObj)
     {
-        byte[] utf8Data = Encoding.UTF8.GetBytes((string)managedObj);
-        nint buffer = Marshal.AllocHGlobal(utf8Data.Length + 1);
-        Marshal.Copy(utf8Data, 0, buffer, utf8Data.Length);
-        Marshal.WriteByte(buffer, utf8Data.Length, 0);
-        return buffer;
+        var managedString = (string)managedObj;
+        Span<byte> utf8Bytes = stackalloc byte[managedString.Length];
+        Encoding.UTF8.GetBytes(managedString, utf8Bytes);
+
+        fixed (byte* data = &MemoryMarshal.GetReference(utf8Bytes))
+        {
+            IntPtr buffer = Marshal.AllocHGlobal(utf8Bytes.Length + 1);
+            Buffer.MemoryCopy(data, (void*)buffer, utf8Bytes.Length, utf8Bytes.Length);
+            Marshal.WriteByte(buffer, utf8Bytes.Length, 0);
+            return buffer;
+        }
     }
 
     public object MarshalNativeToManaged(nint pNativeData)
