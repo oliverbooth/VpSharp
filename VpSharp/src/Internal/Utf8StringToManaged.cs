@@ -12,6 +12,16 @@ internal sealed class Utf8StringToManaged : ICustomMarshaler
         return s_instance ??= new Utf8StringToManaged();
     }
 
+    private static int GetStringLength(IntPtr ptr)
+    {
+        int offset;
+        for (offset = 0; Marshal.ReadByte(ptr, offset) != 0; offset++)
+        {
+        }
+
+        return offset;
+    }
+
     public void CleanUpNativeData(IntPtr pNativeData)
     {
         // Do nothing. For some reason CleanUpNativeData is called for pointers that are not even created by the marshaler.
@@ -31,16 +41,6 @@ internal sealed class Utf8StringToManaged : ICustomMarshaler
     public IntPtr MarshalManagedToNative(object managedObj)
     {
         throw new NotImplementedException();
-    }
-
-    private int GetStringLength(IntPtr ptr)
-    {
-        int offset;
-        for (offset = 0; Marshal.ReadByte(ptr, offset) != 0; offset++)
-        {
-        }
-
-        return offset;
     }
 
     public object MarshalNativeToManaged(IntPtr pNativeData)
