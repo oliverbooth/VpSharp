@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace VpSharp.Commands.Attributes;
 
@@ -23,7 +23,9 @@ public sealed class AliasesAttribute : Attribute
     ///     -or-
     ///     <para>An element in <paramref name="aliases" /> is null, empty, or consists of only whitespace.</para>
     /// </exception>
+#pragma warning disable CA1019
     public AliasesAttribute(string alias, params string[] aliases)
+#pragma warning restore CA1019
     {
         ArgumentNullException.ThrowIfNull(alias);
         ArgumentNullException.ThrowIfNull(aliases);
