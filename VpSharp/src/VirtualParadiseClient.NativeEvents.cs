@@ -284,11 +284,7 @@ public sealed partial class VirtualParadiseClient
             int avatarCount = vp_int(sender, IntegerAttribute.WorldUsers);
             var state = (WorldState)vp_int(sender, IntegerAttribute.WorldState);
 
-            world = new VirtualParadiseWorld(this, name)
-            {
-                AvatarCount = avatarCount,
-                State = state
-            };
+            world = new VirtualParadiseWorld(this, name) {AvatarCount = avatarCount, State = state};
         }
 
         if (_worldListChannel is not null)
@@ -443,7 +439,9 @@ public sealed partial class VirtualParadiseClient
             worldName = vp_string(sender, StringAttribute.TeleportWorld);
         }
 
-        VirtualParadiseWorld? world = string.IsNullOrWhiteSpace(worldName) ? CurrentWorld : await GetWorldAsync(worldName).ConfigureAwait(false);
+        VirtualParadiseWorld? world = string.IsNullOrWhiteSpace(worldName)
+            ? CurrentWorld
+            : await GetWorldAsync(worldName).ConfigureAwait(false);
         var location = new Location(world, position, rotation);
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
