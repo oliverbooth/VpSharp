@@ -74,7 +74,7 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
 
         lock (_client.Lock)
         {
-            Native.vp_join_accept(_client.NativeInstanceHandle, _requestId, worldName, x, y, z, (float) yaw, (float) pitch);
+            _ = Native.vp_join_accept(_client.NativeInstanceHandle, _requestId, worldName, x, y, z, (float)yaw, (float)pitch);
         }
 
         return Task.CompletedTask;
@@ -87,7 +87,7 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
     {
         lock (_client.Lock)
         {
-            Native.vp_join_decline(_client.NativeInstanceHandle, _requestId);
+            _ = Native.vp_join_decline(_client.NativeInstanceHandle, _requestId);
         }
 
         return Task.CompletedTask;

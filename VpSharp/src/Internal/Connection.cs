@@ -111,7 +111,7 @@ internal sealed class Connection : IDisposable
         {
             if (_vpConnection != IntPtr.Zero)
             {
-                Native.vp_net_notify(_vpConnection, (int) notification, rc);
+                _ = Native.vp_net_notify(_vpConnection, (int)notification, rc);
             }
         }
     }

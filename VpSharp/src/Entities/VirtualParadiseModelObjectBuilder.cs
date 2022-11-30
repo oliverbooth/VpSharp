@@ -125,9 +125,9 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
         if (Position is { } position)
         {
             (double x, double y, double z) = position;
-            vp_double_set(handle, FloatAttribute.ObjectX, x);
-            vp_double_set(handle, FloatAttribute.ObjectY, y);
-            vp_double_set(handle, FloatAttribute.ObjectZ, z);
+            _ = vp_double_set(handle, FloatAttribute.ObjectX, x);
+            _ = vp_double_set(handle, FloatAttribute.ObjectY, y);
+            _ = vp_double_set(handle, FloatAttribute.ObjectZ, z);
         }
         else if (Mode == ObjectBuilderMode.Create)
         {
@@ -149,10 +149,10 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
                 (x, y, z) = axis;
             }
 
-            vp_double_set(handle, FloatAttribute.ObjectRotationX, x);
-            vp_double_set(handle, FloatAttribute.ObjectRotationY, y);
-            vp_double_set(handle, FloatAttribute.ObjectRotationZ, z);
-            vp_double_set(handle, FloatAttribute.ObjectRotationAngle, angle);
+            _ = vp_double_set(handle, FloatAttribute.ObjectRotationX, x);
+            _ = vp_double_set(handle, FloatAttribute.ObjectRotationY, y);
+            _ = vp_double_set(handle, FloatAttribute.ObjectRotationZ, z);
+            _ = vp_double_set(handle, FloatAttribute.ObjectRotationAngle, angle);
         }
 
         if (ModificationTimestamp is { } modificationTimestamp)
@@ -162,7 +162,7 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
                 throw new InvalidOperationException("Modification timestamp can only be assigned during an object load.");
             }
 
-            vp_int_set(handle, IntegerAttribute.ObjectTime, (int) modificationTimestamp.ToUnixTimeSeconds());
+            _ = vp_int_set(handle, IntegerAttribute.ObjectTime, (int)modificationTimestamp.ToUnixTimeSeconds());
         }
 
         if (Owner is { } owner)
@@ -172,7 +172,7 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
                 throw new InvalidOperationException("Owner can only be assigned during an object load.");
             }
 
-            vp_int_set(handle, IntegerAttribute.ObjectUserId, owner.Id);
+            _ = vp_int_set(handle, IntegerAttribute.ObjectUserId, owner.Id);
         }
     }
 }

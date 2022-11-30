@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using VpSharp.Entities;
 using VpSharp.Internal;
 using static VpSharp.Internal.Native;
@@ -35,7 +35,7 @@ public sealed partial class VirtualParadiseClient
     private void SetNativeCallback(NativeCallback nativeCallback, NativeCallbackHandler handler)
     {
         _nativeCallbackHandlers.TryAdd(nativeCallback, handler);
-        vp_callback_set(NativeInstanceHandle, nativeCallback, handler);
+        _ = vp_callback_set(NativeInstanceHandle, nativeCallback, handler);
     }
 
     private async void OnObjectGetNativeCallback(nint sender, ReasonCode reason, int reference)

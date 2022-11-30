@@ -146,8 +146,8 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             (double x, double y, double z) = location.Value.Position;
             (double pitch, double yaw, _) = location.Value.Rotation.ToEulerAngles();
 
-            vp_int_set(_client.NativeInstanceHandle, IntegerAttribute.ReferenceNumber, reference);
-            vp_invite(_client.NativeInstanceHandle, Id, world, x, y, z, (float) yaw, (float) pitch);
+            _ = vp_int_set(_client.NativeInstanceHandle, IntegerAttribute.ReferenceNumber, reference);
+            _ = vp_invite(_client.NativeInstanceHandle, Id, world, x, y, z, (float)yaw, (float)pitch);
         }
 
         ReasonCode reason = await taskCompletionSource.Task.ConfigureAwait(false);
@@ -188,8 +188,8 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
         lock (_client.Lock)
         {
             int reference = ObjectReferenceCounter.GetNextReference();
-            vp_int_set(handle, IntegerAttribute.ReferenceNumber, reference);
-            vp_join(handle, Id);
+            _ = vp_int_set(handle, IntegerAttribute.ReferenceNumber, reference);
+            _ = vp_join(handle, Id);
 
             taskCompletionSource = _client.AddJoinCompletionSource(reference);
         }

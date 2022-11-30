@@ -281,7 +281,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 
         lock (_client.Lock)
         {
-            vp_url_send(_client.NativeInstanceHandle, Session, uri.ToString(), target);
+            _ = vp_url_send(_client.NativeInstanceHandle, Session, uri.ToString(), target);
         }
 
         return Task.CompletedTask;
@@ -369,11 +369,11 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
                 (double x, double y, double z) = position;
                 (double pitch, double yaw, double _) = rotation.ToEulerAngles(false);
 
-                vp_double_set(handle, FloatAttribute.MyX, x);
-                vp_double_set(handle, FloatAttribute.MyY, y);
-                vp_double_set(handle, FloatAttribute.MyZ, z);
-                vp_double_set(handle, FloatAttribute.MyPitch, pitch);
-                vp_double_set(handle, FloatAttribute.MyYaw, yaw);
+                _ = vp_double_set(handle, FloatAttribute.MyX, x);
+                _ = vp_double_set(handle, FloatAttribute.MyY, y);
+                _ = vp_double_set(handle, FloatAttribute.MyZ, z);
+                _ = vp_double_set(handle, FloatAttribute.MyPitch, pitch);
+                _ = vp_double_set(handle, FloatAttribute.MyYaw, yaw);
 
                 var reason = (ReasonCode)vp_state_change(handle);
                 if (reason == ReasonCode.NotInWorld)

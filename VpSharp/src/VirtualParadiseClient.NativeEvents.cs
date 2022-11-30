@@ -47,7 +47,7 @@ public sealed partial class VirtualParadiseClient
     private void SetNativeEvent(NativeEvent nativeEvent, NativeEventHandler handler)
     {
         _nativeEventHandlers.TryAdd(nativeEvent, handler);
-        vp_event_set(NativeInstanceHandle, nativeEvent, handler);
+        _ = vp_event_set(NativeInstanceHandle, nativeEvent, handler);
     }
 
     private void OnChatNativeEvent(nint sender)

@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using VpSharp.Entities;
 using static VpSharp.Internal.Native;
 
@@ -33,7 +33,7 @@ public sealed partial class VirtualParadiseClient
 
         lock (Lock)
         {
-            vp_user_attributes_by_id(NativeInstanceHandle, userId);
+            _ = vp_user_attributes_by_id(NativeInstanceHandle, userId);
         }
 
         user = await taskCompletionSource.Task.ConfigureAwait(false);

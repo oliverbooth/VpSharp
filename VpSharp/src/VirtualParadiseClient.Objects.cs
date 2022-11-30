@@ -105,7 +105,7 @@ public sealed partial class VirtualParadiseClient
 
             lock (Lock)
             {
-                vp_int_set(NativeInstanceHandle, IntegerAttribute.ReferenceNumber, id);
+                _ = vp_int_set(NativeInstanceHandle, IntegerAttribute.ReferenceNumber, id);
                 reason = (ReasonCode) vp_object_get(NativeInstanceHandle, id);
                 if (reason != ReasonCode.Success)
                 {

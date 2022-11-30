@@ -298,7 +298,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
         {
             lock (Lock)
             {
-                vp_leave(NativeInstanceHandle);
+                _ = vp_leave(NativeInstanceHandle);
             }
         }
 
@@ -368,7 +368,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
         lock (Lock)
         {
-            vp_state_change(NativeInstanceHandle);
+            _ = vp_state_change(NativeInstanceHandle);
         }
 
         world.Size = new Size(size, size);
@@ -532,7 +532,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
         }
 
         CurrentUser = await GetUserAsync(userId).ConfigureAwait(false);
-        vp_friends_get(NativeInstanceHandle);
+        _ = vp_friends_get(NativeInstanceHandle);
     }
 
     /// <summary>
@@ -600,7 +600,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
     private void ReleaseUnmanagedResources()
     {
-        vp_destroy(NativeInstanceHandle);
+        _ = vp_destroy(NativeInstanceHandle);
         _instanceHandle.Free();
     }
 }
