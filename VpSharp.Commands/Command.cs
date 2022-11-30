@@ -8,10 +8,10 @@ namespace VpSharp.Commands;
 /// </summary>
 public sealed class Command
 {
-    internal Command(string name, string[] aliases, MethodInfo method, CommandModule module)
+    internal Command(string name, IReadOnlyList<string> aliases, MethodInfo method, CommandModule module)
     {
         Name = name;
-        Aliases = new ReadOnlyCollection<string>(aliases);
+        Aliases = aliases;
         Method = method;
         Module = module;
         Parameters = method.GetParameters()[1..];

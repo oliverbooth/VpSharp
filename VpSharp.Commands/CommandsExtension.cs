@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using VpSharp.ClientExtensions;
 using VpSharp.Commands.Attributes;
 using VpSharp.EventData;
@@ -256,7 +256,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
 
         var command = new Command(
             commandAttribute.Name,
-            aliasesAttribute?.Aliases ?? Array.Empty<string>(),
+            aliasesAttribute?.Aliases ?? ArraySegment<string>.Empty,
             methodInfo,
             module
         );
