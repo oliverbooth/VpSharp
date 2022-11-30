@@ -574,7 +574,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        var avatar = CurrentAvatar;
+        VirtualParadiseAvatar? avatar = CurrentAvatar;
         return Task.FromResult(new VirtualParadiseMessage(
             MessageType.ChatMessage,
             avatar!.Name,

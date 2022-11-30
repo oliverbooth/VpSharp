@@ -1,6 +1,7 @@
 using System.Reflection;
 using VpSharp.ClientExtensions;
 using VpSharp.Commands.Attributes;
+using VpSharp.Entities;
 using VpSharp.EventData;
 
 namespace VpSharp.Commands;
@@ -133,7 +134,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     protected override Task OnMessageReceived(MessageReceivedEventArgs args)
     {
         ArgumentNullException.ThrowIfNull(args);
-        var message = args.Message;
+        VirtualParadiseMessage message = args.Message;
 
         if (message.Type != MessageType.ChatMessage)
         {

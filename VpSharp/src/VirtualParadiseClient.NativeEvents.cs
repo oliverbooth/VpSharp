@@ -75,7 +75,7 @@ public sealed partial class VirtualParadiseClient
             }
 
             VirtualParadiseAvatar? avatar = GetAvatar(session);
-            message = new VirtualParadiseMessage((MessageType) type, name, content, avatar, style, color);
+            message = new VirtualParadiseMessage((MessageType)type, name, content, avatar, style, color);
         }
 
         var args = new MessageReceivedEventArgs(message);
@@ -165,8 +165,8 @@ public sealed partial class VirtualParadiseClient
             session = vp_int(sender, IntegerAttribute.AvatarSession);
         }
 
-        VirtualParadiseObject? virtualParadiseObject = await ExtractObjectAsync(sender).ConfigureAwait(false);
-        var cell = virtualParadiseObject.Location.Cell;
+        VirtualParadiseObject virtualParadiseObject = await ExtractObjectAsync(sender).ConfigureAwait(false);
+        Cell cell = virtualParadiseObject.Location.Cell;
 
         virtualParadiseObject = AddOrUpdateObject(virtualParadiseObject);
 
@@ -268,7 +268,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
-        var virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+        VirtualParadiseObject virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
         var args = new ObjectClickedEventArgs(avatar, virtualParadiseObject, clickPoint);
         RaiseEvent(ObjectClicked, args);
     }
@@ -281,7 +281,7 @@ public sealed partial class VirtualParadiseClient
         {
             string name = vp_string(sender, StringAttribute.WorldName);
             int avatarCount = vp_int(sender, IntegerAttribute.WorldUsers);
-            var state = (WorldState) vp_int(sender, IntegerAttribute.WorldState);
+            var state = (WorldState)vp_int(sender, IntegerAttribute.WorldState);
 
             world = new VirtualParadiseWorld(this, name)
             {
