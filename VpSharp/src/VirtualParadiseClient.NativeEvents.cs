@@ -5,6 +5,7 @@ using System.Threading.Channels;
 using VpSharp.ClientExtensions;
 using VpSharp.Entities;
 using VpSharp.EventData;
+using VpSharp.Exceptions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using static VpSharp.Internal.Native;
@@ -239,7 +240,7 @@ public sealed partial class VirtualParadiseClient
         {
             virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
         }
-        catch // any exception: we don't care about GetObject failing. ID is always available
+        catch (VirtualParadiseException) // any exception: we don't care about GetObject failing. ID is always available
         {
             virtualParadiseObject = null;
         }
