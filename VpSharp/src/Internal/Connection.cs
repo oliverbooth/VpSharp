@@ -4,7 +4,7 @@ using VpSharp.NativeApi;
 
 namespace VpSharp.Internal;
 
-internal sealed class Connection
+internal sealed class Connection : IDisposable
 {
     private readonly object _lockObject;
     private readonly Socket _socket;
@@ -31,6 +31,12 @@ internal sealed class Connection
     {
         _socket.BeginConnect(host, port, ConnectCallback, this);
         return (int) NetworkReturnCode.Success;
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+        _socket.Dispose();
     }
 
     private static void ConnectCallback(IAsyncResult ar)
@@ -83,6 +89,7 @@ internal sealed class Connection
         var connection = handle.Target as Connection;
         connection?.BeforeDestroy();
         handle.Free();
+        connection?.Dispose();
     }
 
     private void HandleTimeout()
