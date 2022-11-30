@@ -7,10 +7,10 @@ namespace VpSharp.Internal;
 internal sealed class Connection : IDisposable
 {
     private readonly object _lockObject;
+    private readonly List<byte[]> _readyBuffers = new();
     private readonly Socket _socket;
 
     private byte[] _pendingBuffer;
-    private readonly List<byte[]> _readyBuffers = new();
     private Timer? _timer;
     private nint _vpConnection;
 
@@ -24,7 +24,7 @@ internal sealed class Connection : IDisposable
     public void BeforeDestroy()
     {
         // ReSharper disable once InconsistentlySynchronizedField
-        _vpConnection = nint.Zero;
+        _vpConnection = 0;
     }
 
     public int Connect(string host, ushort port)
@@ -52,12 +52,12 @@ internal sealed class Connection : IDisposable
                 connection._socket.BeginReceive(connection._pendingBuffer, 0, 1024, SocketFlags.None, ReceiveCallback,
                     connection);
 
-                connection.Notify(NetworkNotification.Connect, (int) NetworkReturnCode.Success);
+                connection.Notify(NetworkNotification.Connect, (int)NetworkReturnCode.Success);
             }
         }
         catch (SocketException)
         {
-            connection?.Notify(NetworkNotification.Connect, (int) NetworkReturnCode.ConnectionError);
+            connection?.Notify(NetworkNotification.Connect, (int)NetworkReturnCode.ConnectionError);
         }
     }
 
@@ -109,7 +109,7 @@ internal sealed class Connection : IDisposable
     {
         lock (_lockObject)
         {
-            if (_vpConnection != IntPtr.Zero)
+            if (_vpConnection != 0)
             {
                 _ = Native.vp_net_notify(_vpConnection, (int)notification, rc);
             }
@@ -182,7 +182,7 @@ internal sealed class Connection : IDisposable
             connection._pendingBuffer = new byte[1024];
         }
 
-        if (connection._vpConnection != nint.Zero)
+        if (connection._vpConnection != 0)
         {
             if (bytesRead > 0)
             {
@@ -241,19 +241,11 @@ internal sealed class Connection : IDisposable
 
     public int Timeout(int seconds)
     {
-        if (seconds < 0)
-        {
-            _timer = null;
-        }
-        else
-        {
-            _timer = new Timer(HandleTimeout, this, seconds * 1000, global::System.Threading.Timeout.Infinite);
-        }
-
+        _timer = seconds < 0 ? null : new Timer(HandleTimeout, this, seconds * 1000, System.Threading.Timeout.Infinite);
         return 0;
     }
 
-    public static int TimeoutNative(IntPtr ptr, int seconds)
+    public static int TimeoutNative(nint ptr, int seconds)
     {
         if (GCHandle.FromIntPtr(ptr).Target is Connection connection)
         {
