@@ -3,7 +3,6 @@
 internal static class ObjectReferenceCounter
 {
     private static readonly ReaderWriterLockSlim Rwl = new();
-
     private static int s_reference = int.MinValue;
 
     internal static int GetNextReference()
