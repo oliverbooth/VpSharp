@@ -92,7 +92,7 @@ public sealed partial class VirtualParadiseClient
         ReasonCode reason;
 
         if (!_objectCompletionSources.TryGetValue(id,
-                out TaskCompletionSource<(ReasonCode, VirtualParadiseObject)>? taskCompletionSource))
+                out TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>? taskCompletionSource))
         {
             taskCompletionSource = new TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>();
             _objectCompletionSources.TryAdd(id, taskCompletionSource);
