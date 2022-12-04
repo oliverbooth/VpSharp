@@ -25,19 +25,19 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
     ///     Gets the value of this object's <c>Description</c> field.
     /// </summary>
     /// <value>The value of this object's <c>Description</c> field.</value>
-    public string Action { get; internal set; }
+    public string Action { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the value of this object's <c>Description</c> field.
     /// </summary>
     /// <value>The value of this object's <c>Description</c> field.</value>
-    public string Description { get; internal set; }
+    public string Description { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the value of this object's <c>Model</c> field.
     /// </summary>
     /// <value>The value of this object's <c>Model</c> field.</value>
-    public string Model { get; internal set; }
+    public string Model { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Modifies the object.
