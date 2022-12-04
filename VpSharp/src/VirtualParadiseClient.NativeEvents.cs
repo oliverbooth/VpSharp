@@ -298,7 +298,7 @@ public sealed partial class VirtualParadiseClient
                 await _worldListChannel.Writer.WriteAsync(world).ConfigureAwait(false);
             }
         }
-        catch
+        catch (ChannelClosedException)
         {
             if (_worlds.TryGetValue(name, out world!))
             {
