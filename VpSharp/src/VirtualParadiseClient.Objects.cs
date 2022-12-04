@@ -46,9 +46,8 @@ public sealed partial class VirtualParadiseClient
     /// </summary>
     /// <param name="center">The cell whose objects to enumerate.</param>
     /// <param name="radius">The range of cells to query.</param>
-    /// <param name="revision">The cell revision.</param>
     /// <returns>An enumerable of <see cref="VirtualParadiseObject" />.</returns>
-    public async IAsyncEnumerable<VirtualParadiseObject> EnumerateObjectsAsync(Cell center, int radius, int? revision = null)
+    public async IAsyncEnumerable<VirtualParadiseObject> EnumerateObjectsAsync(Cell center, int radius)
     {
         if (radius < 0)
         {
