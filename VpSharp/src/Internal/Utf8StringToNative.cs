@@ -5,6 +5,7 @@ namespace VpSharp.Internal;
 
 internal sealed class Utf8StringToNative : ICustomMarshaler
 {
+    private static readonly Encoding Utf8Encoding = Encoding.UTF8;
     private static Utf8StringToNative? s_instance;
 
     public static ICustomMarshaler GetInstance(string cookie)
@@ -29,14 +30,15 @@ internal sealed class Utf8StringToNative : ICustomMarshaler
     public unsafe nint MarshalManagedToNative(object managedObj)
     {
         var managedString = (string)managedObj;
-        Span<byte> utf8Bytes = stackalloc byte[managedString.Length];
-        Encoding.UTF8.GetBytes(managedString, utf8Bytes);
+        int byteCount = Utf8Encoding.GetByteCount(managedString);
+        Span<byte> utf8Bytes = stackalloc byte[byteCount];
+        Utf8Encoding.GetBytes(managedString, utf8Bytes);
 
         fixed (byte* data = &MemoryMarshal.GetReference(utf8Bytes))
         {
-            nint buffer = Marshal.AllocHGlobal(utf8Bytes.Length + 1);
-            Buffer.MemoryCopy(data, (void*)buffer, utf8Bytes.Length, utf8Bytes.Length);
-            Marshal.WriteByte(buffer, utf8Bytes.Length, 0);
+            nint buffer = Marshal.AllocHGlobal(byteCount + 1);
+            Buffer.MemoryCopy(data, (void*)buffer, byteCount, byteCount);
+            Marshal.WriteByte(buffer, byteCount, 0);
             return buffer;
         }
     }
