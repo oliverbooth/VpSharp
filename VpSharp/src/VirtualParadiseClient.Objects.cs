@@ -64,7 +64,7 @@ public sealed partial class VirtualParadiseClient
 
         foreach (Cell cell in cells.OrderBy(c => Vector2.Distance(c, center)))
         {
-            await foreach (VirtualParadiseObject vpObject in EnumerateObjectsAsync(cell))
+            await foreach (VirtualParadiseObject vpObject in EnumerateObjectsAsync(cell).ConfigureAwait(false))
             {
                 yield return vpObject;
             }
