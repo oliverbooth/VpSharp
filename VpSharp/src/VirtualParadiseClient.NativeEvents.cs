@@ -277,20 +277,34 @@ public sealed partial class VirtualParadiseClient
     private async void OnWorldListNativeEvent(nint sender)
     {
         VirtualParadiseWorld world;
-
+        string name;
+        int avatarCount;
+        WorldState state;
+        
         lock (Lock)
         {
-            string name = vp_string(sender, StringAttribute.WorldName);
-            int avatarCount = vp_int(sender, IntegerAttribute.WorldUsers);
-            var state = (WorldState)vp_int(sender, IntegerAttribute.WorldState);
+            name = vp_string(sender, StringAttribute.WorldName);
+            avatarCount = vp_int(sender, IntegerAttribute.WorldUsers);
+            state = (WorldState)vp_int(sender, IntegerAttribute.WorldState);
 
             world = new VirtualParadiseWorld(this, name) {AvatarCount = avatarCount, State = state};
             _worlds[name] = world;
         }
 
-        if (_worldListChannel is not null)
+        try
         {
-            await _worldListChannel.Writer.WriteAsync(world).ConfigureAwait(false);
+            if (_worldListChannel is not null)
+            {
+                await _worldListChannel.Writer.WriteAsync(world).ConfigureAwait(false);
+            }
+        }
+        catch
+        {
+            if (_worlds.TryGetValue(name, out world!))
+            {
+                world.AvatarCount = avatarCount;
+                world.State = state;
+            }
         }
     }
 
