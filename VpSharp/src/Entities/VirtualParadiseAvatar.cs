@@ -288,6 +288,23 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     }
 
     /// <summary>
+    ///     Modifies the world settings for this avatar.
+    /// </summary>
+    /// <param name="action">The builder which defines parameters to change.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="action" /> is <see langword="null" />.</exception>
+    /// <exception cref="UnauthorizedAccessException">The client does not have permission to modify world settings.</exception>
+    public async Task SendWorldSettings(Action<WorldSettingsBuilder> action)
+    {
+        ArgumentNullException.ThrowIfNull(action);
+
+        // ReSharper disable once InconsistentlySynchronizedField
+        var builder = new WorldSettingsBuilder(_client, Session);
+        await Task.Run(() => action(builder)).ConfigureAwait(false);
+
+        builder.SendChanges();
+    }
+
+    /// <summary>
     ///     Teleports the avatar to another world.
     /// </summary>
     /// <param name="world">The name of the world to which this avatar should be teleported.</param>
