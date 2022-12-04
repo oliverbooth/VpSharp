@@ -60,6 +60,15 @@ public sealed partial class VirtualParadiseClient : IDisposable
     }
 
     /// <summary>
+    ///     Gets a read-only view of the cached avatars.
+    /// </summary>
+    /// <value>The cached avatars.</value>
+    public IReadOnlyList<VirtualParadiseAvatar> Avatars
+    {
+        get => _avatars.Values.ToArray();
+    }
+
+    /// <summary>
     ///     Gets the current avatar associated with this client.
     /// </summary>
     /// <value>
