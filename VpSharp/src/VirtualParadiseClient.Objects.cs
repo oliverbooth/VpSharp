@@ -144,29 +144,37 @@ public sealed partial class VirtualParadiseClient
 
     private async Task<VirtualParadiseObject> ExtractObjectAsync(nint sender)
     {
-        var type = (ObjectType)vp_int(sender, IntegerAttribute.ObjectType);
-        int id = vp_int(sender, IntegerAttribute.ObjectId);
-        int owner = vp_int(sender, IntegerAttribute.ObjectUserId);
-
-        double x = vp_double(sender, FloatAttribute.ObjectX);
-        double y = vp_double(sender, FloatAttribute.ObjectY);
-        double z = vp_double(sender, FloatAttribute.ObjectZ);
-        var position = new Vector3d(x, y, z);
-
-        float rotX = vp_float(sender, FloatAttribute.ObjectRotationX);
-        float rotY = vp_float(sender, FloatAttribute.ObjectRotationY);
-        float rotZ = vp_float(sender, FloatAttribute.ObjectRotationZ);
-        float angle = vp_float(sender, FloatAttribute.ObjectRotationAngle);
+        ObjectType type;
+        int id;
+        int owner;
         Quaternion rotation;
+        Vector3d position;
 
-        if (double.IsPositiveInfinity(angle))
+        lock (Lock)
         {
-            rotation = Quaternion.CreateFromYawPitchRoll(rotY, rotX, rotZ);
-        }
-        else
-        {
-            var axis = new Vector3(rotX, rotY, rotZ);
-            rotation = Quaternion.CreateFromAxisAngle(axis, angle);
+            type = (ObjectType)vp_int(sender, IntegerAttribute.ObjectType);
+            id = vp_int(sender, IntegerAttribute.ObjectId);
+            owner = vp_int(sender, IntegerAttribute.ObjectUserId);
+
+            double x = vp_double(sender, FloatAttribute.ObjectX);
+            double y = vp_double(sender, FloatAttribute.ObjectY);
+            double z = vp_double(sender, FloatAttribute.ObjectZ);
+            position = new Vector3d(x, y, z);
+
+            float rotX = vp_float(sender, FloatAttribute.ObjectRotationX);
+            float rotY = vp_float(sender, FloatAttribute.ObjectRotationY);
+            float rotZ = vp_float(sender, FloatAttribute.ObjectRotationZ);
+            float angle = vp_float(sender, FloatAttribute.ObjectRotationAngle);
+
+            if (double.IsPositiveInfinity(angle))
+            {
+                rotation = Quaternion.CreateFromYawPitchRoll(rotY, rotX, rotZ);
+            }
+            else
+            {
+                var axis = new Vector3(rotX, rotY, rotZ);
+                rotation = Quaternion.CreateFromAxisAngle(axis, angle);
+            }
         }
 
         VirtualParadiseObject virtualParadiseObject = type switch
