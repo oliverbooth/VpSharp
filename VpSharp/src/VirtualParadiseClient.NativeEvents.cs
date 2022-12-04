@@ -280,7 +280,7 @@ public sealed partial class VirtualParadiseClient
         string name;
         int avatarCount;
         WorldState state;
-        
+
         lock (Lock)
         {
             name = vp_string(sender, StringAttribute.WorldName);
