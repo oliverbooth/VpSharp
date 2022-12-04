@@ -74,6 +74,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
             return;
         }
 
+        base.ExtractFromOther(virtualParadiseObject);
         Action = model.Action;
         Description = model.Description;
         Model = model.Model;
@@ -82,6 +83,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
     /// <inheritdoc />
     protected internal override void ExtractFromInstance(nint handle)
     {
+        base.ExtractFromInstance(handle);
         Action = vp_string(handle, StringAttribute.ObjectAction);
         Description = vp_string(handle, StringAttribute.ObjectDescription);
         Model = vp_string(handle, StringAttribute.ObjectModel);
