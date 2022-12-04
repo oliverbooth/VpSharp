@@ -24,19 +24,19 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     ///     Gets or sets the value of this object's <c>Action</c> field.
     /// </summary>
     /// <value>The value of this object's <c>Action</c> field, or <see langword="null" /> to leave unchanged.</value>
-    public string? Action { get; set; }
+    public Optional<string> Action { get; set; }
 
     /// <summary>
     ///     Gets or sets the value of this object's <c>Description</c> field.
     /// </summary>
     /// <value>The value of this object's <c>Description</c> field, or <see langword="null" /> to leave unchanged.</value>
-    public string? Description { get; set; }
+    public Optional<string> Description { get; set; }
 
     /// <summary>
     ///     Gets or sets the value of this object's <c>Model</c> field.
     /// </summary>
     /// <value>The value of this object's <c>Model</c> field, or <see langword="null" /> to leave unchanged.</value>
-    public string? Model { get; set; }
+    public Optional<string> Model { get; set; }
 
     /// <summary>
     ///     Gets or sets the date and time at which this object was last modified.
@@ -48,7 +48,7 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     ///     This property may only be set during an object load, and will throw <see cref="InvalidOperationException" /> at
     ///     any other point.
     /// </remarks>
-    public DateTimeOffset? ModificationTimestamp { get; set; }
+    public Optional<DateTimeOffset> ModificationTimestamp { get; set; }
 
     /// <summary>
     ///     Gets or sets the owner of this object.
@@ -58,26 +58,26 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     ///     This property may only be set during an object load, and will throw <see cref="InvalidOperationException" /> at
     ///     any other point.
     /// </remarks>
-    public VirtualParadiseUser? Owner { get; set; }
+    public Optional<VirtualParadiseUser> Owner { get; set; }
 
     /// <summary>
     ///     Gets or sets the position of the object.
     /// </summary>
     /// <value>The position of the object, or <see langword="null" /> to leave unchanged.</value>
-    public Vector3d? Position { get; set; }
+    public Optional<Vector3d> Position { get; set; }
 
     /// <summary>
     ///     Gets or sets the rotation of the object.
     /// </summary>
     /// <value>The rotation of the object, or <see langword="null" /> to leave unchanged.</value>
-    public Quaternion? Rotation { get; set; }
+    public Optional<Quaternion> Rotation { get; set; }
 
     /// <summary>
     ///     Sets the value of this object's <c>Action</c> field.
     /// </summary>
     /// <param name="action">The new value of the <c>Action</c> field, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance of this builder.</returns>
-    public VirtualParadiseModelObjectBuilder WithAction(string? action)
+    public VirtualParadiseModelObjectBuilder WithAction(Optional<string> action)
     {
         Action = action;
         return this;
@@ -90,7 +90,7 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     ///     The new value of the <c>Description</c> field, or <see langword="null" /> to leave unchanged.
     /// </param>
     /// <returns>The current instance of this builder.</returns>
-    public VirtualParadiseModelObjectBuilder WithDescription(string? description)
+    public VirtualParadiseModelObjectBuilder WithDescription(Optional<string> description)
     {
         Description = description;
         return this;
@@ -101,7 +101,7 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     /// </summary>
     /// <param name="model">The new value of the <c>Model</c> field, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance of this builder.</returns>
-    public VirtualParadiseModelObjectBuilder WithModel(string? model)
+    public VirtualParadiseModelObjectBuilder WithModel(Optional<string> model)
     {
         Model = model;
         return this;
@@ -112,13 +112,13 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
         nint handle = Client.NativeInstanceHandle;
         var targetObject = (VirtualParadiseModelObject)TargetObject;
 
-        vp_string_set(handle, StringAttribute.ObjectModel, Model ?? targetObject.Model);
-        vp_string_set(handle, StringAttribute.ObjectDescription, Description ?? targetObject.Description);
-        vp_string_set(handle, StringAttribute.ObjectAction, Action ?? targetObject.Action);
+        vp_string_set(handle, StringAttribute.ObjectModel, Model.HasValue ? Model.Value! : targetObject.Model);
+        vp_string_set(handle, StringAttribute.ObjectDescription, Description.HasValue ? Description.Value! : targetObject.Description);
+        vp_string_set(handle, StringAttribute.ObjectAction, Action.HasValue ? Action.Value! : targetObject.Action);
 
-        if (Position is { } position)
+        if (Position.HasValue)
         {
-            (double x, double y, double z) = position;
+            (double x, double y, double z) = Position.Value;
             _ = vp_double_set(handle, FloatAttribute.ObjectX, x);
             _ = vp_double_set(handle, FloatAttribute.ObjectY, y);
             _ = vp_double_set(handle, FloatAttribute.ObjectZ, z);
@@ -135,18 +135,18 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
             _ = vp_double_set(handle, FloatAttribute.ObjectZ, z);
         }
 
-        if (Rotation is null && Mode == ObjectBuilderMode.Create)
+        if (!Rotation.HasValue && Mode == ObjectBuilderMode.Create)
         {
             Rotation = Quaternion.Identity;
         }
 
-        if (Rotation is { } rotation)
+        if (Rotation.HasValue)
         {
             (double x, double y, double z) = Vector3d.Zero;
             double angle = double.PositiveInfinity;
-            if (rotation != Quaternion.Identity)
+            if (Rotation.Value != Quaternion.Identity)
             {
-                rotation.ToAxisAngle(out Vector3d axis, out angle);
+                Rotation.Value.ToAxisAngle(out Vector3d axis, out angle);
                 (x, y, z) = axis;
             }
 
@@ -164,28 +164,28 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
             _ = vp_double_set(handle, FloatAttribute.ObjectRotationAngle, angle);
         }
 
-        if (ModificationTimestamp is { } modificationTimestamp)
+        if (ModificationTimestamp.HasValue)
         {
             if (Mode != ObjectBuilderMode.Load)
             {
                 throw new InvalidOperationException("Modification timestamp can only be assigned during an object load.");
             }
 
-            _ = vp_int_set(handle, IntegerAttribute.ObjectTime, (int)modificationTimestamp.ToUnixTimeSeconds());
+            _ = vp_int_set(handle, IntegerAttribute.ObjectTime, (int)ModificationTimestamp.Value.ToUnixTimeSeconds());
         }
         else
         {
             _ = vp_int_set(handle, IntegerAttribute.ObjectTime, (int)targetObject.ModificationTimestamp.ToUnixTimeSeconds());
         }
 
-        if (Owner is { } owner)
+        if (Owner.HasValue)
         {
             if (Mode != ObjectBuilderMode.Load)
             {
                 throw new InvalidOperationException("Owner can only be assigned during an object load.");
             }
 
-            _ = vp_int_set(handle, IntegerAttribute.ObjectUserId, owner.Id);
+            _ = vp_int_set(handle, IntegerAttribute.ObjectUserId, Owner.Value!.Id);
         }
         else
         {

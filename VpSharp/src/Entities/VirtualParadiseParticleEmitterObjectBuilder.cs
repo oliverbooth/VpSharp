@@ -29,7 +29,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The maximum acceleration, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("acceleration_max")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? AccelerationMax { get; set; }
+    public Optional<Vector3d> AccelerationMax { get; set; }
 
     /// <summary>
     ///     Gets or sets the minimum acceleration.
@@ -37,7 +37,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The minimum acceleration, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("acceleration_min")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? AccelerationMin { get; set; }
+    public Optional<Vector3d> AccelerationMin { get; set; }
 
     /// <summary>
     ///     Gets or sets the blend mode.
@@ -45,7 +45,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The blend mode, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("blend")]
     [ValueConverter(typeof(StringToEnumConverter<ParticleBlendMode>))]
-    public ParticleBlendMode? BlendMode { get; set; }
+    public Optional<ParticleBlendMode> BlendMode { get; set; }
 
     /// <summary>
     ///     Gets or sets the maximum color.
@@ -53,7 +53,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The maximum color, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("color_max")]
     [ValueConverter(typeof(HexToColorConverter))]
-    public Color? ColorMax { get; set; }
+    public Optional<Color> ColorMax { get; set; }
 
     /// <summary>
     ///     Gets or sets the minimum color.
@@ -61,7 +61,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The minimum color, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("color_min")]
     [ValueConverter(typeof(HexToColorConverter))]
-    public Color? ColorMin { get; set; }
+    public Optional<Color> ColorMin { get; set; }
 
     /// <summary>
     ///     Gets or sets the emitter lifespan.
@@ -69,7 +69,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The emitter lifespan, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("emitter_lifespan")]
     [ValueConverter(typeof(MillisecondToTimeSpanConverter))]
-    public TimeSpan? EmitterLifespan { get; set; }
+    public Optional<TimeSpan> EmitterLifespan { get; set; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether this emitter interpolates its values.
@@ -80,14 +80,14 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </value>
     [SerializationKey("interpolate")]
     [ValueConverter(typeof(IntToBoolConverter))]
-    public bool? Interpolate { get; set; }
+    public Optional<bool> Interpolate { get; set; }
 
     /// <summary>
     ///     Gets or sets the opacity.
     /// </summary>
     /// <value>The opacity, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("opacity")]
-    public double? Opacity { get; set; }
+    public Optional<double> Opacity { get; set; }
 
     /// <summary>
     ///     Gets or sets the particle lifespan.
@@ -95,7 +95,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The particle lifespan, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("particle_lifespan")]
     [ValueConverter(typeof(MillisecondToTimeSpanConverter))]
-    public TimeSpan? ParticleLifespan { get; set; }
+    public Optional<TimeSpan> ParticleLifespan { get; set; }
 
     /// <summary>
     ///     Gets or sets the particle type.
@@ -103,14 +103,14 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The particle type, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("particle_type")]
     [ValueConverter(typeof(StringToEnumConverter<ParticleType>))]
-    public ParticleType? ParticleType { get; set; }
+    public Optional<ParticleType> ParticleType { get; set; }
 
     /// <summary>
     ///     Gets or sets the release count.
     /// </summary>
     /// <value>The release count, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("release_count")]
-    public int? ReleaseCount { get; set; }
+    public Optional<int> ReleaseCount { get; set; }
 
     /// <summary>
     ///     Gets or sets the release time.
@@ -118,7 +118,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The release time, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("release_time")]
     [ValueConverter(typeof(MillisecondToTimeSpanConverter))]
-    public TimeSpan? ReleaseTime { get; set; }
+    public Optional<TimeSpan> ReleaseTime { get; set; }
 
     /// <summary>
     ///     Gets or sets the maximum size.
@@ -126,7 +126,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The maximum size, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("size_max")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? SizeMax { get; set; }
+    public Optional<Vector3d> SizeMax { get; set; }
 
     /// <summary>
     ///     Gets or sets the minimum size.
@@ -134,7 +134,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The minimum size, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("size_min")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? SizeMin { get; set; }
+    public Optional<Vector3d> SizeMin { get; set; }
 
     /// <summary>
     ///     Gets or sets the maximum speed.
@@ -142,7 +142,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The maximum speed, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("speed_max")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? SpeedMax { get; set; }
+    public Optional<Vector3d> SpeedMax { get; set; }
 
     /// <summary>
     ///     Gets or sets the minimum speed.
@@ -150,7 +150,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The minimum speed, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("speed_min")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? SpeedMin { get; set; }
+    public Optional<Vector3d> SpeedMin { get; set; }
 
     /// <summary>
     ///     Gets or sets the maximum spin.
@@ -158,7 +158,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The maximum spin, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("spin_max")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? SpinMax { get; set; }
+    public Optional<Vector3d> SpinMax { get; set; }
 
     /// <summary>
     ///     Gets or sets the minimum spin.
@@ -166,7 +166,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The minimum spin, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("spin_min")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? SpinMin { get; set; }
+    public Optional<Vector3d> SpinMin { get; set; }
 
     /// <summary>
     ///     Gets or sets the maximum start angle.
@@ -174,7 +174,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The maximum start angle, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("start_angle_max")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? StartAngleMax { get; set; }
+    public Optional<Vector3d> StartAngleMax { get; set; }
 
     /// <summary>
     ///     Gets or sets the minimum start angle.
@@ -182,7 +182,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The minimum start angle, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("start_angle_min")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? StartAngleMin { get; set; }
+    public Optional<Vector3d> StartAngleMin { get; set; }
 
     /// <summary>
     ///     Gets or sets the maximum volume.
@@ -190,7 +190,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The maximum volume, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("volume_max")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? VolumeMax { get; set; }
+    public Optional<Vector3d> VolumeMax { get; set; }
 
     /// <summary>
     ///     Gets or sets the minimum volume.
@@ -198,28 +198,28 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// <value>The minimum volume, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("volume_min")]
     [ValueConverter(typeof(Vector3dConverter))]
-    public Vector3d? VolumeMin { get; set; }
+    public Optional<Vector3d> VolumeMin { get; set; }
 
     /// <summary>
     ///     Gets or sets the tag.
     /// </summary>
     /// <value>The tag, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("tag")]
-    public string? Tag { get; set; }
+    public Optional<string> Tag { get; set; }
 
     /// <summary>
     ///     Gets or sets the texture.
     /// </summary>
     /// <value>The texture, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("texture")]
-    public string? Texture { get; set; }
+    public Optional<string> Texture { get; set; }
 
     /// <summary>
     ///     Sets the maximum volume.
     /// </summary>
     /// <param name="value">The maximum volume, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithAccelerationMax(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithAccelerationMax(Optional<Vector3d> value)
     {
         AccelerationMax = value;
         return this;
@@ -230,7 +230,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The minimum acceleration, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithAccelerationMin(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithAccelerationMin(Optional<Vector3d> value)
     {
         AccelerationMin = value;
         return this;
@@ -241,7 +241,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The blend mode, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithBlendMode(ParticleBlendMode? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithBlendMode(Optional<ParticleBlendMode> value)
     {
         BlendMode = value;
         return this;
@@ -252,7 +252,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The maximum color, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithColorMax(Color? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithColorMax(Optional<Color> value)
     {
         ColorMax = value;
         return this;
@@ -263,7 +263,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The minimum color, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithColorMin(Color? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithColorMin(Optional<Color> value)
     {
         ColorMin = value;
         return this;
@@ -274,7 +274,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The emitter lifespan, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithEmitterLifespan(TimeSpan? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithEmitterLifespan(Optional<TimeSpan> value)
     {
         EmitterLifespan = value;
         return this;
@@ -288,7 +288,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     ///     <see langword="null" /> to leave unchanged.
     /// </param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithInterpolation(bool? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithInterpolation(Optional<bool> value)
     {
         Interpolate = value;
         return this;
@@ -299,7 +299,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The opacity, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithOpacity(double? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithOpacity(Optional<double> value)
     {
         Opacity = value;
         return this;
@@ -310,7 +310,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The particle lifespan, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithParticleLifespan(TimeSpan? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithParticleLifespan(Optional<TimeSpan> value)
     {
         ParticleLifespan = value;
         return this;
@@ -321,7 +321,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The particle type, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithParticleType(ParticleType? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithParticleType(Optional<ParticleType> value)
     {
         ParticleType = value;
         return this;
@@ -332,7 +332,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The release count, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithReleaseCount(int? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithReleaseCount(Optional<int> value)
     {
         ReleaseCount = value;
         return this;
@@ -343,7 +343,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The release time, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithReleaseTime(TimeSpan? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithReleaseTime(Optional<TimeSpan> value)
     {
         ReleaseTime = value;
         return this;
@@ -354,7 +354,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The maximum size, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithSizeMax(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithSizeMax(Optional<Vector3d> value)
     {
         SizeMax = value;
         return this;
@@ -365,7 +365,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The minimum size, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithSizeMin(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithSizeMin(Optional<Vector3d> value)
     {
         SizeMin = value;
         return this;
@@ -376,7 +376,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The maximum speed, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithSpeedMax(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithSpeedMax(Optional<Vector3d> value)
     {
         SpeedMax = value;
         return this;
@@ -387,7 +387,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The minimum speed, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithSpeedMin(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithSpeedMin(Optional<Vector3d> value)
     {
         SpeedMin = value;
         return this;
@@ -398,7 +398,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The maximum spin, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithSpinMax(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithSpinMax(Optional<Vector3d> value)
     {
         SpinMax = value;
         return this;
@@ -409,7 +409,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The minimum spin, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithSpinMin(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithSpinMin(Optional<Vector3d> value)
     {
         SpinMin = value;
         return this;
@@ -420,7 +420,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The maximum start angle, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithStartAngleMax(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithStartAngleMax(Optional<Vector3d> value)
     {
         StartAngleMax = value;
         return this;
@@ -431,7 +431,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The minimum start angle, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithStartAngleMin(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithStartAngleMin(Optional<Vector3d> value)
     {
         StartAngleMin = value;
         return this;
@@ -442,7 +442,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The maximum volume, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithVolumeMax(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithVolumeMax(Optional<Vector3d> value)
     {
         VolumeMax = value;
         return this;
@@ -453,7 +453,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The minimum volume, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithVolumeMin(Vector3d? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithVolumeMin(Optional<Vector3d> value)
     {
         VolumeMin = value;
         return this;
@@ -464,7 +464,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The tag, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithTag(string? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithTag(Optional<string> value)
     {
         Tag = value;
         return this;
@@ -475,7 +475,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The texture, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithTexture(string? value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithTexture(Optional<string> value)
     {
         Texture = value;
         return this;
