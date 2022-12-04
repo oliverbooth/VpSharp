@@ -54,20 +54,42 @@ public sealed partial class VirtualParadiseClient
             throw new ArgumentException("Range must be greater than or equal to 1.");
         }
 
-        var cells = new HashSet<Cell>();
+        var hashSet = new HashSet<Cell>();
 
         for (int x = center.X - radius; x < center.X + radius; x++)
         for (int z = center.Z - radius; z < center.Z + radius; z++)
         {
-            cells.Add(new Cell(x, z));
+            hashSet.Add(new Cell(x, z));
         }
 
-        foreach (Cell cell in cells.OrderBy(c => Vector2.Distance(c, center)))
+        var cells = new List<Cell>(hashSet);
+        cells.Sort((a, b) =>
         {
-            await foreach (VirtualParadiseObject vpObject in EnumerateObjectsAsync(cell).ConfigureAwait(false))
+            int x = a.X.CompareTo(b.X);
+            return x == 0 ? a.Z.CompareTo(b.Z) : x;
+        });
+
+        var objects = new List<VirtualParadiseObject>();
+        var tasks = new List<Task>();
+
+        foreach (Cell[] chunk in cells.Chunk(64))
+        {
+            Task task = Parallel.ForEachAsync(chunk, async (cell, token) =>
             {
-                yield return vpObject;
-            }
+                await foreach (VirtualParadiseObject current in EnumerateObjectsAsync(cell).WithCancellation(token))
+                {
+                    objects.Add(current);
+                }
+            });
+
+            tasks.Add(task);
+        }
+
+        await Task.WhenAll(tasks).ConfigureAwait(false);
+
+        foreach (VirtualParadiseObject current in objects)
+        {
+            yield return current;
         }
     }
 
