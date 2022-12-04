@@ -53,7 +53,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
     {
         ArgumentNullException.ThrowIfNull(action);
 
-        var builder = new VirtualParadiseModelObjectBuilder(Client, ObjectBuilderMode.Modify);
+        var builder = new VirtualParadiseModelObjectBuilder(Client, this, ObjectBuilderMode.Modify);
         await Task.Run(() => action(builder)).ConfigureAwait(false);
 
         lock (Client.Lock)

@@ -14,8 +14,12 @@ namespace VpSharp.Entities;
 /// </summary>
 public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadiseObjectBuilder
 {
-    internal VirtualParadiseParticleEmitterObjectBuilder(VirtualParadiseClient client, ObjectBuilderMode mode)
-        : base(client, mode)
+    internal VirtualParadiseParticleEmitterObjectBuilder(
+        VirtualParadiseClient client,
+        VirtualParadiseParticleEmitterObject targetObject,
+        ObjectBuilderMode mode
+    )
+        : base(client, targetObject, mode)
     {
     }
 
@@ -201,14 +205,14 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <value>The tag, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("tag")]
-    public string Tag { get; set; }
+    public string? Tag { get; set; }
 
     /// <summary>
     ///     Gets or sets the texture.
     /// </summary>
     /// <value>The texture, or <see langword="null" /> to leave unchanged.</value>
     [SerializationKey("texture")]
-    public string Texture { get; set; }
+    public string? Texture { get; set; }
 
     /// <summary>
     ///     Sets the maximum volume.
@@ -460,7 +464,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The tag, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithTag(string value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithTag(string? value)
     {
         Tag = value;
         return this;
@@ -471,7 +475,7 @@ public sealed class VirtualParadiseParticleEmitterObjectBuilder : VirtualParadis
     /// </summary>
     /// <param name="value">The texture, or <see langword="null" /> to leave unchanged.</param>
     /// <returns>The current instance.</returns>
-    public VirtualParadiseParticleEmitterObjectBuilder WithTexture(string value)
+    public VirtualParadiseParticleEmitterObjectBuilder WithTexture(string? value)
     {
         Texture = value;
         return this;

@@ -11,8 +11,12 @@ namespace VpSharp.Entities;
 /// </summary>
 public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBuilder
 {
-    internal VirtualParadiseModelObjectBuilder(VirtualParadiseClient client, ObjectBuilderMode mode)
-        : base(client, mode)
+    internal VirtualParadiseModelObjectBuilder(
+        VirtualParadiseClient client,
+        VirtualParadiseModelObject targetObject,
+        ObjectBuilderMode mode
+    )
+        : base(client, targetObject, mode)
     {
     }
 
@@ -106,21 +110,11 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     internal void ApplyChanges()
     {
         nint handle = Client.NativeInstanceHandle;
+        var targetObject = (VirtualParadiseModelObject)TargetObject;
 
-        if (Action is { } action)
-        {
-            vp_string_set(handle, StringAttribute.ObjectAction, action);
-        }
-
-        if (Description is { } description)
-        {
-            vp_string_set(handle, StringAttribute.ObjectDescription, description);
-        }
-
-        if (Model is { } model)
-        {
-            vp_string_set(handle, StringAttribute.ObjectModel, model);
-        }
+        vp_string_set(handle, StringAttribute.ObjectModel, Model ?? targetObject.Model);
+        vp_string_set(handle, StringAttribute.ObjectDescription, Description ?? targetObject.Description);
+        vp_string_set(handle, StringAttribute.ObjectAction, Action ?? targetObject.Action);
 
         if (Position is { } position)
         {
@@ -132,6 +126,13 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
         else if (Mode == ObjectBuilderMode.Create)
         {
             throw new ArgumentException("Position must be assigned when creating a new object.");
+        }
+        else
+        {
+            (double x, double y, double z) = targetObject.Location.Position;
+            _ = vp_double_set(handle, FloatAttribute.ObjectX, x);
+            _ = vp_double_set(handle, FloatAttribute.ObjectY, y);
+            _ = vp_double_set(handle, FloatAttribute.ObjectZ, z);
         }
 
         if (Rotation is null && Mode == ObjectBuilderMode.Create)
@@ -154,6 +155,14 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
             _ = vp_double_set(handle, FloatAttribute.ObjectRotationZ, z);
             _ = vp_double_set(handle, FloatAttribute.ObjectRotationAngle, angle);
         }
+        else
+        {
+            targetObject.Location.Rotation.ToAxisAngle(out Vector3 axis, out float angle);
+            _ = vp_double_set(handle, FloatAttribute.ObjectRotationX, axis.X);
+            _ = vp_double_set(handle, FloatAttribute.ObjectRotationY, axis.Y);
+            _ = vp_double_set(handle, FloatAttribute.ObjectRotationZ, axis.Z);
+            _ = vp_double_set(handle, FloatAttribute.ObjectRotationAngle, angle);
+        }
 
         if (ModificationTimestamp is { } modificationTimestamp)
         {
@@ -164,6 +173,10 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
 
             _ = vp_int_set(handle, IntegerAttribute.ObjectTime, (int)modificationTimestamp.ToUnixTimeSeconds());
         }
+        else
+        {
+            _ = vp_int_set(handle, IntegerAttribute.ObjectTime, (int)targetObject.ModificationTimestamp.ToUnixTimeSeconds());
+        }
 
         if (Owner is { } owner)
         {
@@ -173,6 +186,10 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
             }
 
             _ = vp_int_set(handle, IntegerAttribute.ObjectUserId, owner.Id);
+        }
+        else
+        {
+            _ = vp_int_set(handle, IntegerAttribute.ObjectUserId, targetObject.Owner.Id);
         }
     }
 }
