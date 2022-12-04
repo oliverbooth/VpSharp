@@ -38,6 +38,12 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     public Location Location { get; internal set; }
 
     /// <summary>
+    ///     Gets the modification timestamp of this object.
+    /// </summary>
+    /// <value>The modification timestamp.</value>
+    public DateTimeOffset ModificationTimestamp { get; internal set; }
+
+    /// <summary>
     ///     Gets the owner of this object.
     /// </summary>
     /// <value>The owner of this object.</value>
@@ -232,6 +238,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     {
         ArgumentNullException.ThrowIfNull(virtualParadiseObject);
         Location = virtualParadiseObject.Location;
+        ModificationTimestamp = virtualParadiseObject.ModificationTimestamp;
         Owner = virtualParadiseObject.Owner;
     }
 

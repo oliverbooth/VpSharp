@@ -168,6 +168,7 @@ public sealed partial class VirtualParadiseClient
     {
         ObjectType type;
         int id;
+        int time;
         int owner;
         Quaternion rotation;
         Vector3d position;
@@ -197,6 +198,8 @@ public sealed partial class VirtualParadiseClient
                 var axis = new Vector3(rotX, rotY, rotZ);
                 rotation = Quaternion.CreateFromAxisAngle(axis, angle);
             }
+
+            time = vp_int(sender, IntegerAttribute.ObjectTime);
         }
 
         VirtualParadiseObject virtualParadiseObject = type switch
@@ -211,6 +214,7 @@ public sealed partial class VirtualParadiseClient
 
         var location = new Location(CurrentWorld!, position, rotation);
         virtualParadiseObject.Location = location;
+        virtualParadiseObject.ModificationTimestamp = DateTimeOffset.FromUnixTimeSeconds(time);
         virtualParadiseObject.Owner = await GetUserAsync(owner).ConfigureAwait(false);
         return virtualParadiseObject;
     }
