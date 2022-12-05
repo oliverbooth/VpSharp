@@ -15,8 +15,39 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>
     /// <param name="isRelative">
     ///     <see langword="true" /> if these coordinates represent relative coordinates; <see langword="false" /> otherwise.
     /// </param>
+    public Coordinates(double x, double y, double z, Heading yaw, bool isRelative = false)
+        : this(null, x, y, z, yaw.ToHeading(), isRelative)
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Coordinates" /> struct.
+    /// </summary>
+    /// <param name="x">The X coordinate.</param>
+    /// <param name="y">The Y coordinate.</param>
+    /// <param name="z">The Z coordinate.</param>
+    /// <param name="yaw">The yaw.</param>
+    /// <param name="isRelative">
+    ///     <see langword="true" /> if these coordinates represent relative coordinates; <see langword="false" /> otherwise.
+    /// </param>
     public Coordinates(double x, double y, double z, double yaw, bool isRelative = false)
         : this(null, x, y, z, yaw, isRelative)
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Coordinates" /> struct.
+    /// </summary>
+    /// <param name="world">The world name.</param>
+    /// <param name="x">The X coordinate.</param>
+    /// <param name="y">The Y coordinate.</param>
+    /// <param name="z">The Z coordinate.</param>
+    /// <param name="yaw">The yaw.</param>
+    /// <param name="isRelative">
+    ///     <see langword="true" /> if these coordinates represent relative coordinates; <see langword="false" /> otherwise.
+    /// </param>
+    public Coordinates(string? world, double x, double y, double z, Heading yaw, bool isRelative = false)
+        : this(world, x, y, z, yaw.ToHeading(), isRelative)
     {
     }
 
@@ -39,6 +70,16 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>
         Z = z;
         Yaw = yaw;
         IsRelative = isRelative;
+    }
+
+    /// <summary>
+    ///     Gets or initializes the heading.
+    /// </summary>
+    /// <value>The heading.</value>
+    public Heading Heading
+    {
+        get => Yaw.ToHeading();
+        init => Yaw = value.ToHeading();
     }
 
     /// <summary>
