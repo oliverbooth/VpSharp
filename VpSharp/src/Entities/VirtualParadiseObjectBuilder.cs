@@ -1,6 +1,7 @@
-﻿using System.Numerics;
+using System.Numerics;
 using VpSharp.Extensions;
 using VpSharp.Internal;
+using static VpSharp.Internal.NativeAttributes.DataAttribute;
 using static VpSharp.Internal.NativeAttributes.FloatAttribute;
 using static VpSharp.Internal.NativeAttributes.IntegerAttribute;
 using static VpSharp.Internal.NativeMethods;
@@ -57,6 +58,8 @@ public abstract class VirtualParadiseObjectBuilder
     /// <value>The rotation of the object, or <see langword="null" /> to leave unchanged.</value>
     public Optional<Quaternion> Rotation { get; set; }
 
+    internal Optional<IReadOnlyList<byte>> Data { get; set; }
+
     private protected VirtualParadiseClient Client { get; }
 
     private protected ObjectBuilderMode Mode { get; }
@@ -69,6 +72,21 @@ public abstract class VirtualParadiseObjectBuilder
         ApplyRotation();
         ApplyModificationTimestamp();
         ApplyOwner();
+        ApplyData();
+    }
+
+    private void ApplyData()
+    {
+        nint handle = Client.NativeInstanceHandle;
+        if (Data.HasValue)
+        {
+            IReadOnlyList<byte> data = Data.Value!;
+            _ = vp_data_set(handle, ObjectData, data.Count, data.ToArray());
+        }
+        else
+        {
+            _ = vp_data_set(handle, ObjectData, 0, Array.Empty<byte>());
+        }
     }
 
     private void ApplyOwner()

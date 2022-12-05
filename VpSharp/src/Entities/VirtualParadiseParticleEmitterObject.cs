@@ -239,6 +239,8 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
     /// <inheritdoc />
     protected override void ExtractFromData(ReadOnlySpan<byte> data)
     {
+        base.ExtractFromData(data);
+
 #pragma warning disable 612
         const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
         PropertyInfo[] properties = typeof(VirtualParadiseParticleEmitterObject).GetProperties(bindingFlags);

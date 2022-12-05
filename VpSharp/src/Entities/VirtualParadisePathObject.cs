@@ -42,6 +42,8 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
     /// <inheritdoc />
     protected override void ExtractFromData(ReadOnlySpan<byte> data)
     {
+        base.ExtractFromData(data);
+
         Span<char> chars = stackalloc char[data.Length];
         Encoding.UTF8.GetChars(data, chars);
 

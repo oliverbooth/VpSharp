@@ -49,6 +49,8 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <value>The owner of this object.</value>
     public VirtualParadiseUser Owner { get; internal set; } = null!;
 
+    internal byte[] Data { get; set; } = Array.Empty<byte>();
+
     private protected VirtualParadiseClient Client { get; }
 
     /// <summary>
@@ -240,6 +242,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         Location = virtualParadiseObject.Location;
         ModificationTimestamp = virtualParadiseObject.ModificationTimestamp;
         Owner = virtualParadiseObject.Owner;
+        Data = virtualParadiseObject.Data;
     }
 
     /// <summary>
@@ -272,5 +275,6 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <param name="data">A span of bytes containing the object data.</param>
     protected virtual void ExtractFromData(ReadOnlySpan<byte> data)
     {
+        Data = data.ToArray();
     }
 }
