@@ -38,18 +38,6 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     public Optional<string> Model { get; set; }
 
     /// <summary>
-    ///     Gets or sets the position of the object.
-    /// </summary>
-    /// <value>The position of the object, or <see langword="null" /> to leave unchanged.</value>
-    public Optional<Vector3d> Position { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the rotation of the object.
-    /// </summary>
-    /// <value>The rotation of the object, or <see langword="null" /> to leave unchanged.</value>
-    public Optional<Quaternion> Rotation { get; set; }
-
-    /// <summary>
     ///     Sets the value of this object's <c>Action</c> field.
     /// </summary>
     /// <param name="action">The new value of the <c>Action</c> field, or <see langword="null" /> to leave unchanged.</param>
