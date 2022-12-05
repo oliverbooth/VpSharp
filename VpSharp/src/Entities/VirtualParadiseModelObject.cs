@@ -1,3 +1,4 @@
+using VpSharp.Exceptions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using static VpSharp.Internal.NativeMethods;
@@ -53,6 +54,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
     {
         ArgumentNullException.ThrowIfNull(action);
 
+        var taskCompletionSource = new TaskCompletionSource<ReasonCode>();
         var builder = new VirtualParadiseModelObjectBuilder(Client, this, ObjectBuilderMode.Modify);
         await Task.Run(() => action(builder)).ConfigureAwait(false);
 
@@ -60,9 +62,25 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
         {
             nint handle = Client.NativeInstanceHandle;
             _ = vp_int_set(handle, IntegerAttribute.ObjectId, Id);
+            _ = vp_int_set(handle, IntegerAttribute.ReferenceNumber, Id);
             builder.ApplyChanges();
 
-            _ = vp_object_change(handle);
+            Client.AddObjectUpdateCompletionSource(Id, taskCompletionSource);
+
+            var reason = (ReasonCode)vp_object_change(handle);
+            if (reason != ReasonCode.Success)
+            {
+                Client.RemoveObjectUpdateCompletionSource(Id);
+                throw new VirtualParadiseException(reason);
+            }
+        }
+
+        ReasonCode result = await taskCompletionSource.Task.ConfigureAwait(false);
+        Client.RemoveObjectUpdateCompletionSource(Id);
+
+        if (result != ReasonCode.Success)
+        {
+            throw new VirtualParadiseException(result);
         }
     }
 

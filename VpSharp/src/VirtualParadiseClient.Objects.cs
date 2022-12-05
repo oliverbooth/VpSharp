@@ -14,6 +14,8 @@ public sealed partial class VirtualParadiseClient
     private readonly ConcurrentDictionary<int, TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>>
         _objectCompletionSources = new();
     private readonly ConcurrentDictionary<int, VirtualParadiseObject> _objects = new();
+    private readonly ConcurrentDictionary<int, TaskCompletionSource<ReasonCode>> _objectUpdates = new();
+
 
     /// <summary>
     ///     Enumerates all objects within a specified cell.
@@ -149,6 +151,17 @@ public sealed partial class VirtualParadiseClient
             _ when reason != ReasonCode.Success => throw new VirtualParadiseException(reason, $"{reason:D} ({reason:G})"),
             _ => virtualParadiseObject!
         };
+    }
+
+
+    internal void AddObjectUpdateCompletionSource(int id, TaskCompletionSource<ReasonCode> taskCompletionSource)
+    {
+        _objectUpdates.AddOrUpdate(id, _ => taskCompletionSource, (_, _) => taskCompletionSource);
+    }
+
+    internal void RemoveObjectUpdateCompletionSource(int id)
+    {
+        _objectUpdates.TryRemove(id, out _);
     }
 
     private VirtualParadiseObject AddOrUpdateObject(VirtualParadiseObject obj)

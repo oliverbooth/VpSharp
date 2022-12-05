@@ -12,7 +12,7 @@ public sealed partial class VirtualParadiseClient
     private void SetNativeCallbacks()
     {
         // SetNativeCallback(NativeCallback.ObjectAdd, OnObjectAddNativeCallback);
-        // SetNativeCallback(NativeCallback.ObjectChange, OnObjectChangeNativeCallback);
+        SetNativeCallback(NativeCallback.ObjectChange, OnObjectChangeNativeCallback);
         // SetNativeCallback(NativeCallback.ObjectDelete, OnObjectDeleteNativeCallback);
         // SetNativeCallback(NativeCallback.GetFriends, OnGetFriendsNativeCallback);
         // SetNativeCallback(NativeCallback.FriendAdd, OnFriendAddNativeCallback);
@@ -47,6 +47,16 @@ public sealed partial class VirtualParadiseClient
 
         VirtualParadiseObject? virtualParadiseObject = reason == ReasonCode.Success ? await ExtractObjectAsync(sender).ConfigureAwait(true) : null;
         taskCompletionSource.SetResult((reason, virtualParadiseObject));
+    }
+
+    private void OnObjectChangeNativeCallback(nint sender, ReasonCode reason, int reference)
+    {
+        if (!_objectUpdates.TryGetValue(reference, out TaskCompletionSource<ReasonCode>? taskCompletionSource))
+        {
+            return;
+        }
+
+        taskCompletionSource.SetResult(reason);
     }
 
     private void OnLoginNativeCallback(nint sender, ReasonCode reason, int reference)
