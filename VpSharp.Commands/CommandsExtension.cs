@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using VpSharp.ClientExtensions;
 using VpSharp.Commands.Attributes;
+using VpSharp.Commands.Attributes.ExecutionChecks;
 using VpSharp.Entities;
 using VpSharp.EventData;
 
@@ -218,8 +219,16 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             }
 
             var context = new CommandContext(Client, message.Author, command.Name, commandNameString, rawArguments.ToString());
-            object?[] arguments = {context};
 
+            foreach (var attribute in command.Method.GetCustomAttributes<PreExecutionCheckAttribute>())
+            {
+                if (!attribute.PerformAsync(context).ConfigureAwait(false).GetAwaiter().GetResult())
+                {
+                    return base.OnMessageReceived(args);
+                }
+            }
+
+            object?[] arguments = {context};
             if (rawArguments.Length > 0)
             {
                 spaceIndex = rawArguments.IndexOf(' ');
