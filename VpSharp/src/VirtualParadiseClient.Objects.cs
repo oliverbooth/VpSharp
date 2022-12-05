@@ -220,7 +220,7 @@ public sealed partial class VirtualParadiseClient
             ObjectType.Model => new VirtualParadiseModelObject(this, id),
             ObjectType.ParticleEmitter => new VirtualParadiseParticleEmitterObject(this, id),
             ObjectType.Path => new VirtualParadisePathObject(this, id),
-            var _ => throw new NotSupportedException("Unsupported object type.")
+            _ => throw new NotSupportedException("Unsupported object type.")
         };
 
         virtualParadiseObject.ExtractFromInstance(sender);
@@ -229,6 +229,7 @@ public sealed partial class VirtualParadiseClient
         virtualParadiseObject.Location = location;
         virtualParadiseObject.ModificationTimestamp = DateTimeOffset.FromUnixTimeSeconds(time);
         virtualParadiseObject.Owner = await GetUserAsync(owner).ConfigureAwait(false);
+
         return virtualParadiseObject;
     }
 }
