@@ -1,6 +1,7 @@
-using System.Numerics;
+﻿using System.Numerics;
 using VpSharp.Extensions;
 using VpSharp.Internal;
+using X10D.Math;
 using static VpSharp.Internal.NativeAttributes.DataAttribute;
 using static VpSharp.Internal.NativeAttributes.FloatAttribute;
 using static VpSharp.Internal.NativeAttributes.IntegerAttribute;
@@ -167,6 +168,14 @@ public abstract class VirtualParadiseObjectBuilder
             {
                 Rotation.Value.ToAxisAngle(out Vector3d axis, out angle);
                 (x, y, z) = axis;
+                angle = angle.RadiansToDegrees();
+            }
+
+            if (double.IsPositiveInfinity(angle))
+            {
+                x = x.RadiansToDegrees();
+                y = y.RadiansToDegrees();
+                z = z.RadiansToDegrees();
             }
 
             _ = vp_double_set(handle, ObjectRotationX, x);

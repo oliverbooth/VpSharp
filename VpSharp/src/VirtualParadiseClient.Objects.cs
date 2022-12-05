@@ -5,6 +5,7 @@ using VpSharp.Entities;
 using VpSharp.Exceptions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
+using X10D.Math;
 using static VpSharp.Internal.NativeMethods;
 
 namespace VpSharp;
@@ -204,6 +205,9 @@ public sealed partial class VirtualParadiseClient
 
             if (double.IsPositiveInfinity(angle))
             {
+                rotX = rotX.DegreesToRadians();
+                rotY = rotY.DegreesToRadians();
+                rotZ = rotZ.DegreesToRadians();
                 rotation = Quaternion.CreateFromYawPitchRoll(rotY, rotX, rotZ);
             }
             else
