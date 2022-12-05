@@ -176,7 +176,7 @@ public abstract class VirtualParadiseObjectBuilder
         }
         else
         {
-            TargetObject.Location.Rotation.ToAxisAngle(out Vector3 axis, out float angle);
+            TargetObject.Location.Rotation.ToAxisAngle(out Vector3d axis, out double angle);
             _ = vp_double_set(handle, ObjectRotationX, axis.X);
             _ = vp_double_set(handle, ObjectRotationY, axis.Y);
             _ = vp_double_set(handle, ObjectRotationZ, axis.Z);
