@@ -384,7 +384,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             lock (_client.Lock)
             {
                 (double x, double y, double z) = position;
-                (double pitch, double yaw, double _) = rotation.ToEulerAngles(false);
+                (double pitch, double yaw, double _) = rotation.ToEulerAngles();
 
                 _ = vp_double_set(handle, FloatAttribute.MyX, x);
                 _ = vp_double_set(handle, FloatAttribute.MyY, y);
@@ -404,7 +404,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             lock (_client.Lock)
             {
                 (float x, float y, float z) = (Vector3)position;
-                (float pitch, float yaw, float _) = (Vector3)rotation.ToEulerAngles(false);
+                (float pitch, float yaw, float _) = (Vector3)rotation.ToEulerAngles();
 
                 var reason = (ReasonCode)vp_teleport_avatar(handle, Session, world, x, y, z, yaw, pitch);
                 if (reason == ReasonCode.NotInWorld)
