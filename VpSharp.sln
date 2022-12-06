@@ -17,6 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VpSharp.Commands", "VpSharp.Commands\VpSharp.Commands.csproj", "{8EE96C20-57AA-48E1-95A2-04580C4F7E05}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{FB67E448-5EFC-4703-922E-7CB00B070CF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VpSharp.CSharp_Sample", "Samples\VpSharp.CSharp_Sample\VpSharp.CSharp_Sample.csproj", "{7B075CFD-CD89-4C6C-ADAC-C8FA39A1C2E1}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VpSharp.VB_Sample", "Samples\VpSharp.VB_Sample\VpSharp.VB_Sample.vbproj", "{EF3BBA1B-8E9B-49A7-87C0-BE7D99E86B8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,5 +45,13 @@ Global
 		{8EE96C20-57AA-48E1-95A2-04580C4F7E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EE96C20-57AA-48E1-95A2-04580C4F7E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EE96C20-57AA-48E1-95A2-04580C4F7E05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B075CFD-CD89-4C6C-ADAC-C8FA39A1C2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B075CFD-CD89-4C6C-ADAC-C8FA39A1C2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B075CFD-CD89-4C6C-ADAC-C8FA39A1C2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B075CFD-CD89-4C6C-ADAC-C8FA39A1C2E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF3BBA1B-8E9B-49A7-87C0-BE7D99E86B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF3BBA1B-8E9B-49A7-87C0-BE7D99E86B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF3BBA1B-8E9B-49A7-87C0-BE7D99E86B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF3BBA1B-8E9B-49A7-87C0-BE7D99E86B8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
