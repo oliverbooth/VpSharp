@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\VpSharp.Commands\VpSharp.Commands.csproj" />
       <ProjectReference Include="..\..\VpSharp\VpSharp.csproj" />
     </ItemGroup>
 

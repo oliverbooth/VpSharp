@@ -1,4 +1,5 @@
-﻿using VpSharp.EventData;
+﻿using VpSharp.Commands;
+using VpSharp.EventData;
 
 namespace VpSharp.CSharp_Sample;
 
@@ -17,6 +18,8 @@ internal static class Program
         };
 
         s_client = new VirtualParadiseClient(configuration);
+        var commands = s_client.UseCommands(new CommandsExtensionConfiguration {Prefixes = {"/"}});
+        commands.RegisterCommands<SayCommand>();
 
         s_client.AvatarJoined += ClientOnAvatarJoined;
 

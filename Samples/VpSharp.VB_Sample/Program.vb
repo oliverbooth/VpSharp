@@ -1,3 +1,4 @@
+Imports VpSharp.Commands
 Imports VpSharp.EventData
 
 Module Program
@@ -6,7 +7,7 @@ Module Program
     Public Sub Main(args As String())
         MainAsync().GetAwaiter().GetResult()
     End Sub
-    
+
     Private Async Function MainAsync() As Task
         Dim configuration = new VirtualParadiseConfiguration _
                 With {
@@ -17,16 +18,27 @@ Module Program
                 }
 
         _client = New VirtualParadiseClient(configuration)
+        
+        Dim commands = _client.UseCommands(New CommandsExtensionConfiguration With { .Prefixes = {"/"} })
+        commands.RegisterCommands(GetType(SayCommand))
 
         Await _client.ConnectAsync()
         Await _client.LoginAsync()
         Await _client.EnterAsync("WORLD_NAME")
         Await _client.CurrentAvatar.TeleportAsync(Vector3d.Zero)
-        
-        Await Task.Delay(-1)
+
+        Await Task.Delay(- 1)
     End Function
 
     Private Async Sub ClientOnAvatarJoined(sender As Object, args As AvatarJoinedEventArgs) Handles _client.AvatarJoined
         Await _client.SendMessageAsync("Hello, " & args.Avatar.Name)
+    End Sub
+
+    Private Async Sub OnChatMessage(sender As Object, args As MessageReceivedEventArgs) Handles _client.MessageReceived
+        Dim message As String = args.Message.Content
+
+        If message.StartsWith("/say ") Then
+            Await _client.SendMessageAsync(message.Substring(5))
+        End If
     End Sub
 End Module
