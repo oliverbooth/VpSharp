@@ -54,7 +54,7 @@ public sealed partial class VirtualParadiseClient
     {
         if (radius < 0)
         {
-            throw new ArgumentException("Range must be greater than or equal to 1.");
+            throw new ArgumentException(ExceptionMessages.RadiusMustBeGreaterThan1, nameof(radius));
         }
 
         var hashSet = new HashSet<Cell>();
@@ -144,12 +144,10 @@ public sealed partial class VirtualParadiseClient
         PreReturn:
         return reason switch
         {
-            ReasonCode.DatabaseError =>
-                throw new VirtualParadiseException(ReasonCode.DatabaseError, "Error communicating with the database."),
+            ReasonCode.DatabaseError => throw new VirtualParadiseException(ReasonCode.DatabaseError),
             ReasonCode.ObjectNotFound => throw new ObjectNotFoundException(),
-            ReasonCode.UnknownError =>
-                throw new VirtualParadiseException(ReasonCode.UnknownError, "An unknown error occurred retrieving the object."),
-            _ when reason != ReasonCode.Success => throw new VirtualParadiseException(reason, $"{reason:D} ({reason:G})"),
+            ReasonCode.UnknownError => throw new VirtualParadiseException(ReasonCode.UnknownError),
+            _ when reason != ReasonCode.Success => throw new VirtualParadiseException(reason),
             _ => virtualParadiseObject!
         };
     }
@@ -224,7 +222,7 @@ public sealed partial class VirtualParadiseClient
             ObjectType.Model => new VirtualParadiseModelObject(this, id),
             ObjectType.ParticleEmitter => new VirtualParadiseParticleEmitterObject(this, id),
             ObjectType.Path => new VirtualParadisePathObject(this, id),
-            _ => throw new NotSupportedException("Unsupported object type.")
+            _ => throw new NotSupportedException(ExceptionMessages.UnsupportedObjectType)
         };
 
         virtualParadiseObject.ExtractFromInstance(sender);

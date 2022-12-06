@@ -60,11 +60,119 @@ namespace VpSharp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The target avatar is not in the world..
+        /// </summary>
+        internal static string AvatarNotInWorld {
+            get {
+                return ResourceManager.GetString("AvatarNotInWorld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot invite non-existent user..
+        /// </summary>
+        internal static string CannotInviteNonExistentUser {
+            get {
+                return ResourceManager.GetString("CannotInviteNonExistentUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot join non-existent user..
+        /// </summary>
+        internal static string CannotJoinNonExistentUser {
+            get {
+                return ResourceManager.GetString("CannotJoinNonExistentUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot login due to incomplete configuration..
+        /// </summary>
+        internal static string CannotLogin_IncompleteConfiguration {
+            get {
+                return ResourceManager.GetString("CannotLogin_IncompleteConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified username and password constitute an invalid login..
+        /// </summary>
+        internal static string CannotLogin_InvalidLogin {
+            get {
+                return ResourceManager.GetString("CannotLogin_InvalidLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A value in the configuration is too long. (BotName?).
+        /// </summary>
+        internal static string CannotLogin_StringTooLong {
+            get {
+                return ResourceManager.GetString("CannotLogin_StringTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The login request timed out..
+        /// </summary>
+        internal static string CannotLogin_Timeout {
+            get {
+                return ResourceManager.GetString("CannotLogin_Timeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The operation cannot be performed on the client&apos;s current avatar..
         /// </summary>
         internal static string CannotUseSelf {
             get {
                 return ResourceManager.GetString("CannotUseSelf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection to the server timed out..
+        /// </summary>
+        internal static string ConnectionTimedOut {
+            get {
+                return ResourceManager.GetString("ConnectionTimedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A connection to a universe server is required for this operation..
+        /// </summary>
+        internal static string ConnectionToUniverseServerRequired {
+            get {
+                return ResourceManager.GetString("ConnectionToUniverseServerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A connection to a world server is required for this operation..
+        /// </summary>
+        internal static string ConnectionToWorldServerRequired {
+            get {
+                return ResourceManager.GetString("ConnectionToWorldServerRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No extension with the type {0} is added to this client..
+        /// </summary>
+        internal static string NoSuchExtension {
+            get {
+                return ResourceManager.GetString("NoSuchExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not allowed to modify world settings..
+        /// </summary>
+        internal static string NotAllowedToModifyWorldSettings {
+            get {
+                return ResourceManager.GetString("NotAllowedToModifyWorldSettings", resourceCulture);
             }
         }
         
@@ -87,6 +195,15 @@ namespace VpSharp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Radius must be greater than or equal to 1..
+        /// </summary>
+        internal static string RadiusMustBeGreaterThan1 {
+            get {
+                return ResourceManager.GetString("RadiusMustBeGreaterThan1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A specified value is too long..
         /// </summary>
         internal static string StringTooLong {
@@ -96,11 +213,56 @@ namespace VpSharp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type cannot be abstract..
+        /// </summary>
+        internal static string TypeCannotBeAbstract {
+            get {
+                return ResourceManager.GetString("TypeCannotBeAbstract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type must inherit from {0}..
+        /// </summary>
+        internal static string TypeMustInherit {
+            get {
+                return ResourceManager.GetString("TypeMustInherit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified remote endpoint is not supported..
         /// </summary>
         internal static string UnsupportedEndpoint {
             get {
                 return ResourceManager.GetString("UnsupportedEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported object type..
+        /// </summary>
+        internal static string UnsupportedObjectType {
+            get {
+                return ResourceManager.GetString("UnsupportedObjectType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value cannot be empty..
+        /// </summary>
+        internal static string ValueCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ValueCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection to the universe server was lost, or connecting to the world failed..
+        /// </summary>
+        internal static string WorldLoginError {
+            get {
+                return ResourceManager.GetString("WorldLoginError", resourceCulture);
             }
         }
         

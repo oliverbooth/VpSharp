@@ -50,12 +50,14 @@ public sealed partial class VirtualParadiseClient
 
         if (!type.IsSubclassOf(typeof(VirtualParadiseClientExtension)))
         {
-            throw new ArgumentException($"Type must inherit from {typeof(VirtualParadiseClientExtension)}");
+            throw new ArgumentException(
+                string.Format(CultureInfo.InvariantCulture, ExceptionMessages.TypeMustInherit,
+                    typeof(VirtualParadiseClientExtension)), nameof(type));
         }
 
         if (type.IsAbstract)
         {
-            throw new ArgumentException("Extension type cannot be abstract");
+            throw new ArgumentException(ExceptionMessages.TypeCannotBeAbstract, nameof(type));
         }
 
         object?[] argumentsActual = {this};
@@ -105,7 +107,8 @@ public sealed partial class VirtualParadiseClient
         var result = _extensions.Find(e => e.GetType() == typeof(T)) as T;
         if (result is null)
         {
-            throw new InvalidOperationException($"No extension with the type {typeof(T)} is added to this client.");
+            throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, ExceptionMessages.NoSuchExtension,
+                typeof(T)));
         }
 
         return result;

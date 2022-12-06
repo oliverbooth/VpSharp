@@ -344,8 +344,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
                 break;
 
             case ReasonCode.NotInUniverse:
-                throw new InvalidOperationException(
-                    "The client must be connected to the universe server in order to enter a world.");
+                throw new InvalidOperationException(ExceptionMessages.ConnectionToUniverseServerRequired);
 
             case ReasonCode.StringTooLong:
                 ThrowHelper.ThrowStringTooLongException(nameof(worldName));
@@ -353,17 +352,16 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
             case ReasonCode.ConnectionError:
             case ReasonCode.WorldLoginError:
-                throw new VirtualParadiseException(reason,
-                    "Connection to the universe server was lost, or connecting to the world failed.");
+                throw new VirtualParadiseException(reason, ExceptionMessages.WorldLoginError);
 
             case ReasonCode.WorldNotFound:
                 throw new WorldNotFoundException(worldName);
 
             case ReasonCode.Timeout:
-                throw new TimeoutException("Connection to the world server timed out.");
+                throw new TimeoutException(ExceptionMessages.ConnectionTimedOut);
 
             default:
-                throw new VirtualParadiseException(reason, $"Unknown error: {reason:D} ({reason:G})");
+                throw new VirtualParadiseException(reason);
         }
 
         int size;
@@ -483,7 +481,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(botName))
         {
-            throw new ArgumentException("Cannot login due to incomplete configuration.");
+            throw new ArgumentException(ExceptionMessages.CannotLogin_IncompleteConfiguration);
         }
 
         _loginCompletionSource = new TaskCompletionSource<ReasonCode>();
@@ -512,16 +510,16 @@ public sealed partial class VirtualParadiseClient : IDisposable
         switch (reason)
         {
             case ReasonCode.Timeout:
-                throw new TimeoutException("The login request timed out.");
+                throw new TimeoutException(ExceptionMessages.CannotLogin_Timeout);
 
             case ReasonCode.InvalidLogin:
-                throw new InvalidCredentialException("The specified username and password constitute an invalid login.");
+                throw new InvalidCredentialException(ExceptionMessages.CannotLogin_InvalidLogin);
 
             case ReasonCode.StringTooLong:
-                throw new ArgumentException($"A value in the configuration is too long. ({nameof(_configuration.BotName)}?)");
+                throw new ArgumentException(ExceptionMessages.CannotLogin_StringTooLong);
 
             case ReasonCode.NotInUniverse:
-                throw new InvalidOperationException("A connection to the universe server is required to attempt login.");
+                throw new InvalidOperationException(ExceptionMessages.ConnectionToUniverseServerRequired);
         }
 
         int userId;
@@ -554,7 +552,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
         ArgumentNullException.ThrowIfNull(message);
         if (string.IsNullOrWhiteSpace(message))
         {
-            throw new ArgumentException("Message cannot be empty.");
+            throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(message));
         }
 
         lock (Lock)
@@ -565,10 +563,10 @@ public sealed partial class VirtualParadiseClient : IDisposable
                 switch (reason)
                 {
                     case ReasonCode.NotInWorld:
-                        throw new InvalidOperationException("A connection to the world server is required to send messages.");
+                        throw new InvalidOperationException(ExceptionMessages.ConnectionToWorldServerRequired);
 
                     case ReasonCode.StringTooLong:
-                        throw new ArgumentException("The message is too long to send.");
+                        throw new ArgumentException(ExceptionMessages.StringTooLong);
                 }
             }
         }

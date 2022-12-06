@@ -396,7 +396,7 @@ public sealed class WorldSettingsBuilder
 
                 if (reason == ReasonCode.NotAllowed)
                 {
-                    throw new UnauthorizedAccessException("Not allowed to modify world settings.");
+                    throw new UnauthorizedAccessException(ExceptionMessages.NotAllowedToModifyWorldSettings);
                 }
             }
         }

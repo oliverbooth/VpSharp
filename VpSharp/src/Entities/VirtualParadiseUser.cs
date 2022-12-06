@@ -156,9 +156,8 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             ReasonCode.Success => InviteResponse.Accepted,
             ReasonCode.InviteDeclined => InviteResponse.Declined,
             ReasonCode.Timeout => InviteResponse.TimeOut,
-            ReasonCode.NoSuchUser => throw new UserNotFoundException($"Cannot invite non-existent user {Id}."),
-            var _ => throw new InvalidOperationException(
-                $"An error occurred trying to invite the user: {reason:D} ({reason:G})")
+            ReasonCode.NoSuchUser => throw new UserNotFoundException(ExceptionMessages.CannotInviteNonExistentUser),
+            _ => throw new VirtualParadiseException(reason)
         };
     }
 
@@ -232,9 +231,8 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             ReasonCode.Success => JoinResponse.Accepted,
             ReasonCode.JoinDeclined => JoinResponse.Declined,
             ReasonCode.Timeout => JoinResponse.TimeOut,
-            ReasonCode.NoSuchUser => throw new UserNotFoundException($"Cannot join non-existent user {Id}."),
-            var _ => throw new InvalidOperationException(
-                $"An error occurred trying to join the user: {reason:D} ({reason:G})")
+            ReasonCode.NoSuchUser => throw new UserNotFoundException(ExceptionMessages.CannotJoinNonExistentUser),
+            _ => throw new VirtualParadiseException(reason)
         };
         // ReSharper enable InconsistentlySynchronizedField
 

@@ -217,7 +217,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
         ArgumentNullException.ThrowIfNull(message);
         if (string.IsNullOrWhiteSpace(message))
         {
-            throw new ArgumentException("Message cannot be empty.");
+            throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(message));
         }
 
         VirtualParadiseAvatar avatar;
@@ -240,13 +240,13 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
                 switch (reason)
                 {
                     case ReasonCode.NotInWorld when _client.CurrentAvatar is null:
-                        throw new InvalidOperationException("A connection to the world server is required to send messages.");
+                        throw new InvalidOperationException(ExceptionMessages.ConnectionToWorldServerRequired);
 
                     case ReasonCode.NotInWorld:
-                        throw new InvalidOperationException("The recipient avatar is not in this world.");
+                        throw new InvalidOperationException(ExceptionMessages.AvatarNotInWorld);
 
                     case ReasonCode.StringTooLong:
-                        throw new ArgumentException("The message is too long to send.");
+                        throw new ArgumentException(ExceptionMessages.StringTooLong);
                 }
             }
 
@@ -354,7 +354,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 #else
         if (string.IsNullOrEmpty(world))
         {
-            throw new ArgumentException("World cannot be empty");
+            throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(world));
         }
 #endif
 
