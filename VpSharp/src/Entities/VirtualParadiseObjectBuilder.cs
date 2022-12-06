@@ -186,6 +186,12 @@ public abstract class VirtualParadiseObjectBuilder
         else
         {
             TargetObject.Location.Rotation.ToAxisAngle(out Vector3d axis, out double angle);
+            if (Vector3d.IsNan(axis))
+            {
+                axis = Vector3d.Zero;
+                angle = double.PositiveInfinity;
+            }
+
             _ = vp_double_set(handle, ObjectRotationX, axis.X);
             _ = vp_double_set(handle, ObjectRotationY, axis.Y);
             _ = vp_double_set(handle, ObjectRotationZ, axis.Z);

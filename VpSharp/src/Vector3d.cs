@@ -395,13 +395,53 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     }
 
     /// <summary>
+    ///     Returns a value that indicates whether the components in the specified vector are not a number
+    ///     (<see cref="double.NaN" />).
+    /// </summary>
+    /// <param name="vector">A double-precision vector.</param>
+    /// <returns>
+    ///     <see langword="true" /> if the components in <paramref name="vector" /> evaluate to <see cref="double.NaN" />;
+    ///     otherwise, <see langword="false" />.
+    /// </returns>
+    public static bool IsNan(in Vector3d vector)
+    {
+        return double.IsNaN(vector.X) && double.IsNaN(vector.Y) && double.IsNaN(vector.Z);
+    }
+
+    /// <summary>
+    ///     Returns a value that indicates whether the components in the specified vector evaluate to positive infinity.
+    /// </summary>
+    /// <param name="vector">A double-precision vector.</param>
+    /// <returns>
+    ///     <see langword="true" /> if the components in <paramref name="vector" /> evaluate to
+    ///     <see cref="double.PositiveInfinity" />; otherwise, <see langword="false" />.
+    /// </returns>
+    public static bool IsPositiveInfinity(in Vector3d vector)
+    {
+        return double.IsPositiveInfinity(vector.X) && double.IsPositiveInfinity(vector.Y) && double.IsPositiveInfinity(vector.Z);
+    }
+
+    /// <summary>
+    ///     Returns a value that indicates whether the components in the specified vector evaluate to negative infinity.
+    /// </summary>
+    /// <param name="vector">A double-precision vector.</param>
+    /// <returns>
+    ///     <see langword="true" /> if the components in <paramref name="vector" /> evaluate to
+    ///     <see cref="double.NegativeInfinity" />; otherwise, <see langword="false" />.
+    /// </returns>
+    public static bool IsNegativeInfinity(in Vector3d vector)
+    {
+        return double.IsNegativeInfinity(vector.X) && double.IsNegativeInfinity(vector.Y) && double.IsNegativeInfinity(vector.Z);
+    }
+
+    /// <summary>
     ///     Linearly interpolates between two vectors based on the given weighting.
     /// </summary>
     /// <param name="a">The first source vector.</param>
     /// <param name="b">The second source vector.</param>
     /// <param name="t">A value between 0 and 1 indicating the weight of <paramref name="b" />.</param>
     /// <returns>The interpolate vector.</returns>
-    public static Vector3d Lerp(Vector3d a, Vector3d b, double t)
+    public static Vector3d Lerp(in Vector3d a, in Vector3d b, double t)
     {
         Vector3d firstInfluence = a * (1.0f - t);
         Vector3d secondInfluence = b * t;
