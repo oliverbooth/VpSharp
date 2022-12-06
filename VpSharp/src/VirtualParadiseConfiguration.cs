@@ -39,7 +39,7 @@ public sealed class VirtualParadiseConfiguration
     ///     Gets or sets the application.
     /// </summary>
     /// <value>The application.</value>
-    public Application? Application { get; init; }
+    public Application? Application { get; set; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether or not the client should automatically query and cache the whole world
