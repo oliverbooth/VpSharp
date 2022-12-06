@@ -18,7 +18,7 @@ internal static class Program
         };
 
         s_client = new VirtualParadiseClient(configuration);
-        var commands = s_client.UseCommands(new CommandsExtensionConfiguration {Prefixes = {"/"}});
+        var commands = s_client.UseCommands(new CommandsExtensionConfiguration {Prefixes = new[] {"/"}});
         commands.RegisterCommands<SayCommand>();
 
         s_client.AvatarJoined += ClientOnAvatarJoined;
