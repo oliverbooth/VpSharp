@@ -1,6 +1,5 @@
 using System.Numerics;
 using VpSharp.Exceptions;
-using VpSharp.Extensions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using X10D.Numerics;
@@ -230,6 +229,46 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     public override string ToString()
     {
         return $"Object {Id}; Owner {Owner}; Location {Location}";
+    }
+
+    /// <summary>
+    ///     Updates the object by extracting the values provided by a specified <see cref="VirtualParadiseObjectBuilder" />.
+    /// </summary>
+    /// <param name="builder">The builder whose values to extract.</param>
+    protected internal virtual void ExtractFromBuilder(VirtualParadiseObjectBuilder builder)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+
+        Location location = Location;
+        Vector3d position = location.Position;
+        Quaternion rotation = location.Rotation;
+
+        if (builder.Position.HasValue)
+        {
+            position = builder.Position.Value;
+        }
+
+        if (builder.Rotation.HasValue)
+        {
+            rotation = builder.Rotation.Value;
+        }
+
+        Location = new Location(location.World, position, rotation);
+
+        if (builder.Data.HasValue)
+        {
+            Data = builder.Data.Value!.ToArray();
+        }
+
+        if (builder.ModificationTimestamp.HasValue)
+        {
+            ModificationTimestamp = builder.ModificationTimestamp.Value;
+        }
+
+        if (builder.Owner.HasValue)
+        {
+            Owner = builder.Owner.Value!;
+        }
     }
 
     /// <summary>

@@ -82,6 +82,34 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
         {
             throw new VirtualParadiseException(result);
         }
+
+        ExtractFromBuilder(builder);
+    }
+
+    /// <inheritdoc />
+    protected internal override void ExtractFromBuilder(VirtualParadiseObjectBuilder builder)
+    {
+        if (builder is not VirtualParadiseModelObjectBuilder modelObjectBuilder)
+        {
+            return;
+        }
+
+        base.ExtractFromBuilder(builder);
+
+        if (modelObjectBuilder.Model.HasValue)
+        {
+            Model = modelObjectBuilder.Model.Value!;
+        }
+
+        if (modelObjectBuilder.Description.HasValue)
+        {
+            Description = modelObjectBuilder.Description.Value!;
+        }
+
+        if (modelObjectBuilder.Action.HasValue)
+        {
+            Action = modelObjectBuilder.Action.Value!;
+        }
     }
 
     /// <inheritdoc />
