@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using VpSharp.Internal;
+﻿using VpSharp.Internal;
 using static VpSharp.Internal.NativeAttributes.StringAttribute;
 using static VpSharp.Internal.NativeMethods;
 
@@ -36,41 +35,6 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     /// </summary>
     /// <value>The value of this object's <c>Model</c> field, or <see langword="null" /> to leave unchanged.</value>
     public Optional<string> Model { get; set; }
-
-    /// <summary>
-    ///     Sets the value of this object's <c>Action</c> field.
-    /// </summary>
-    /// <param name="action">The new value of the <c>Action</c> field, or <see langword="null" /> to leave unchanged.</param>
-    /// <returns>The current instance of this builder.</returns>
-    public VirtualParadiseModelObjectBuilder WithAction(Optional<string> action)
-    {
-        Action = action;
-        return this;
-    }
-
-    /// <summary>
-    ///     Sets the value of this object's <c>Description</c> field.
-    /// </summary>
-    /// <param name="description">
-    ///     The new value of the <c>Description</c> field, or <see langword="null" /> to leave unchanged.
-    /// </param>
-    /// <returns>The current instance of this builder.</returns>
-    public VirtualParadiseModelObjectBuilder WithDescription(Optional<string> description)
-    {
-        Description = description;
-        return this;
-    }
-
-    /// <summary>
-    ///     Sets the value of this object's <c>Model</c> field.
-    /// </summary>
-    /// <param name="model">The new value of the <c>Model</c> field, or <see langword="null" /> to leave unchanged.</param>
-    /// <returns>The current instance of this builder.</returns>
-    public VirtualParadiseModelObjectBuilder WithModel(Optional<string> model)
-    {
-        Model = model;
-        return this;
-    }
 
     internal override void ApplyChanges()
     {
