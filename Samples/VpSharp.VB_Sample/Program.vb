@@ -33,12 +33,4 @@ Module Program
     Private Async Sub ClientOnAvatarJoined(sender As Object, args As AvatarJoinedEventArgs) Handles _client.AvatarJoined
         Await _client.SendMessageAsync("Hello, " & args.Avatar.Name)
     End Sub
-
-    Private Async Sub OnChatMessage(sender As Object, args As MessageReceivedEventArgs) Handles _client.MessageReceived
-        Dim message As String = args.Message.Content
-
-        If message.StartsWith("/say ") Then
-            Await _client.SendMessageAsync(message.Substring(5))
-        End If
-    End Sub
 End Module
