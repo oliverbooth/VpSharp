@@ -65,12 +65,9 @@ public sealed partial class VirtualParadiseClient
             hashSet.Add(new Cell(x, z));
         }
 
+        var centerPosition = center.ToVector3d();
         var cells = new List<Cell>(hashSet);
-        cells.Sort((a, b) =>
-        {
-            int x = a.X.CompareTo(b.X);
-            return x == 0 ? a.Z.CompareTo(b.Z) : x;
-        });
+        cells.Sort((a, b) => Vector3d.DistanceSquared(a.ToVector3d(), centerPosition).CompareTo(Vector3d.Distance(b.ToVector3d(), centerPosition)));
 
         var objects = new List<VirtualParadiseObject>();
         var tasks = new List<Task>();
