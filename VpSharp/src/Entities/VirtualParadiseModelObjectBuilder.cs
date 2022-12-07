@@ -21,19 +21,19 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
     /// <summary>
     ///     Gets or sets the value of this object's <c>Action</c> field.
     /// </summary>
-    /// <value>The value of this object's <c>Action</c> field, or <see langword="null" /> to leave unchanged.</value>
+    /// <value>The value of this object's <c>Action</c> field, or <see langword="default" /> to leave unchanged.</value>
     public Optional<string> Action { get; set; }
 
     /// <summary>
     ///     Gets or sets the value of this object's <c>Description</c> field.
     /// </summary>
-    /// <value>The value of this object's <c>Description</c> field, or <see langword="null" /> to leave unchanged.</value>
+    /// <value>The value of this object's <c>Description</c> field, or <see langword="default" /> to leave unchanged.</value>
     public Optional<string> Description { get; set; }
 
     /// <summary>
     ///     Gets or sets the value of this object's <c>Model</c> field.
     /// </summary>
-    /// <value>The value of this object's <c>Model</c> field, or <see langword="null" /> to leave unchanged.</value>
+    /// <value>The value of this object's <c>Model</c> field, or <see langword="default" /> to leave unchanged.</value>
     public Optional<string> Model { get; set; }
 
     internal override void ApplyChanges()

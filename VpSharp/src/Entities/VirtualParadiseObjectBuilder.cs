@@ -29,7 +29,7 @@ public abstract class VirtualParadiseObjectBuilder
     ///     Gets or sets the date and time at which this object was last modified.
     /// </summary>
     /// <value>
-    ///     The date and time at which this object was last modified, or <see langword="null" /> to leave unchanged.
+    ///     The date and time at which this object was last modified, or <see langword="default" /> to leave unchanged.
     /// </value>
     /// <remarks>
     ///     This property may only be set during an object load, and will throw <see cref="InvalidOperationException" /> at
@@ -40,7 +40,7 @@ public abstract class VirtualParadiseObjectBuilder
     /// <summary>
     ///     Gets or sets the owner of this object.
     /// </summary>
-    /// <value>The owner of this object, or <see langword="null" /> to leave unchanged.</value>
+    /// <value>The owner of this object, or <see langword="default" /> to leave unchanged.</value>
     /// <remarks>
     ///     This property may only be set during an object load, and will throw <see cref="InvalidOperationException" /> at
     ///     any other point.
@@ -50,13 +50,13 @@ public abstract class VirtualParadiseObjectBuilder
     /// <summary>
     ///     Gets or sets the position of the object.
     /// </summary>
-    /// <value>The position of the object, or <see langword="null" /> to leave unchanged.</value>
+    /// <value>The position of the object, or <see langword="default" /> to leave unchanged.</value>
     public Optional<Vector3d> Position { get; set; }
 
     /// <summary>
     ///     Gets or sets the rotation of the object.
     /// </summary>
-    /// <value>The rotation of the object, or <see langword="null" /> to leave unchanged.</value>
+    /// <value>The rotation of the object, or <see langword="default" /> to leave unchanged.</value>
     public Optional<Quaternion> Rotation { get; set; }
 
     internal Optional<IReadOnlyList<byte>> Data { get; set; }
