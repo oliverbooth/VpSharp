@@ -120,6 +120,21 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     }
 
     /// <summary>
+    ///     Calculates the cell number for a specified coordinate value.
+    /// </summary>
+    /// <param name="value">The coordinate value.</param>
+    /// <returns>The cell number.</returns>
+    /// <remarks>
+    ///     The way VP calculates cell number isn't a <c>floor(n)</c> as one might have thought, but instead
+    ///     <c>n &lt; 0 ? (int)value - 1 : (int)value</c>. This helper method exists because of this idiosyncrasy of the world
+    ///     server. 
+    /// </remarks>
+    public static int CellFromCoordinate(double value)
+    {
+        return value < 0 ? (int)value - 1 : (int)value;
+    }
+
+    /// <summary>
     ///     Converts an instance of <see cref="Vector2" /> to a new instance of <see cref="Cell" />.
     /// </summary>
     /// <param name="vector">The vector to convert.</param>

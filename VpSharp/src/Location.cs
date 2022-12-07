@@ -51,12 +51,7 @@ public readonly struct Location : IEquatable<Location>
     /// </summary>
     public Cell Cell
     {
-        get
-        {
-            var x = (int)Math.Floor(Position.X);
-            var z = (int)Math.Floor(Position.Z);
-            return new Cell(x, z);
-        }
+        get => new(Cell.CellFromCoordinate(Position.X), Cell.CellFromCoordinate(Position.Z));
     }
 
     /// <summary>
