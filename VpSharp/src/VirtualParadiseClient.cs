@@ -581,6 +581,89 @@ public sealed partial class VirtualParadiseClient : IDisposable
         ));
     }
 
+    /// <summary>
+    ///     Sends a console message to everyone in the current world.
+    /// </summary>
+    /// <param name="message">The message to send.</param>
+    /// <param name="fontStyle">The font style of the message.</param>
+    /// <param name="color">The text color of the message.</param>
+    /// <returns>The message which was sent.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///     An attempt was made to send a message while not connected to a world.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <para><paramref name="message" /> is empty, or consists of only whitespace.</para>
+    ///     -or-
+    ///     <para><paramref name="message" /> is too long to send.</para>
+    /// </exception>
+    public Task<VirtualParadiseMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    {
+        return SendMessageAsync(null, message, fontStyle, color);
+    }
+
+    /// <summary>
+    ///     Sends a console message to everyone in the current world.
+    /// </summary>
+    /// <param name="name">The apparent author of the message.</param>
+    /// <param name="message">The message to send.</param>
+    /// <param name="fontStyle">The font style of the message.</param>
+    /// <param name="color">The text color of the message.</param>
+    /// <returns>The message which was sent.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="message" /> is <see langword="null" />.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///     An attempt was made to send a message while not connected to a world.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <para><paramref name="message" /> is empty, or consists of only whitespace.</para>
+    ///     -or-
+    ///     <para><paramref name="message" /> is too long to send.</para>
+    /// </exception>
+    public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    {
+        ArgumentNullException.ThrowIfNull(message);
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(message));
+        }
+
+        lock (Lock)
+        {
+            var reason = (ReasonCode)vp_console_message(
+                NativeInstanceHandle,
+                0,
+                name ?? string.Empty,
+                message,
+                (int)fontStyle,
+                color.R,
+                color.G,
+                color.B
+            );
+
+            if (reason != ReasonCode.Success)
+            {
+                switch (reason)
+                {
+                    case ReasonCode.NotInWorld:
+                        throw new InvalidOperationException(ExceptionMessages.ConnectionToWorldServerRequired);
+
+                    case ReasonCode.StringTooLong:
+                        throw new ArgumentException(ExceptionMessages.StringTooLong);
+                }
+            }
+        }
+
+        VirtualParadiseAvatar avatar = CurrentAvatar!;
+        return Task.FromResult(new VirtualParadiseMessage(
+            MessageType.ConsoleMessage,
+            name,
+            message,
+            avatar,
+            fontStyle,
+            color
+        ));
+    }
+
     internal TaskCompletionSource<ReasonCode> AddJoinCompletionSource(int reference)
     {
         var taskCompletionSource = new TaskCompletionSource<ReasonCode>();
