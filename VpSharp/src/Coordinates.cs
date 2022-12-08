@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a set of coordinates.
 /// </summary>
-public readonly partial struct Coordinates : IEquatable<Coordinates>
+public readonly partial struct Coordinates : IEquatable<Coordinates>, IFormattable
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="Coordinates" /> struct.
@@ -195,9 +195,11 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>
     ///     Returns the string representation of these coordinates.
     /// </summary>
     /// <param name="format">The format to apply to each component.</param>
+    /// <param name="formatProvider">The format provider.</param>
     /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
-    public string ToString(string format)
+    public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
-        return Serializer.Serialize(this, format);
+        format ??= "{0}";
+        return Serializer.Serialize(this, format, formatProvider);
     }
 }

@@ -10,15 +10,15 @@ public readonly partial struct Coordinates
 {
     private static class Serializer
     {
-        public static string Serialize(in Coordinates coordinates, string format)
+        public static string Serialize(in Coordinates coordinates, string format, IFormatProvider? formatProvider)
         {
-            int count = Serialize(coordinates, format, Span<char>.Empty);
+            int count = Serialize(coordinates, format, formatProvider, Span<char>.Empty);
             Span<char> chars = stackalloc char[count];
-            Serialize(coordinates, format, chars);
+            Serialize(coordinates, format, formatProvider, chars);
             return chars.ToString();
         }
 
-        public static int Serialize(in Coordinates coordinates, string format, Span<char> destination)
+        public static int Serialize(in Coordinates coordinates, string format, IFormatProvider? formatProvider, Span<char> destination)
         {
             using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
 
@@ -40,7 +40,7 @@ public readonly partial struct Coordinates
                     builder.Append('+');
                 }
 
-                builder.Append(string.Format(CultureInfo.InvariantCulture, format, coordinates.Z));
+                builder.Append(string.Format(formatProvider, format, coordinates.Z));
                 builder.Append(' ');
 
                 if (west)
@@ -48,7 +48,7 @@ public readonly partial struct Coordinates
                     builder.Append('+');
                 }
 
-                builder.Append(string.Format(CultureInfo.InvariantCulture, format, coordinates.X));
+                builder.Append(string.Format(formatProvider, format, coordinates.X));
                 builder.Append(' ');
 
                 if (up)
@@ -56,7 +56,7 @@ public readonly partial struct Coordinates
                     builder.Append('+');
                 }
 
-                builder.Append(string.Format(CultureInfo.InvariantCulture, format, coordinates.Y));
+                builder.Append(string.Format(formatProvider, format, coordinates.Y));
                 builder.Append("a ");
 
                 if (dir)
@@ -64,25 +64,25 @@ public readonly partial struct Coordinates
                     builder.Append('+');
                 }
 
-                builder.Append(string.Format(CultureInfo.InvariantCulture, format, coordinates.Yaw));
+                builder.Append(string.Format(formatProvider, format, coordinates.Yaw));
             }
             else
             {
                 char zChar = north ? 'n' : 's';
                 char xChar = west ? 'w' : 'e';
 
-                builder.Append(string.Format(CultureInfo.InvariantCulture, format, Math.Abs(coordinates.Z)));
+                builder.Append(string.Format(formatProvider, format, Math.Abs(coordinates.Z)));
                 builder.Append(zChar);
                 builder.Append(' ');
 
-                builder.Append(string.Format(CultureInfo.InvariantCulture, format, Math.Abs(coordinates.X)));
+                builder.Append(string.Format(formatProvider, format, Math.Abs(coordinates.X)));
                 builder.Append(xChar);
                 builder.Append(' ');
 
-                builder.Append(string.Format(CultureInfo.InvariantCulture, format, coordinates.Y));
+                builder.Append(string.Format(formatProvider, format, coordinates.Y));
                 builder.Append("a ");
 
-                builder.Append(string.Format(CultureInfo.InvariantCulture, format, coordinates.Yaw));
+                builder.Append(string.Format(formatProvider, format, coordinates.Yaw));
             }
 
             ReadOnlySpan<byte> bytes = builder.AsSpan();
@@ -339,7 +339,7 @@ public readonly partial struct Coordinates
             {
                 y = value;
             }
-            else if (isAt3 && double.TryParse(chars, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+            else if (isAt3 && double.TryParse(chars, NumberStyles.Float, formatProvider, out value))
             {
                 yaw = value;
             }*/
