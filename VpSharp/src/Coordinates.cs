@@ -70,7 +70,7 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>, IFormattab
         X = x;
         Y = y;
         Z = z;
-        Yaw = yaw;
+        Yaw = yaw % 360.0;
         IsRelative = isRelative;
     }
 
