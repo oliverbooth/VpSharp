@@ -173,6 +173,24 @@ public readonly struct Rotation : IEquatable<Rotation>, IFormattable
     }
 
     /// <summary>
+    ///     Converts this rotation to a quaternion.
+    /// </summary>
+    /// <returns>An instance of <see cref="Quaternion" /> representing the same rotation as this instance.</returns>
+    public Quaternion ToQuaternion()
+    {
+        if (double.IsPositiveInfinity(Angle))
+        {
+            var yaw = (float)Yaw.DegreesToRadians();
+            var tilt = (float)Tilt.DegreesToRadians();
+            var roll = (float)Roll.DegreesToRadians();
+            return Quaternion.CreateFromYawPitchRoll(yaw, tilt, roll);
+        }
+
+        var axis = new Vector3d(Tilt, Yaw, Roll);
+        return Quaternion.CreateFromAxisAngle((Vector3)axis, (float)Angle);
+    }
+
+    /// <summary>
     ///     Returns the string representation of these coordinates.
     /// </summary>
     /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
