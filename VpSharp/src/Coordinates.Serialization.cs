@@ -18,7 +18,12 @@ public readonly partial struct Coordinates
             return chars.ToString();
         }
 
-        public static int Serialize(in Coordinates coordinates, string format, IFormatProvider? formatProvider, Span<char> destination)
+        public static int Serialize(
+            in Coordinates coordinates,
+            string? format,
+            IFormatProvider? formatProvider,
+            Span<char> destination
+        )
         {
             using Utf8ValueStringBuilder builder = ZString.CreateUtf8StringBuilder();
 
@@ -40,7 +45,7 @@ public readonly partial struct Coordinates
                     builder.Append('+');
                 }
 
-                builder.Append(string.Format(formatProvider, format, coordinates.Z));
+                builder.Append(coordinates.Z.ToString(format, formatProvider));
                 builder.Append(' ');
 
                 if (west)
@@ -48,7 +53,7 @@ public readonly partial struct Coordinates
                     builder.Append('+');
                 }
 
-                builder.Append(string.Format(formatProvider, format, coordinates.X));
+                builder.Append(coordinates.X.ToString(format, formatProvider));
                 builder.Append(' ');
 
                 if (up)
@@ -56,7 +61,7 @@ public readonly partial struct Coordinates
                     builder.Append('+');
                 }
 
-                builder.Append(string.Format(formatProvider, format, coordinates.Y));
+                builder.Append(coordinates.Y.ToString(format, formatProvider));
                 builder.Append("a ");
 
                 if (dir)
@@ -71,18 +76,18 @@ public readonly partial struct Coordinates
                 char zChar = north ? 'n' : 's';
                 char xChar = west ? 'w' : 'e';
 
-                builder.Append(string.Format(formatProvider, format, Math.Abs(coordinates.Z)));
+                builder.Append(Math.Abs(coordinates.Z).ToString(format, formatProvider));
                 builder.Append(zChar);
                 builder.Append(' ');
 
-                builder.Append(string.Format(formatProvider, format, Math.Abs(coordinates.X)));
+                builder.Append(Math.Abs(coordinates.X).ToString(format, formatProvider));
                 builder.Append(xChar);
                 builder.Append(' ');
 
-                builder.Append(string.Format(formatProvider, format, coordinates.Y));
+                builder.Append(Math.Abs(coordinates.Y).ToString(format, formatProvider));
                 builder.Append("a ");
 
-                builder.Append(string.Format(formatProvider, format, coordinates.Yaw));
+                builder.Append(Math.Abs(coordinates.Yaw).ToString(format, formatProvider));
             }
 
             ReadOnlySpan<byte> bytes = builder.AsSpan();

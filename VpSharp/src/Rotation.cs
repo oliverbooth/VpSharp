@@ -178,7 +178,7 @@ public readonly struct Rotation : IEquatable<Rotation>, IFormattable
     /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
     public override string ToString()
     {
-        return ToString("{0}", CultureInfo.CurrentCulture);
+        return ToString("F", CultureInfo.CurrentCulture);
     }
 
     /// <summary>
@@ -194,13 +194,13 @@ public readonly struct Rotation : IEquatable<Rotation>, IFormattable
 
         using var builder = ZString.CreateUtf8StringBuilder();
         builder.Append('<');
-        builder.Append(string.Format(formatProvider, format, Tilt));
+        builder.Append(Tilt.ToString(format, formatProvider));
         builder.Append(separator);
         builder.Append(' ');
-        builder.Append(string.Format(formatProvider, format, Yaw));
+        builder.Append(Yaw.ToString(format, formatProvider));
         builder.Append(separator);
         builder.Append(' ');
-        builder.Append(string.Format(formatProvider, format, Roll));
+        builder.Append(Roll.ToString(format, formatProvider));
         builder.Append('>');
 
         return builder.ToString();

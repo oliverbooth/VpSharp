@@ -190,7 +190,7 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>, IFormattab
     /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
     public override string ToString()
     {
-        return ToString("{0}", CultureInfo.InvariantCulture);
+        return ToString("F", CultureInfo.InvariantCulture);
     }
 
     /// <summary>
@@ -202,6 +202,6 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>, IFormattab
     public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
         format ??= "{0}";
-        return Serializer.Serialize(this, format, formatProvider);
+        return Serializer.Serialize(this, format, formatProvider ??  CultureInfo.InvariantCulture);
     }
 }
