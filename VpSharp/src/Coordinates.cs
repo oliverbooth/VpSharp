@@ -1,4 +1,6 @@
-﻿namespace VpSharp;
+﻿using System.Globalization;
+
+namespace VpSharp;
 
 /// <summary>
 ///     Represents a set of coordinates.
@@ -188,7 +190,7 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>, IFormattab
     /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
     public override string ToString()
     {
-        return ToString("{0}");
+        return ToString("{0}", CultureInfo.InvariantCulture);
     }
 
     /// <summary>

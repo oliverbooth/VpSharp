@@ -178,7 +178,7 @@ public readonly struct Rotation : IEquatable<Rotation>, IFormattable
     /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
     public override string ToString()
     {
-        return ToString("{0}");
+        return ToString("{0}", CultureInfo.CurrentCulture);
     }
 
     /// <summary>
