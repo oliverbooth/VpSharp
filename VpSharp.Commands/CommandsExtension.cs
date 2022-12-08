@@ -269,6 +269,11 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
                 }
             }
 
+            if (command.Method.GetParameters().Length != arguments.Length)
+            {
+                return base.OnMessageReceived(args);
+            }
+
             object? returnValue = command.Method.Invoke(command.Module, arguments);
             if (returnValue is Task task)
             {
