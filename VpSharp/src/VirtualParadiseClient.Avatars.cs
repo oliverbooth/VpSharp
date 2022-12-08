@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Numerics;
 using VpSharp.Entities;
 using VpSharp.Internal.NativeAttributes;
 using static VpSharp.Internal.NativeMethods;
@@ -52,7 +51,7 @@ public sealed partial class VirtualParadiseClient
             var yaw = (float)vp_double(sender, FloatAttribute.AvatarYaw);
 
             var position = new Vector3d(x, y, z);
-            var rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);
+            var rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
 
             string applicationName = vp_string(sender, StringAttribute.AvatarApplicationName);
             string applicationVersion = vp_string(sender, StringAttribute.AvatarApplicationVersion);

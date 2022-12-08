@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using VpSharp.Extensions;
-using VpSharp.Internal;
-using X10D.Math;
+﻿using VpSharp.Internal;
 using static VpSharp.Internal.NativeAttributes.DataAttribute;
 using static VpSharp.Internal.NativeAttributes.FloatAttribute;
 using static VpSharp.Internal.NativeAttributes.IntegerAttribute;
@@ -57,7 +54,7 @@ public abstract class VirtualParadiseObjectBuilder
     ///     Gets or sets the rotation of the object.
     /// </summary>
     /// <value>The rotation of the object, or <see langword="default" /> to leave unchanged.</value>
-    public Optional<Quaternion> Rotation { get; set; }
+    public Optional<Rotation> Rotation { get; set; }
 
     internal Optional<IReadOnlyList<byte>> Data { get; set; }
 
@@ -157,27 +154,12 @@ public abstract class VirtualParadiseObjectBuilder
 
         if (!Rotation.HasValue && Mode == ObjectBuilderMode.Create)
         {
-            Rotation = Quaternion.Identity;
+            Rotation = VpSharp.Rotation.None;
         }
 
         if (Rotation.HasValue)
         {
-            (double x, double y, double z) = Vector3d.Zero;
-            double angle = double.PositiveInfinity;
-            if (Rotation.Value != Quaternion.Identity)
-            {
-                Rotation.Value.ToAxisAngle(out Vector3d axis, out angle);
-                (x, y, z) = axis;
-                angle = angle.RadiansToDegrees();
-            }
-
-            if (double.IsPositiveInfinity(angle))
-            {
-                x = x.RadiansToDegrees();
-                y = y.RadiansToDegrees();
-                z = z.RadiansToDegrees();
-            }
-
+            (double x, double y, double z, double angle) = Rotation.Value;
             _ = vp_double_set(handle, ObjectRotationX, x);
             _ = vp_double_set(handle, ObjectRotationY, y);
             _ = vp_double_set(handle, ObjectRotationZ, z);
@@ -185,16 +167,10 @@ public abstract class VirtualParadiseObjectBuilder
         }
         else
         {
-            TargetObject.Location.Rotation.ToAxisAngle(out Vector3d axis, out double angle);
-            if (Vector3d.IsNan(axis))
-            {
-                axis = Vector3d.Zero;
-                angle = double.PositiveInfinity;
-            }
-
-            _ = vp_double_set(handle, ObjectRotationX, axis.X);
-            _ = vp_double_set(handle, ObjectRotationY, axis.Y);
-            _ = vp_double_set(handle, ObjectRotationZ, axis.Z);
+            (double x, double y, double z, double angle) = TargetObject.Location.Rotation;
+            _ = vp_double_set(handle, ObjectRotationX, x);
+            _ = vp_double_set(handle, ObjectRotationY, y);
+            _ = vp_double_set(handle, ObjectRotationZ, z);
             _ = vp_double_set(handle, ObjectRotationAngle, angle);
         }
     }

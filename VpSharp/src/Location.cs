@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using VpSharp.Entities;
-using VpSharp.Extensions;
-using X10D.Math;
+﻿using VpSharp.Entities;
 
 namespace VpSharp;
 
@@ -29,7 +26,7 @@ public readonly struct Location : IEquatable<Location>
     {
         World = world ?? throw new ArgumentNullException(nameof(world));
         Position = new Vector3d(coordinates.X, coordinates.Y, coordinates.Z);
-        Rotation = Quaternion.CreateFromYawPitchRoll((float)coordinates.Yaw.DegreesToRadians(), 0, 0);
+        Rotation = Rotation.CreateFromTiltYawRoll(0, coordinates.Yaw, 0);
     }
 
     /// <summary>
@@ -39,7 +36,7 @@ public readonly struct Location : IEquatable<Location>
     /// <param name="position">The position.</param>
     /// <param name="rotation">The rotation.</param>
     /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
-    public Location(VirtualParadiseWorld world, Vector3d position = default, Quaternion rotation = default)
+    public Location(VirtualParadiseWorld world, Vector3d position = default, Rotation rotation = default)
     {
         World = world ?? throw new ArgumentNullException(nameof(world));
         Position = position;
@@ -64,7 +61,7 @@ public readonly struct Location : IEquatable<Location>
     ///     Gets the rotation represented by this location.
     /// </summary>
     /// <value>The rotation.</value>
-    public Quaternion Rotation { get; init; }
+    public Rotation Rotation { get; init; }
 
     /// <summary>
     ///     Gets the world represented by this location.
@@ -131,8 +128,7 @@ public readonly struct Location : IEquatable<Location>
     public Coordinates ToCoordinates()
     {
         (double x, double y, double z) = Position;
-        (_, double yaw, _) = Rotation.ToEulerAngles();
-        return new Coordinates(World?.Name, x, y, z, yaw);
+        return new Coordinates(World?.Name, x, y, z, Rotation.Yaw);
     }
 
     /// <inheritdoc />

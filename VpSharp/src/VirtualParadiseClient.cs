@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
-using System.Numerics;
 using System.Security.Authentication;
 using System.Threading.Channels;
 using VpSharp.Entities;
@@ -218,7 +217,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position)
     {
         await EnterAsync(worldName).ConfigureAwait(false);
-        await CurrentAvatar!.TeleportAsync(position, Quaternion.Identity).ConfigureAwait(false);
+        await CurrentAvatar!.TeleportAsync(position, Rotation.None).ConfigureAwait(false);
         return CurrentWorld!;
     }
 
@@ -235,7 +234,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="Exception">Connection to the universe server was lost, or connecting to the world failed.</exception>
     /// <exception cref="WorldNotFoundException">The specified world was not found.</exception>
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
-    public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position, Quaternion rotation)
+    public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position, Rotation rotation)
     {
         await EnterAsync(worldName).ConfigureAwait(false);
         await CurrentAvatar!.TeleportAsync(position, rotation).ConfigureAwait(false);
@@ -257,7 +256,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position)
     {
         await EnterAsync(world).ConfigureAwait(false);
-        await CurrentAvatar!.TeleportAsync(position, Quaternion.Identity).ConfigureAwait(false);
+        await CurrentAvatar!.TeleportAsync(position, Rotation.None).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -273,7 +272,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="Exception">Connection to the universe server was lost, or connecting to the world failed.</exception>
     /// <exception cref="WorldNotFoundException">The specified world was not found.</exception>
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
-    public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position, Quaternion rotation)
+    public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position, Rotation rotation)
     {
         await EnterAsync(world).ConfigureAwait(false);
         await CurrentAvatar!.TeleportAsync(position, rotation).ConfigureAwait(false);
@@ -401,7 +400,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
         {
             Application = _configuration.Application!,
             Name = $"[{_configuration.BotName}]",
-            Location = new Location(world, Vector3d.Zero, Quaternion.Identity),
+            Location = new Location(world, Vector3d.Zero, Rotation.None),
             User = CurrentUser!
         };
 

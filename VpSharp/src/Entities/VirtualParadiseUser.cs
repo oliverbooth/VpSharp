@@ -1,6 +1,4 @@
-using System.Numerics;
 using VpSharp.Exceptions;
-using VpSharp.Extensions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using static VpSharp.Internal.NativeMethods;
@@ -144,7 +142,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
 
             string world = location.Value.World.Name;
             (double x, double y, double z) = location.Value.Position;
-            (double pitch, double yaw, _) = location.Value.Rotation.ToEulerAngles();
+            (double pitch, double yaw, _) = location.Value.Rotation;
 
             _ = vp_int_set(_client.NativeInstanceHandle, IntegerAttribute.ReferenceNumber, reference);
             _ = vp_invite(_client.NativeInstanceHandle, Id, world, x, y, z, (float)yaw, (float)pitch);
@@ -215,7 +213,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             }
 
             var position = new Vector3d(x, y, z);
-            var rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);
+            var rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
             VirtualParadiseWorld world = (await _client.GetWorldAsync(worldName).ConfigureAwait(false))!;
 
             location = new Location(world, position, rotation);

@@ -241,7 +241,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
 
         Location location = Location;
         Vector3d position = location.Position;
-        Quaternion rotation = location.Rotation;
+        Rotation rotation = location.Rotation;
 
         if (builder.Position.HasValue)
         {

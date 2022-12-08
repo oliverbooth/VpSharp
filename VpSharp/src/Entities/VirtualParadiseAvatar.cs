@@ -1,6 +1,5 @@
 using System.Drawing;
 using System.Numerics;
-using VpSharp.Extensions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
 using X10D.Numerics;
@@ -314,7 +313,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position)
     {
         ArgumentNullException.ThrowIfNull(world);
-        return TeleportAsync(world.Name, position, Quaternion.Identity);
+        return TeleportAsync(world.Name, position, Rotation.None);
     }
 
     /// <summary>
@@ -324,7 +323,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="position">The position to which this avatar should be teleported.</param>
     /// <param name="rotation">The rotation to which this avatar should be teleported.</param>
     /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
-    public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position, Quaternion rotation)
+    public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position, Rotation rotation)
     {
         ArgumentNullException.ThrowIfNull(world);
         return TeleportAsync(world.Name, position, rotation);
@@ -337,7 +336,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="position">The position to which this avatar should be teleported.</param>
     public Task TeleportAsync(string world, Vector3d position)
     {
-        return TeleportAsync(world, position, Quaternion.Identity);
+        return TeleportAsync(world, position, Rotation.None);
     }
 
     /// <summary>
@@ -346,7 +345,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="world">The name of the world to which this avatar should be teleported.</param>
     /// <param name="position">The position to which this avatar should be teleported.</param>
     /// <param name="rotation">The rotation to which this avatar should be teleported.</param>
-    public async Task TeleportAsync(string world, Vector3d position, Quaternion rotation)
+    public async Task TeleportAsync(string world, Vector3d position, Rotation rotation)
     {
         ArgumentNullException.ThrowIfNull(world);
 #if NET7_0_OR_GREATER
@@ -385,7 +384,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             lock (_client.Lock)
             {
                 (double x, double y, double z) = position;
-                (double pitch, double yaw, double _) = rotation.ToEulerAngles();
+                (double pitch, double yaw, double _) = rotation;
 
                 _ = vp_double_set(handle, FloatAttribute.MyX, x);
                 _ = vp_double_set(handle, FloatAttribute.MyY, y);
@@ -405,9 +404,9 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             lock (_client.Lock)
             {
                 (float x, float y, float z) = (Vector3)position;
-                (float pitch, float yaw, float _) = (Vector3)rotation.ToEulerAngles();
+                (double pitch, double yaw, double _) = rotation;
 
-                var reason = (ReasonCode)vp_teleport_avatar(handle, Session, world, x, y, z, yaw, pitch);
+                var reason = (ReasonCode)vp_teleport_avatar(handle, Session, world, x, y, z, (float)yaw, (float)pitch);
                 if (reason == ReasonCode.NotInWorld)
                 {
                     ThrowHelper.ThrowNotInWorldException();
@@ -433,7 +432,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// </summary>
     /// <param name="position">The position to which this avatar should be teleported.</param>
     /// <param name="rotation">The rotation to which this avatar should be teleported</param>
-    public Task TeleportAsync(Vector3d position, Quaternion rotation)
+    public Task TeleportAsync(Vector3d position, Rotation rotation)
     {
         return TeleportAsync(Location with {Position = position, Rotation = rotation});
     }

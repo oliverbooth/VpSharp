@@ -1,11 +1,9 @@
 using System.Collections.Concurrent;
-using System.Numerics;
 using System.Threading.Channels;
 using VpSharp.Entities;
 using VpSharp.Exceptions;
 using VpSharp.Internal;
 using VpSharp.Internal.NativeAttributes;
-using X10D.Math;
 using static VpSharp.Internal.NativeMethods;
 
 namespace VpSharp;
@@ -179,7 +177,7 @@ public sealed partial class VirtualParadiseClient
         int id;
         int time;
         int owner;
-        Quaternion rotation;
+        Rotation rotation;
         Vector3d position;
 
         lock (Lock)
@@ -200,15 +198,12 @@ public sealed partial class VirtualParadiseClient
 
             if (double.IsPositiveInfinity(angle))
             {
-                rotX = rotX.DegreesToRadians();
-                rotY = rotY.DegreesToRadians();
-                rotZ = rotZ.DegreesToRadians();
-                rotation = Quaternion.CreateFromYawPitchRoll(rotY, rotX, rotZ);
+                rotation = Rotation.CreateFromTiltYawRoll(rotX, rotY, rotZ);
             }
             else
             {
-                var axis = new Vector3(rotX, rotY, rotZ);
-                rotation = Quaternion.CreateFromAxisAngle(axis, angle);
+                var axis = new Vector3d(rotX, rotY, rotZ);
+                rotation = Rotation.CreateFromAxisAngle(axis, angle);
             }
 
             time = vp_int(sender, IntegerAttribute.ObjectTime);

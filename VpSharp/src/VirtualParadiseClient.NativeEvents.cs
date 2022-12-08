@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.Drawing;
-using System.Numerics;
 using System.Threading.Channels;
 using VpSharp.ClientExtensions;
 using VpSharp.Entities;
@@ -103,7 +102,7 @@ public sealed partial class VirtualParadiseClient
         int session;
         int type;
         Vector3d position;
-        Quaternion rotation;
+        Rotation rotation;
 
         lock (Lock)
         {
@@ -117,7 +116,7 @@ public sealed partial class VirtualParadiseClient
 
             var pitch = (float)vp_double(sender, FloatAttribute.AvatarPitch);
             var yaw = (float)vp_double(sender, FloatAttribute.AvatarYaw);
-            rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);
+            rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
         }
 
         VirtualParadiseAvatar? avatar = GetAvatar(session);
@@ -436,7 +435,7 @@ public sealed partial class VirtualParadiseClient
         int session;
         string worldName;
         Vector3d position;
-        Quaternion rotation;
+        Rotation rotation;
 
         lock (Lock)
         {
@@ -449,7 +448,7 @@ public sealed partial class VirtualParadiseClient
 
             float yaw = vp_float(sender, FloatAttribute.TeleportYaw);
             float pitch = vp_float(sender, FloatAttribute.TeleportPitch);
-            rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);
+            rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
 
             worldName = vp_string(sender, StringAttribute.TeleportWorld);
         }
@@ -546,7 +545,7 @@ public sealed partial class VirtualParadiseClient
     private async void OnInviteNativeEvent(nint sender)
     {
         Vector3d position;
-        Quaternion rotation;
+        Rotation rotation;
         int requestId;
         int userId;
         string worldName;
@@ -566,7 +565,7 @@ public sealed partial class VirtualParadiseClient
             var pitch = (float)vp_double(sender, FloatAttribute.InvitePitch);
 
             position = new Vector3d(x, y, z);
-            rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);
+            rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
 
             worldName = vp_string(sender, StringAttribute.InviteWorld);
         }

@@ -1,6 +1,5 @@
 using VpSharp.Entities;
 using VpSharp.Exceptions;
-using VpSharp.Extensions;
 using VpSharp.Internal;
 
 namespace VpSharp;
@@ -76,7 +75,7 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
         location ??= _client.CurrentAvatar.Location;
         string worldName = location.Value.World.Name;
         (double x, double y, double z) = location.Value.Position;
-        (double pitch, double yaw, double _) = location.Value.Rotation.ToEulerAngles();
+        (double pitch, double yaw, double _) = location.Value.Rotation;
 
         lock (_client.Lock)
         {
