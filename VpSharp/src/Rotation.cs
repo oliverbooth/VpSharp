@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System.Globalization;
+using System.Numerics;
+using Cysharp.Text;
 using X10D.Math;
 using X10D.Numerics;
 
@@ -7,7 +9,7 @@ namespace VpSharp;
 /// <summary>
 ///     Represents a rotation.
 /// </summary>
-public readonly struct Rotation : IEquatable<Rotation>
+public readonly struct Rotation : IEquatable<Rotation>, IFormattable
 {
     /// <summary>
     ///     Represents no rotation.
@@ -168,5 +170,39 @@ public readonly struct Rotation : IEquatable<Rotation>
     public override int GetHashCode()
     {
         return HashCode.Combine(Angle, Roll, Tilt, Yaw);
+    }
+
+    /// <summary>
+    ///     Returns the string representation of these coordinates.
+    /// </summary>
+    /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
+    public override string ToString()
+    {
+        return ToString("{0}");
+    }
+
+    /// <summary>
+    ///     Returns the string representation of these coordinates.
+    /// </summary>
+    /// <param name="format">The format to apply to each component.</param>
+    /// <param name="formatProvider">The format provider.</param>
+    /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
+    public string ToString(string? format, IFormatProvider? formatProvider = null)
+    {
+        format ??= "{0}";
+        string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
+
+        using var builder = ZString.CreateUtf8StringBuilder();
+        builder.Append('<');
+        builder.Append(string.Format(formatProvider, format, Tilt));
+        builder.Append(separator);
+        builder.Append(' ');
+        builder.Append(string.Format(formatProvider, format, Yaw));
+        builder.Append(separator);
+        builder.Append(' ');
+        builder.Append(string.Format(formatProvider, format, Roll));
+        builder.Append('>');
+
+        return builder.ToString();
     }
 }
