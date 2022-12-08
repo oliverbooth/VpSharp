@@ -93,6 +93,21 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>, IFormattab
     public bool IsRelative { get; init; }
 
     /// <summary>
+    ///     Gets or initializes the position by accessing the <see cref="X" />, <see cref="Y" />, and <see cref="Z" /> properties.
+    /// </summary>
+    /// <value>The position encoded in these coordinates.</value>
+    public Vector3d Position
+    {
+        get => new(X, Y, Z);
+        init
+        {
+            X = value.X;
+            Y = value.Y;
+            Z = value.Z;
+        }
+    }
+
+    /// <summary>
     ///     Gets or initializes the world.
     /// </summary>
     /// <value>The world.</value>
@@ -202,6 +217,6 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>, IFormattab
     public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
         format ??= "{0}";
-        return Serializer.Serialize(this, format, formatProvider ??  CultureInfo.InvariantCulture);
+        return Serializer.Serialize(this, format, formatProvider ?? CultureInfo.InvariantCulture);
     }
 }
