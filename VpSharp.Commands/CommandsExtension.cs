@@ -5,6 +5,7 @@ using VpSharp.Commands.Attributes;
 using VpSharp.Commands.Attributes.ExecutionChecks;
 using VpSharp.Entities;
 using VpSharp.EventData;
+using VpSharp.Internal;
 
 namespace VpSharp.Commands;
 
@@ -146,29 +147,9 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             throw new ArgumentException($"Module type is not a subclass of {typeof(CommandModule)}");
         }
 
-        ConstructorInfo[] constructors = moduleType.GetTypeInfo().DeclaredConstructors.Where(c => c.IsPublic).ToArray();
-        if (constructors.Length != 1)
-        {
-            throw new ArgumentException(
-                $"Constructor for {moduleType} is not public, or {moduleType} has more than one public constructor.");
-        }
-
-        ConstructorInfo constructor = constructors[0];
-        ParameterInfo[] parameters = constructor.GetParameters();
-
         IServiceProvider? serviceProvider = _configuration.Services;
-        if (parameters.Length != 0 && serviceProvider is null)
-        {
-            throw new InvalidOperationException("No ServiceProvider has been registered!");
-        }
-
-        var args = new object[parameters.Length];
-        for (var index = 0; index < args.Length; index++)
-        {
-            args[index] = serviceProvider!.GetRequiredService(parameters[index].ParameterType);
-        }
-
-        if (Activator.CreateInstance(moduleType, args) is not CommandModule module)
+        object instance = DependencyInjectionUtility.CreateInstance(moduleType, serviceProvider);
+        if (instance is not CommandModule module)
         {
             throw new TypeInitializationException(moduleType.FullName, null);
         }
@@ -180,7 +161,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     }
 
     /// <inheritdoc />
-    protected override Task OnMessageReceived(MessageReceivedEventArgs args)
+    protected internal override Task OnMessageReceived(MessageReceivedEventArgs args)
     {
         ArgumentNullException.ThrowIfNull(args);
         VirtualParadiseMessage message = args.Message;
