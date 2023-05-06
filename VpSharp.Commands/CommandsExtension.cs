@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using VpSharp.ClientExtensions;
@@ -200,8 +201,9 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             }
 
             var context = new CommandContext(Client, message.Author, command.Name, commandNameString, rawArguments.ToString());
+            MethodInfo commandMethod = command.Method;
 
-            foreach (var attribute in command.Method.GetCustomAttributes<PreExecutionCheckAttribute>())
+            foreach (var attribute in commandMethod.GetCustomAttributes<PreExecutionCheckAttribute>())
             {
                 if (!attribute.PerformAsync(context).ConfigureAwait(false).GetAwaiter().GetResult())
                 {
@@ -250,12 +252,41 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
                 }
             }
 
-            if (command.Method.GetParameters().Length != arguments.Length)
+            ParameterInfo[] parameters = commandMethod.GetParameters();
+            if (parameters.Length != arguments.Length)
             {
                 return base.OnMessageReceived(args);
             }
 
-            object? returnValue = command.Method.Invoke(command.Module, arguments);
+            for (var index = 0; index < arguments.Length; index++)
+            {
+                Type parameterType = parameters[index].ParameterType;
+
+                if (parameterType.IsEnum)
+                {
+                    var argumentString = arguments[index]?.ToString();
+
+                    Type enumUnderlyingType = parameterType.GetEnumUnderlyingType();
+                    if (enumUnderlyingType == typeof(int) && int.TryParse(argumentString, out int enumInt))
+                    {
+                        arguments[index] = Enum.ToObject(parameterType, enumInt);
+                    }
+                    else if (enumUnderlyingType == typeof(long) && long.TryParse(argumentString, out long enumLong))
+                    {
+                        arguments[index] = Enum.ToObject(parameterType, enumLong);
+                    }
+                    else if (Enum.TryParse(parameterType, argumentString, true, out object? enumValue))
+                    {
+                        arguments[index] = enumValue;
+                    }
+                }
+                else
+                {
+                    arguments[index] = Convert.ChangeType(arguments[index], parameterType, CultureInfo.InvariantCulture);
+                }
+            }
+
+            object? returnValue = commandMethod.Invoke(command.Module, arguments);
             if (returnValue is Task task)
             {
                 return task;
