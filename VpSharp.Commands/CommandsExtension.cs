@@ -253,7 +253,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             }
 
             ParameterInfo[] parameters = commandMethod.GetParameters();
-            if (parameters.Length != arguments.Length)
+            if (parameters.Length != arguments.Length || parameters[arguments.Length..].Any(p => !p.IsOptional))
             {
                 return base.OnMessageReceived(args);
             }
@@ -284,6 +284,11 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
                 {
                     arguments[index] = Convert.ChangeType(arguments[index], parameterType, CultureInfo.InvariantCulture);
                 }
+            }
+
+            for (int index = arguments.Length; index < parameters.Length; index++)
+            {
+                arguments[index] = parameters[index].DefaultValue;
             }
 
             object? returnValue = commandMethod.Invoke(command.Module, arguments);
