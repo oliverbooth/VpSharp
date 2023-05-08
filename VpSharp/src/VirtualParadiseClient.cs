@@ -745,6 +745,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
         _objectDeleted.Dispose();
         _objectUpdates.Clear();
 
+        _messageReceived.Dispose();
         _inviteRequestReceived.Dispose();
         _joinRequestReceived.Dispose();
         _teleported.Dispose();
