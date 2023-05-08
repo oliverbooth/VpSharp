@@ -1,97 +1,163 @@
-﻿using VpSharp.EventData;
+﻿using System.Reactive.Subjects;
+using VpSharp.Entities;
+using VpSharp.EventData;
 
 namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
+    private readonly Subject<AvatarClickedEventArgs> _avatarClicked = new();
+    private readonly Subject<VirtualParadiseAvatar> _avatarJoined = new();
+    private readonly Subject<VirtualParadiseAvatar> _avatarLeft = new();
+    private readonly Subject<AvatarMovedEventArgs> _avatarMoved = new();
+    private readonly Subject<AvatarTypeChangedEventArgs> _avatarTypeChanged = new();
+    private readonly Subject<InviteRequest> _inviteRequestReceived = new();
+    private readonly Subject<JoinRequest> _joinRequestReceived = new();
+    private readonly Subject<VirtualParadiseMessage> _messageReceived = new();
+    private readonly Subject<ObjectBumpEventArgs> _objectBump = new();
+    private readonly Subject<ObjectChangedEventArgs> _objectChanged = new();
+    private readonly Subject<ObjectClickedEventArgs> _objectClicked = new();
+    private readonly Subject<ObjectCreatedEventArgs> _objectCreated = new();
+    private readonly Subject<ObjectDeletedEventArgs> _objectDeleted = new();
+    private readonly Subject<TeleportedEventArgs> _teleported = new();
+    private readonly Subject<DisconnectReason> _universeServerDisconnected = new();
+    private readonly Subject<UriReceivedEventArgs> _uriReceived = new();
+    private readonly Subject<DisconnectReason> _worldServerDisconnected = new();
+
     /// <summary>
     ///     Occurs when an avatar has clicked another avatar.
     /// </summary>
-    public event EventHandler<AvatarClickedEventArgs>? AvatarClicked;
+    public IObservable<AvatarClickedEventArgs> AvatarClicked
+    {
+        get => _avatarClicked;
+    }
 
     /// <summary>
     ///     Occurs when an avatar has entered the vicinity of the client.
     /// </summary>
-    public event EventHandler<AvatarJoinedEventArgs>? AvatarJoined;
+    public IObservable<VirtualParadiseAvatar> AvatarJoined
+    {
+        get => _avatarJoined;
+    }
 
     /// <summary>
     ///     Occurs when an avatar has left the vicinity of the client.
     /// </summary>
-    public event EventHandler<AvatarLeftEventArgs>? AvatarLeft;
+    public IObservable<VirtualParadiseAvatar> AvatarLeft
+    {
+        get => _avatarLeft;
+    }
 
     /// <summary>
     ///     Occurs when an avatar has changed their position or rotation.
     /// </summary>
-    public event EventHandler<AvatarMovedEventArgs>? AvatarMoved;
+    public IObservable<AvatarMovedEventArgs> AvatarMoved
+    {
+        get => _avatarMoved;
+    }
 
     /// <summary>
     ///     Occurs when an avatar has changed their type.
     /// </summary>
-    public event EventHandler<AvatarTypeChangedEventArgs>? AvatarTypeChanged;
+    public IObservable<AvatarTypeChangedEventArgs> AvatarTypeChanged
+    {
+        get => _avatarTypeChanged;
+    }
 
     /// <summary>
     ///     Occurs when an invite request has been received.
     /// </summary>
-    public event EventHandler<InviteRequestReceivedEventArgs>? InviteRequestReceived;
+    public IObservable<InviteRequest> InviteRequestReceived
+    {
+        get => _inviteRequestReceived;
+    }
 
     /// <summary>
     ///     Occurs when a join request has been received.
     /// </summary>
-    public event EventHandler<JoinRequestReceivedEventArgs>? JoinRequestReceived;
+    public IObservable<JoinRequest> JoinRequestReceived
+    {
+        get => _joinRequestReceived;
+    }
 
     /// <summary>
     ///     Occurs when a chat message or console message has been received.
     /// </summary>
-    public event EventHandler<MessageReceivedEventArgs>? MessageReceived;
+    public IObservable<VirtualParadiseMessage> MessageReceived
+    {
+        get => _messageReceived;
+    }
 
     /// <summary>
     ///     Occurs when a bump phase has changed for an object.
     /// </summary>
-    public event EventHandler<ObjectBumpEventArgs>? ObjectBump;
+    public IObservable<ObjectBumpEventArgs> ObjectBump
+    {
+        get => _objectBump;
+    }
 
     /// <summary>
     ///     Occurs when an object has been changed.
     /// </summary>
-    public event EventHandler<ObjectChangedEventArgs>? ObjectChanged;
+    public IObservable<ObjectChangedEventArgs> ObjectChanged
+    {
+        get => _objectChanged;
+    }
 
     /// <summary>
     ///     Occurs when an avatar has clicked an object.
     /// </summary>
-    public event EventHandler<ObjectClickedEventArgs>? ObjectClicked;
+    public IObservable<ObjectClickedEventArgs> ObjectClicked
+    {
+        get => _objectClicked;
+    }
 
     /// <summary>
     ///     Occurs when an object has been created.
     /// </summary>
-    public event EventHandler<ObjectCreatedEventArgs>? ObjectCreated;
+    public IObservable<ObjectCreatedEventArgs> ObjectCreated
+    {
+        get => _objectCreated;
+    }
 
     /// <summary>
     ///     Occurs when an object has been deleted.
     /// </summary>
-    public event EventHandler<ObjectDeletedEventArgs>? ObjectDeleted;
+    public IObservable<ObjectDeletedEventArgs> ObjectDeleted
+    {
+        get => _objectDeleted;
+    }
 
     /// <summary>
     ///     Occurs when an avatar has requested this client to teleport.
     /// </summary>
-    public event EventHandler<TeleportedEventArgs>? Teleported;
+    public IObservable<TeleportedEventArgs> Teleported
+    {
+        get => _teleported;
+    }
 
     /// <summary>
     ///     Occurs when the client has been disconnected from the universe server.
     /// </summary>
-    public event EventHandler<DisconnectedEventArgs>? UniverseServerDisconnected;
+    public IObservable<DisconnectReason> UniverseServerDisconnected
+    {
+        get => _universeServerDisconnected;
+    }
 
     /// <summary>
     ///     Occurs when an avatar has sent a URI to this client.
     /// </summary>
-    public event EventHandler<UriReceivedEventArgs>? UriReceived;
+    public IObservable<UriReceivedEventArgs> UriReceived
+    {
+        get => _uriReceived;
+    }
+
 
     /// <summary>
     ///     Occurs when the client has been disconnected from the world server.
     /// </summary>
-    public event EventHandler<DisconnectedEventArgs>? WorldServerDisconnected;
-
-    private void RaiseEvent<T>(EventHandler<T>? eventHandler, T args)
-        where T : EventArgs
+    public IObservable<DisconnectReason> WorldServerDisconnected
     {
-        eventHandler?.Invoke(this, args);
+        get => _worldServerDisconnected;
     }
 }

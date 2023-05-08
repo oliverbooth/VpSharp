@@ -1,4 +1,5 @@
-﻿using VpSharp.EventData;
+﻿using VpSharp.Entities;
+using VpSharp.EventData;
 
 namespace VpSharp.ClientExtensions;
 
@@ -27,7 +28,7 @@ public abstract class VirtualParadiseClientExtension
     ///     Called when a chat message is received.
     /// </summary>
     /// <param name="args">An object containing event data.</param>
-    protected internal virtual Task OnMessageReceived(MessageReceivedEventArgs args)
+    protected internal virtual Task OnMessageReceived(VirtualParadiseMessage message)
     {
         return Task.CompletedTask;
     }

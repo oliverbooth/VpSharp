@@ -1,5 +1,5 @@
 ﻿using VpSharp.Commands;
-using VpSharp.EventData;
+using VpSharp.Extensions;
 
 namespace VpSharp.CSharp_Sample;
 
@@ -21,7 +21,7 @@ internal static class Program
         var commands = s_client.UseCommands(new CommandsExtensionConfiguration {Prefixes = new[] {"/"}});
         commands.RegisterCommands<SayCommand>();
 
-        s_client.AvatarJoined += ClientOnAvatarJoined;
+        s_client.AvatarJoined.SubscribeAsync(async avatar => await s_client.SendMessageAsync($"Hello, {avatar.Name}!"));
 
         await s_client.ConnectAsync();
         await s_client.LoginAsync();
@@ -29,10 +29,5 @@ internal static class Program
         await s_client.CurrentAvatar!.TeleportAsync(Vector3d.Zero);
 
         await Task.Delay(-1);
-    }
-
-    private static async void ClientOnAvatarJoined(object? sender, AvatarJoinedEventArgs args)
-    {
-        await s_client.SendMessageAsync($"Hello, {args.Avatar.Name}!");
     }
 }
