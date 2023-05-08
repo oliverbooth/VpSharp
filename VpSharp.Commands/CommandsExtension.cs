@@ -162,14 +162,13 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     }
 
     /// <inheritdoc />
-    protected internal override Task OnMessageReceived(MessageReceivedEventArgs args)
+    protected internal override Task OnMessageReceived(VirtualParadiseMessage message)
     {
-        ArgumentNullException.ThrowIfNull(args);
-        VirtualParadiseMessage message = args.Message;
+        ArgumentNullException.ThrowIfNull(message);
 
         if (message.Type != MessageType.ChatMessage)
         {
-            return base.OnMessageReceived(args);
+            return base.OnMessageReceived(message);
         }
 
         foreach (ReadOnlySpan<char> prefix in _configuration.Prefixes)
@@ -197,7 +196,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             var commandNameString = commandName.ToString();
             if (!_commandMap.TryGetValue(commandNameString, out Command? command))
             {
-                return base.OnMessageReceived(args);
+                return base.OnMessageReceived(message);
             }
 
             var context = new CommandContext(Client, message.Author, command.Name, commandNameString, rawArguments.ToString());
@@ -207,7 +206,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             {
                 if (!attribute.PerformAsync(context).ConfigureAwait(false).GetAwaiter().GetResult())
                 {
-                    return base.OnMessageReceived(args);
+                    return base.OnMessageReceived(message);
                 }
             }
 
@@ -255,7 +254,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             ParameterInfo[] parameters = commandMethod.GetParameters();
             if (parameters.Length != arguments.Length || parameters[arguments.Length..].Any(p => !p.IsOptional))
             {
-                return base.OnMessageReceived(args);
+                return base.OnMessageReceived(message);
             }
 
             for (var index = 0; index < arguments.Length; index++)
@@ -297,10 +296,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
                 return task;
             }
 
-            return base.OnMessageReceived(args);
+            return base.OnMessageReceived(message);
         }
 
-        return base.OnMessageReceived(args);
+        return base.OnMessageReceived(message);
     }
 
     private void RegisterCommandMethod(CommandModule module, MethodInfo methodInfo)
