@@ -200,6 +200,13 @@ public sealed partial class VirtualParadiseClient : IDisposable
     {
         ReleaseUnmanagedResources();
         GC.SuppressFinalize(this);
+
+        DisposeCompletionSources();
+        DisposeObservables();
+
+        _worlds.Clear();
+        _avatars.Clear();
+        _users.Clear();
     }
 
     /// <summary>
@@ -676,6 +683,74 @@ public sealed partial class VirtualParadiseClient : IDisposable
         var taskCompletionSource = new TaskCompletionSource<ReasonCode>();
         _inviteCompletionSources.TryAdd(reference, taskCompletionSource);
         return taskCompletionSource;
+    }
+
+    private void DisposeCompletionSources()
+    {
+        _connectCompletionSource?.TrySetCanceled();
+        _connectCompletionSource = null;
+
+        _enterCompletionSource?.TrySetCanceled();
+        _enterCompletionSource = null;
+
+        _loginCompletionSource?.TrySetCanceled();
+        _loginCompletionSource = null;
+
+        _worldSettingsCompletionSource.TrySetCanceled();
+        _worldSettingsCompletionSource = null!;
+
+        foreach (KeyValuePair<int, TaskCompletionSource<ReasonCode>> pair in _inviteCompletionSources)
+        {
+            pair.Value.TrySetCanceled();
+        }
+
+        foreach (KeyValuePair<int, TaskCompletionSource<ReasonCode>> pair in _joinCompletionSources)
+        {
+            pair.Value.TrySetCanceled();
+        }
+
+        foreach (KeyValuePair<int, TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>> pair in _objectCompletionSources)
+        {
+            pair.Value.TrySetCanceled();
+        }
+
+        foreach (KeyValuePair<int, TaskCompletionSource<ReasonCode>> pair in _objectUpdates)
+        {
+            pair.Value.TrySetCanceled();
+        }
+
+        foreach (KeyValuePair<int, TaskCompletionSource<VirtualParadiseUser>> pair in _usersCompletionSources)
+        {
+            pair.Value.TrySetCanceled();
+        }
+
+        _joinCompletionSources.Clear();
+        _inviteCompletionSources.Clear();
+        _objectCompletionSources.Clear();
+        _objectUpdates.Clear();
+        _usersCompletionSources.Clear();
+    }
+
+    private void DisposeObservables()
+    {
+        _avatarClicked.Dispose();
+        _avatarJoined.Dispose();
+        _avatarLeft.Dispose();
+        _avatarMoved.Dispose();
+        _avatarTypeChanged.Dispose();
+
+        _objectBump.Dispose();
+        _objectClicked.Dispose();
+        _objectCreated.Dispose();
+        _objectDeleted.Dispose();
+        _objectUpdates.Clear();
+
+        _inviteRequestReceived.Dispose();
+        _joinRequestReceived.Dispose();
+        _teleported.Dispose();
+        _uriReceived.Dispose();
+        _universeServerDisconnected.Dispose();
+        _worldServerDisconnected.Dispose();
     }
 
     private void ReleaseUnmanagedResources()
