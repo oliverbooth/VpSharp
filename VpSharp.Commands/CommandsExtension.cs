@@ -211,45 +211,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             }
 
             object?[] arguments = {context};
-            if (rawArguments.Length > 0)
-            {
-                spaceIndex = rawArguments.IndexOf(' ');
-                if (spaceIndex == -1)
-                {
-                    Array.Resize(ref arguments, 2);
-                    arguments[1] = rawArguments.ToString();
-                }
-                else
-                {
-                    var appendLast = true;
-
-                    for (var argumentIndex = 1; spaceIndex > -1; argumentIndex++)
-                    {
-                        Array.Resize(ref arguments, argumentIndex + 1);
-
-                        if (argumentIndex == command.Parameters.Length)
-                        {
-                            if (command.Parameters[argumentIndex - 1].GetCustomAttribute<RemainderAttribute>() is not null)
-                            {
-                                appendLast = false;
-                                arguments[argumentIndex] = rawArguments.ToString();
-                                break;
-                            }
-                        }
-
-                        arguments[argumentIndex] = rawArguments[..spaceIndex].ToString();
-                        rawArguments = rawArguments[(spaceIndex + 1)..];
-                        spaceIndex = rawArguments.IndexOf(' ');
-                        argumentIndex++;
-                    }
-
-                    if (appendLast)
-                    {
-                        Array.Resize(ref arguments, arguments.Length + 1);
-                        arguments[^1] = rawArguments.ToString();
-                    }
-                }
-            }
+            arguments = ParseArguments(rawArguments, arguments, command);
 
             ParameterInfo[] parameters = commandMethod.GetParameters();
             if (parameters.Length != arguments.Length || parameters[arguments.Length..].Any(p => !p.IsOptional))
@@ -300,6 +262,51 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
         }
 
         return base.OnMessageReceived(message);
+    }
+
+    private static object?[] ParseArguments(ReadOnlySpan<char> rawArguments, object?[] arguments, Command command)
+    {
+        if (rawArguments.Length <= 0)
+        {
+            return arguments;
+        }
+
+        int spaceIndex = rawArguments.IndexOf(' ');
+        if (spaceIndex == -1)
+        {
+            Array.Resize(ref arguments, 2);
+            arguments[1] = rawArguments.ToString();
+            return arguments;
+        }
+
+        var appendLast = true;
+        for (var argumentIndex = 1; spaceIndex > -1; argumentIndex++)
+        {
+            Array.Resize(ref arguments, argumentIndex + 1);
+
+            if (argumentIndex == command.Parameters.Length)
+            {
+                if (command.Parameters[argumentIndex - 1].GetCustomAttribute<RemainderAttribute>() is not null)
+                {
+                    appendLast = false;
+                    arguments[argumentIndex] = rawArguments.ToString();
+                    break;
+                }
+            }
+
+            arguments[argumentIndex] = rawArguments[..spaceIndex].ToString();
+            rawArguments = rawArguments[(spaceIndex + 1)..];
+            spaceIndex = rawArguments.IndexOf(' ');
+            argumentIndex++;
+        }
+
+        if (appendLast)
+        {
+            Array.Resize(ref arguments, arguments.Length + 1);
+            arguments[^1] = rawArguments.ToString();
+        }
+
+        return arguments;
     }
 
     private void RegisterCommandMethod(CommandModule module, MethodInfo methodInfo)
