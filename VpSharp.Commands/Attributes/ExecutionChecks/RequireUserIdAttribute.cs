@@ -1,5 +1,7 @@
 ﻿namespace VpSharp.Commands.Attributes.ExecutionChecks;
 
+#pragma warning disable CA1019 // Define accessors for attribute arguments
+
 /// <summary>
 ///     Specifies that this command can only be run by bots.
 /// </summary>
@@ -8,8 +10,20 @@ public sealed class RequireUserIdAttribute : PreExecutionCheckAttribute
     /// <summary>
     ///     Initializes a new instance of the <see cref="RequireUserIdAttribute" /> class.
     /// </summary>
+    /// <param name="userIds">An enumerable collection of allowed user IDs.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="userIds" /> is <see langword="null" />.</exception>
+    public RequireUserIdAttribute(IEnumerable<int> userIds)
+    {
+        ArgumentNullException.ThrowIfNull(userIds);
+        UserIds = userIds.ToArray();
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RequireUserIdAttribute" /> class.
+    /// </summary>
     /// <param name="userIds">An array of allowed user IDs.</param>
     /// <exception cref="ArgumentNullException"><paramref name="userIds" /> is <see langword="null" />.</exception>
+    [CLSCompliant(false)]
     public RequireUserIdAttribute(params int[] userIds)
     {
         ArgumentNullException.ThrowIfNull(userIds);
