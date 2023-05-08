@@ -740,6 +740,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
         _avatarTypeChanged.Dispose();
 
         _objectBump.Dispose();
+        _objectChanged.Dispose();
         _objectClicked.Dispose();
         _objectCreated.Dispose();
         _objectDeleted.Dispose();
