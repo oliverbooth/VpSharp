@@ -1,4 +1,5 @@
-﻿using VpSharp.Internal;
+﻿using Optional;
+using VpSharp.Internal;
 using static VpSharp.Internal.NativeAttributes.DataAttribute;
 using static VpSharp.Internal.NativeAttributes.FloatAttribute;
 using static VpSharp.Internal.NativeAttributes.IntegerAttribute;
@@ -32,7 +33,7 @@ public abstract class VirtualParadiseObjectBuilder
     ///     This property may only be set during an object load, and will throw <see cref="InvalidOperationException" /> at
     ///     any other point.
     /// </remarks>
-    public Optional<DateTimeOffset> ModificationTimestamp { get; set; }
+    public Option<DateTimeOffset> ModificationTimestamp { get; set; }
 
     /// <summary>
     ///     Gets or sets the owner of this object.
@@ -42,21 +43,21 @@ public abstract class VirtualParadiseObjectBuilder
     ///     This property may only be set during an object load, and will throw <see cref="InvalidOperationException" /> at
     ///     any other point.
     /// </remarks>
-    public Optional<VirtualParadiseUser> Owner { get; set; }
+    public Option<VirtualParadiseUser> Owner { get; set; }
 
     /// <summary>
     ///     Gets or sets the position of the object.
     /// </summary>
     /// <value>The position of the object, or <see langword="default" /> to leave unchanged.</value>
-    public Optional<Vector3d> Position { get; set; }
+    public Option<Vector3d> Position { get; set; }
 
     /// <summary>
     ///     Gets or sets the rotation of the object.
     /// </summary>
     /// <value>The rotation of the object, or <see langword="default" /> to leave unchanged.</value>
-    public Optional<Rotation> Rotation { get; set; }
+    public Option<Rotation> Rotation { get; set; }
 
-    internal Optional<IReadOnlyList<byte>> Data { get; set; }
+    internal Option<IReadOnlyList<byte>> Data { get; set; }
 
     private protected VirtualParadiseClient Client { get; }
 
@@ -76,76 +77,49 @@ public abstract class VirtualParadiseObjectBuilder
     private void ApplyData()
     {
         nint handle = Client.NativeInstanceHandle;
-        if (Data.HasValue)
-        {
-            IReadOnlyList<byte> data = Data.Value!;
-            _ = vp_data_set(handle, ObjectData, data.Count, data.ToArray());
-        }
-        else
-        {
-            _ = vp_data_set(handle, ObjectData, 0, Array.Empty<byte>());
-        }
+        byte[] data = Data.ValueOr(ArraySegment<byte>.Empty).ToArray();
+        _ = vp_data_set(handle, ObjectData, data.Length, data);
     }
 
     private void ApplyOwner()
     {
         nint handle = Client.NativeInstanceHandle;
-        if (Owner.HasValue)
-        {
-            if (Mode != ObjectBuilderMode.Load)
-            {
-                throw new InvalidOperationException("Owner can only be assigned during an object load.");
-            }
 
-            _ = vp_int_set(handle, ObjectUserId, Owner.Value!.Id);
-        }
-        else
+        if (Owner.HasValue && Mode != ObjectBuilderMode.Load)
         {
-            _ = vp_int_set(handle, ObjectUserId, TargetObject.Owner.Id);
+            throw new InvalidOperationException("Owner can only be assigned during an object load.");
         }
+
+        VirtualParadiseUser oldOwner = TargetObject.Owner;
+        _ = vp_int_set(handle, ObjectUserId, Owner.ValueOr(oldOwner).Id);
     }
 
     private void ApplyModificationTimestamp()
     {
         nint handle = Client.NativeInstanceHandle;
 
-        if (ModificationTimestamp.HasValue)
+        if (ModificationTimestamp.HasValue && Mode != ObjectBuilderMode.Load)
         {
-            if (Mode != ObjectBuilderMode.Load)
-            {
-                throw new InvalidOperationException("Modification timestamp can only be assigned during an object load.");
-            }
+            throw new InvalidOperationException("Modification timestamp can only be assigned during an object load.");
+        }
 
-            _ = vp_int_set(handle, ObjectTime, (int)ModificationTimestamp.Value.ToUnixTimeSeconds());
-        }
-        else
-        {
-            _ = vp_int_set(handle, ObjectTime, (int)TargetObject.ModificationTimestamp.ToUnixTimeSeconds());
-        }
+        DateTimeOffset oldTimestamp = TargetObject.ModificationTimestamp;
+        _ = vp_int_set(handle, ObjectTime, (int)ModificationTimestamp.ValueOr(oldTimestamp).ToUnixTimeSeconds());
     }
 
     private void ApplyPosition()
     {
         nint handle = Client.NativeInstanceHandle;
 
-        if (Position.HasValue)
-        {
-            (double x, double y, double z) = Position.Value;
-            _ = vp_double_set(handle, ObjectX, x);
-            _ = vp_double_set(handle, ObjectY, y);
-            _ = vp_double_set(handle, ObjectZ, z);
-        }
-        else if (Mode == ObjectBuilderMode.Create)
+        if (!Position.HasValue && Mode == ObjectBuilderMode.Create)
         {
             throw new ArgumentException("Position must be assigned when creating a new object.");
         }
-        else
-        {
-            (double x, double y, double z) = TargetObject.Location.Position;
-            _ = vp_double_set(handle, ObjectX, x);
-            _ = vp_double_set(handle, ObjectY, y);
-            _ = vp_double_set(handle, ObjectZ, z);
-        }
+
+        (double x, double y, double z) = Position.ValueOr(TargetObject.Location.Position);
+        _ = vp_double_set(handle, ObjectX, x);
+        _ = vp_double_set(handle, ObjectY, y);
+        _ = vp_double_set(handle, ObjectZ, z);
     }
 
     private void ApplyRotation()
@@ -154,24 +128,13 @@ public abstract class VirtualParadiseObjectBuilder
 
         if (!Rotation.HasValue && Mode == ObjectBuilderMode.Create)
         {
-            Rotation = VpSharp.Rotation.None;
+            Rotation = Option.Some(VpSharp.Rotation.None);
         }
 
-        if (Rotation.HasValue)
-        {
-            (double x, double y, double z, double angle) = Rotation.Value;
-            _ = vp_double_set(handle, ObjectRotationX, x);
-            _ = vp_double_set(handle, ObjectRotationY, y);
-            _ = vp_double_set(handle, ObjectRotationZ, z);
-            _ = vp_double_set(handle, ObjectRotationAngle, angle);
-        }
-        else
-        {
-            (double x, double y, double z, double angle) = TargetObject.Location.Rotation;
-            _ = vp_double_set(handle, ObjectRotationX, x);
-            _ = vp_double_set(handle, ObjectRotationY, y);
-            _ = vp_double_set(handle, ObjectRotationZ, z);
-            _ = vp_double_set(handle, ObjectRotationAngle, angle);
-        }
+        (double x, double y, double z, double angle) = Rotation.ValueOr(TargetObject.Location.Rotation);
+        _ = vp_double_set(handle, ObjectRotationX, x);
+        _ = vp_double_set(handle, ObjectRotationY, y);
+        _ = vp_double_set(handle, ObjectRotationZ, z);
+        _ = vp_double_set(handle, ObjectRotationAngle, angle);
     }
 }

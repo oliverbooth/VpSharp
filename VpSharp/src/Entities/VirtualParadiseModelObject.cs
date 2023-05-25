@@ -96,20 +96,9 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
 
         base.ExtractFromBuilder(builder);
 
-        if (modelObjectBuilder.Model.HasValue)
-        {
-            Model = modelObjectBuilder.Model.Value!;
-        }
-
-        if (modelObjectBuilder.Description.HasValue)
-        {
-            Description = modelObjectBuilder.Description.Value!;
-        }
-
-        if (modelObjectBuilder.Action.HasValue)
-        {
-            Action = modelObjectBuilder.Action.Value!;
-        }
+        Model = modelObjectBuilder.Model.ValueOr(Model);
+        Description = modelObjectBuilder.Description.ValueOr(Description);
+        Action = modelObjectBuilder.Action.ValueOr(Action);
     }
 
     /// <inheritdoc />

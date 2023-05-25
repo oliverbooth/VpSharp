@@ -240,35 +240,13 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
         ArgumentNullException.ThrowIfNull(builder);
 
         Location location = Location;
-        Vector3d position = location.Position;
-        Rotation rotation = location.Rotation;
-
-        if (builder.Position.HasValue)
-        {
-            position = builder.Position.Value;
-        }
-
-        if (builder.Rotation.HasValue)
-        {
-            rotation = builder.Rotation.Value;
-        }
+        Vector3d position = builder.Position.ValueOr(location.Position);
+        Rotation rotation = builder.Rotation.ValueOr(location.Rotation);
 
         Location = new Location(location.World, position, rotation);
-
-        if (builder.Data.HasValue)
-        {
-            Data = builder.Data.Value!.ToArray();
-        }
-
-        if (builder.ModificationTimestamp.HasValue)
-        {
-            ModificationTimestamp = builder.ModificationTimestamp.Value;
-        }
-
-        if (builder.Owner.HasValue)
-        {
-            Owner = builder.Owner.Value!;
-        }
+        Data = builder.Data.ValueOr(Data).ToArray();
+        ModificationTimestamp = builder.ModificationTimestamp.ValueOr(ModificationTimestamp);
+        Owner = builder.Owner.ValueOr(Owner);
     }
 
     /// <summary>
