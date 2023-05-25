@@ -1,11 +1,11 @@
 <h1 align="center"><img src="banner.png"></h1>
 <p align="center">
-<a href="https://github.com/oliverbooth/VpSharp/actions?query=workflow%3A%22.NET%22"><img src="https://img.shields.io/github/workflow/status/oliverbooth/VpSharp/.NET" alt="GitHub Workflow Status" title="GitHub Workflow Status"></a>
-<a href="https://github.com/oliverbooth/VpSharp/issues"><img src="https://img.shields.io/github/issues/oliverbooth/VpSharp" alt="GitHub Issues" title="GitHub Issues"></a>
-<a href="https://www.nuget.org/packages/VpSharp/"><img src="https://img.shields.io/nuget/dt/VpSharp" alt="NuGet Downloads" title="NuGet Downloads"></a>
-<a href="https://www.nuget.org/packages/VpSharp/"><img src="https://img.shields.io/nuget/v/VpSharp?label=stable" alt="Stable Version" title="Stable Version"></a>
-<a href="https://www.nuget.org/packages/VpSharp/"><img src="https://img.shields.io/nuget/vpre/VpSharp?label=nightly" alt="Nightly Version" title="Nightly Version"></a>
-<a href="https://github.com/oliverbooth/VpSharp/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/oliverbooth/VpSharp" alt="MIT License" title="MIT License"></a>
+<a href="https://github.com/oliverbooth/VpSharp/actions?query=workflow%3A%22.NET%22"><img src="https://img.shields.io/github/actions/workflow/status/oliverbooth/VpSharp/dotnet.yml?style=flat-square" alt="GitHub Workflow Status" title="GitHub Workflow Status"></a>
+<a href="https://github.com/oliverbooth/VpSharp/issues"><img src="https://img.shields.io/github/issues/oliverbooth/VpSharp?style=flat-square" alt="GitHub Issues" title="GitHub Issues"></a>
+<a href="https://www.nuget.org/packages/VpSharp/"><img src="https://img.shields.io/nuget/dt/VpSharp?style=flat-square" alt="NuGet Downloads" title="NuGet Downloads"></a>
+<a href="https://www.nuget.org/packages/VpSharp/"><img src="https://img.shields.io/nuget/v/VpSharp?label=stable&style=flat-square" alt="Stable Version" title="Stable Version"></a>
+<a href="https://www.nuget.org/packages/VpSharp/"><img src="https://img.shields.io/nuget/vpre/VpSharp?label=nightly&style=flat-square" alt="Nightly Version" title="Nightly Version"></a>
+<a href="https://github.com/oliverbooth/VpSharp/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/oliverbooth/VpSharp?style=flat-square" alt="MIT License" title="MIT License"></a>
 </p>
 
 ### About
