@@ -263,9 +263,16 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar avatar = GetAvatar(session)!;
-        VirtualParadiseObject virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
-        var args = new ObjectClickedEventArgs(avatar, virtualParadiseObject, clickPoint);
-        _objectClicked.OnNext(args);
+        try
+        {
+            VirtualParadiseObject virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+            var args = new ObjectClickedEventArgs(avatar, virtualParadiseObject, clickPoint);
+            _objectClicked.OnNext(args);
+        }
+        catch (ObjectNotFoundException)
+        {
+            // ignored
+        }
     }
 
     private async void OnWorldListNativeEvent(nint sender)
@@ -281,7 +288,7 @@ public sealed partial class VirtualParadiseClient
             avatarCount = vp_int(sender, IntegerAttribute.WorldUsers);
             state = (WorldState)vp_int(sender, IntegerAttribute.WorldState);
 
-            world = new VirtualParadiseWorld(this, name) {AvatarCount = avatarCount, State = state};
+            world = new VirtualParadiseWorld(this, name) { AvatarCount = avatarCount, State = state };
             _worlds[name] = world;
         }
 
@@ -468,10 +475,16 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar avatar = GetAvatar(session)!;
-        var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
-
-        var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.End);
-        _objectBump.OnNext(args);
+        try
+        {
+            var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+            var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.End);
+            _objectBump.OnNext(args);
+        }
+        catch (ObjectNotFoundException)
+        {
+            // ignored
+        }
     }
 
     private void OnUrlNativeEvent(nint sender)
@@ -510,10 +523,16 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseAvatar avatar = GetAvatar(session)!;
-        var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
-
-        var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.Begin);
-        _objectBump.OnNext(args);
+        try
+        {
+            var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+            var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.Begin);
+            _objectBump.OnNext(args);
+        }
+        catch (ObjectNotFoundException)
+        {
+            // ignored
+        }
     }
 
     private async void OnJoinNativeEvent(nint sender)
