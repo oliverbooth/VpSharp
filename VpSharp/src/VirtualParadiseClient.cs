@@ -390,11 +390,6 @@ public sealed partial class VirtualParadiseClient : IDisposable
             CurrentAvatar.Location = new Location(world);
         }
 
-        lock (Lock)
-        {
-            _ = vp_state_change(NativeInstanceHandle);
-        }
-
         world.Size = new Size(size, size);
 
         CurrentAvatar = new VirtualParadiseAvatar(this, -1)
@@ -409,6 +404,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
         {
             CurrentWorld.Settings = WorldSettingsConverter.FromDictionary(_worldSettings);
             _worldSettings.Clear();
+        }
+
+        lock (Lock)
+        {
+            _ = vp_state_change(NativeInstanceHandle);
         }
 
         if (_configuration.AutoQuery)
