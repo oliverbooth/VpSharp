@@ -70,6 +70,6 @@ public class MarshellerTests
         var marshaller = new Utf8StringToNative();
         nint buffer = marshaller.MarshalManagedToNative(input);
         byteCount = Encoding.UTF8.GetByteCount(input);
-        return (byte*)buffer.ToPointer();
+        return (byte*)buffer;
     }
 }
