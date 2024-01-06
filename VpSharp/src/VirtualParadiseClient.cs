@@ -397,12 +397,6 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
         world.Size = new Size(size, size);
 
-        if (CurrentWorld is not null)
-        {
-            CurrentWorld.Settings = WorldSettingsConverter.FromDictionary(_worldSettings);
-            _worldSettings.Clear();
-        }
-
         CurrentAvatar = new VirtualParadiseAvatar(this, -1)
         {
             Application = _configuration.Application!,
@@ -410,6 +404,12 @@ public sealed partial class VirtualParadiseClient : IDisposable
             Location = new Location(world, Vector3d.Zero, Rotation.None),
             User = CurrentUser!
         };
+
+        if (CurrentWorld is not null)
+        {
+            CurrentWorld.Settings = WorldSettingsConverter.FromDictionary(_worldSettings);
+            _worldSettings.Clear();
+        }
 
         if (_configuration.AutoQuery)
         {
