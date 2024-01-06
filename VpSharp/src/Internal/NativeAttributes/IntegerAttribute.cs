@@ -32,7 +32,7 @@ internal enum IntegerAttribute
     TerrainNodeRevision,
     ClickedSession,
     ChatType,
-    ChatRolorRed,
+    ChatColorRed,
     ChatColorGreen,
     ChatColorBlue,
     ChatEffects,

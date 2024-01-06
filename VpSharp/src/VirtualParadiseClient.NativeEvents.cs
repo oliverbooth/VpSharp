@@ -67,7 +67,7 @@ public sealed partial class VirtualParadiseClient
 
             if (type == 1)
             {
-                int r = vp_int(sender, IntegerAttribute.ChatRolorRed);
+                int r = vp_int(sender, IntegerAttribute.ChatColorRed);
                 int g = vp_int(sender, IntegerAttribute.ChatColorGreen);
                 int b = vp_int(sender, IntegerAttribute.ChatColorBlue);
                 color = Color.FromArgb(r, g, b);
