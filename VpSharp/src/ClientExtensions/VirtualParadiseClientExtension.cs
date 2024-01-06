@@ -1,5 +1,4 @@
 ﻿using VpSharp.Entities;
-using VpSharp.EventData;
 
 namespace VpSharp.ClientExtensions;
 
