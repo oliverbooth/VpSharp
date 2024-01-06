@@ -59,22 +59,6 @@ public struct Vector3d : IEquatable<Vector3d>, IFormattable
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Vector3d" /> struct from the given
-    ///     <see cref="ReadOnlySpan{Single}" />. The span must contain at least 3 elements.
-    /// </summary>
-    /// <param name="values">The span of elements to assign to the vector.</param>
-    /// <exception cref="ArgumentException"><paramref name="values" /> contains fewer than 3 elements.</exception>
-    public Vector3d(ReadOnlySpan<double> values)
-    {
-        if (values.Length < 3)
-        {
-            throw new ArgumentException("The specified span has an insufficient number of elements.", nameof(values));
-        }
-
-        this = Unsafe.ReadUnaligned<Vector3d>(ref Unsafe.As<double, byte>(ref MemoryMarshal.GetReference(values)));
-    }
-
-    /// <summary>
     ///     Gets the length of the vector.
     /// </summary>
     /// <value>The length of the vector.</value>
