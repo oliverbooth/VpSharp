@@ -9,6 +9,6 @@ public sealed class RequireBotOwnerAttribute : PreExecutionCheckAttribute
     protected internal override Task<bool> PerformAsync(CommandContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
-        return Task.FromResult(context.Avatar.User.Id == context.Client.CurrentUser?.Id);
+        return Task.FromResult(context.Avatar.UserId == context.Client.CurrentUser?.Id);
     }
 }

@@ -40,6 +40,6 @@ public sealed class RequireUserIdAttribute : PreExecutionCheckAttribute
     protected internal override Task<bool> PerformAsync(CommandContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
-        return Task.FromResult(UserIds.Contains(context.Avatar.User.Id));
+        return Task.FromResult(UserIds.Contains(context.Avatar.UserId));
     }
 }

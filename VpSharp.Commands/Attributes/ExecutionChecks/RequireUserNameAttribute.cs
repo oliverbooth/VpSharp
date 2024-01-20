@@ -1,4 +1,6 @@
-﻿namespace VpSharp.Commands.Attributes.ExecutionChecks;
+﻿using VpSharp.Entities;
+
+namespace VpSharp.Commands.Attributes.ExecutionChecks;
 
 #pragma warning disable CA1019 // Define accessors for attribute arguments
 
@@ -37,9 +39,10 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
     public IReadOnlyList<string> Names { get; }
 
     /// <inheritdoc />
-    protected internal override Task<bool> PerformAsync(CommandContext context)
+    protected internal override async Task<bool> PerformAsync(CommandContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
-        return Task.FromResult(Names.Contains(context.Avatar.User.Name));
+        VirtualParadiseUser user = await context.Avatar.GetUserAsync().ConfigureAwait(false);
+        return Names.Contains(user.Name);
     }
 }
