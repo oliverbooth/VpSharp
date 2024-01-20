@@ -89,8 +89,8 @@ public sealed partial class VirtualParadiseClient
     private async void OnAvatarAddNativeEvent(nint sender)
     {
         VirtualParadiseAvatar avatar = ExtractAvatar(sender);
-        avatar = AddOrUpdateAvatar(avatar);
         avatar.User = await GetUserAsync(vp_int(sender, IntegerAttribute.UserId)).ConfigureAwait(false);
+        avatar = AddOrUpdateAvatar(avatar);
         _avatarJoined.OnNext(avatar);
     }
 
