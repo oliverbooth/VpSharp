@@ -14,7 +14,11 @@ public sealed class RequireAvatarNameAttribute : PreExecutionCheckAttribute
     /// <exception cref="ArgumentNullException"><paramref name="names" /> is <see langword="null" />.</exception>
     public RequireAvatarNameAttribute(IEnumerable<string> names)
     {
-        ArgumentNullException.ThrowIfNull(names);
+        if (names is null)
+        {
+            throw new ArgumentNullException(nameof(names));
+        }
+
         Names = names.ToArray();
     }
 
@@ -26,7 +30,11 @@ public sealed class RequireAvatarNameAttribute : PreExecutionCheckAttribute
     [CLSCompliant(false)]
     public RequireAvatarNameAttribute(params string[] names)
     {
-        ArgumentNullException.ThrowIfNull(names);
+        if (names is null)
+        {
+            throw new ArgumentNullException(nameof(names));
+        }
+
         Names = names[..];
     }
 
@@ -39,7 +47,11 @@ public sealed class RequireAvatarNameAttribute : PreExecutionCheckAttribute
     /// <inheritdoc />
     protected internal override Task<bool> PerformAsync(CommandContext context)
     {
-        ArgumentNullException.ThrowIfNull(context);
+        if (context is null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
+
         return Task.FromResult(Names.Contains(context.Avatar.Name));
     }
 }

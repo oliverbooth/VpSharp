@@ -28,8 +28,15 @@ public sealed class AliasesAttribute : Attribute
     public AliasesAttribute(string alias, params string[] aliases)
 #pragma warning restore CA1019
     {
-        ArgumentNullException.ThrowIfNull(alias);
-        ArgumentNullException.ThrowIfNull(aliases);
+        if (alias is null)
+        {
+            throw new ArgumentNullException(nameof(alias));
+        }
+
+        if (aliases is null)
+        {
+            throw new ArgumentNullException(nameof(aliases));
+        }
 
         if (string.IsNullOrWhiteSpace(alias))
         {

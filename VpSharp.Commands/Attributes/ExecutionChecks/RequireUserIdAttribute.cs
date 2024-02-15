@@ -14,7 +14,11 @@ public sealed class RequireUserIdAttribute : PreExecutionCheckAttribute
     /// <exception cref="ArgumentNullException"><paramref name="userIds" /> is <see langword="null" />.</exception>
     public RequireUserIdAttribute(IEnumerable<int> userIds)
     {
-        ArgumentNullException.ThrowIfNull(userIds);
+        if (userIds is null)
+        {
+            throw new ArgumentNullException(nameof(userIds));
+        }
+
         UserIds = userIds.ToArray();
     }
 
@@ -26,7 +30,11 @@ public sealed class RequireUserIdAttribute : PreExecutionCheckAttribute
     [CLSCompliant(false)]
     public RequireUserIdAttribute(params int[] userIds)
     {
-        ArgumentNullException.ThrowIfNull(userIds);
+        if (userIds is null)
+        {
+            throw new ArgumentNullException(nameof(userIds));
+        }
+
         UserIds = userIds[..];
     }
 
@@ -39,7 +47,11 @@ public sealed class RequireUserIdAttribute : PreExecutionCheckAttribute
     /// <inheritdoc />
     protected internal override Task<bool> PerformAsync(CommandContext context)
     {
-        ArgumentNullException.ThrowIfNull(context);
+        if (context is null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
+
         return Task.FromResult(UserIds.Contains(context.Avatar.UserId));
     }
 }

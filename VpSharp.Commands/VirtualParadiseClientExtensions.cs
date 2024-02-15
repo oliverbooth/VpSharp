@@ -14,7 +14,11 @@ public static class VirtualParadiseClientExtensions
     /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     public static CommandsExtension UseCommands(this VirtualParadiseClient client, CommandsExtensionConfiguration configuration)
     {
-        ArgumentNullException.ThrowIfNull(client);
+        if (client is null)
+        {
+            throw new ArgumentNullException(nameof(client));
+        }
+
         return client.AddExtension<CommandsExtension>(configuration);
     }
 }

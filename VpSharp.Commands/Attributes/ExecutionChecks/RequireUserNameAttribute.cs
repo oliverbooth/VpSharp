@@ -16,7 +16,11 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
     /// <exception cref="ArgumentNullException"><paramref name="names" /> is <see langword="null" />.</exception>
     public RequireUserNameAttribute(IEnumerable<string> names)
     {
-        ArgumentNullException.ThrowIfNull(names);
+        if (names is null)
+        {
+            throw new ArgumentNullException(nameof(names));
+        }
+
         Names = names.ToArray();
     }
 
@@ -28,7 +32,11 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
     [CLSCompliant(false)]
     public RequireUserNameAttribute(params string[] names)
     {
-        ArgumentNullException.ThrowIfNull(names);
+        if (names is null)
+        {
+            throw new ArgumentNullException(nameof(names));
+        }
+
         Names = names[..];
     }
 
@@ -41,7 +49,11 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
     /// <inheritdoc />
     protected internal override async Task<bool> PerformAsync(CommandContext context)
     {
-        ArgumentNullException.ThrowIfNull(context);
+        if (context is null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
+
         VirtualParadiseUser user = await context.Avatar.GetUserAsync().ConfigureAwait(false);
         return Names.Contains(user.Name);
     }

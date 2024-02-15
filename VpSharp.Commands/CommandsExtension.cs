@@ -33,8 +33,16 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     public CommandsExtension(VirtualParadiseClient client, CommandsExtensionConfiguration configuration)
         : base(client)
     {
-        ArgumentNullException.ThrowIfNull(client);
-        ArgumentNullException.ThrowIfNull(configuration);
+        if (client is null)
+        {
+            throw new ArgumentNullException(nameof(client));
+        }
+
+        if (configuration is null)
+        {
+            throw new ArgumentNullException(nameof(configuration));
+        }
+
 
         _configuration = configuration;
         _configuration.Services ??= client.Services;
@@ -64,7 +72,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     /// </exception>
     public void RegisterCommands(Assembly assembly)
     {
-        ArgumentNullException.ThrowIfNull(assembly);
+        if (assembly is null)
+        {
+            throw new ArgumentNullException(nameof(assembly));
+        }
 
         foreach (Type type in assembly.GetTypes())
         {
@@ -136,7 +147,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     /// </exception>
     public void RegisterCommands(Type moduleType)
     {
-        ArgumentNullException.ThrowIfNull(moduleType);
+        if (moduleType is null)
+        {
+            throw new ArgumentNullException(nameof(moduleType));
+        }
 
         if (moduleType.IsAbstract)
         {
@@ -164,7 +178,10 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     /// <inheritdoc />
     protected internal override Task OnMessageReceived(VirtualParadiseMessage message)
     {
-        ArgumentNullException.ThrowIfNull(message);
+        if (message is null)
+        {
+            throw new ArgumentNullException(nameof(message));
+        }
 
         if (message.Type != MessageType.ChatMessage)
         {
