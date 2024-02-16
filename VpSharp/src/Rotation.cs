@@ -207,7 +207,7 @@ public readonly struct Rotation : IEquatable<Rotation>, IFormattable
     /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
     public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
-        format ??= "{0}";
+        format ??= "F";
         string separator = NumberFormatInfo.GetInstance(formatProvider).NumberGroupSeparator;
 
         using var builder = ZString.CreateUtf8StringBuilder();
