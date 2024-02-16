@@ -443,7 +443,9 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             }
         }
 
-        Location = new Location(new VirtualParadiseWorld(_client, world), position, rotation);
+        VirtualParadiseWorld? updatedWorld = isNewWorld ? await _client.GetWorldAsync(world) : Location.World;
+        updatedWorld ??= new VirtualParadiseWorld(_client, world);
+        Location = new Location(updatedWorld, position, rotation);
         // ReSharper restore InconsistentlySynchronizedField
     }
 
