@@ -458,6 +458,13 @@ public sealed partial class VirtualParadiseClient
         var location = new Location(world, position, rotation);
 
         VirtualParadiseAvatar avatar = GetAvatar(session)!;
+        avatar.Location = location;
+
+        if (world != CurrentWorld)
+        {
+            _avatars.TryRemove(session, out _);
+        }
+
         var args = new TeleportedEventArgs(avatar, location);
         _teleported.OnNext(args);
     }
