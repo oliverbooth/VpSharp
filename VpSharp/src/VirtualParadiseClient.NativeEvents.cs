@@ -457,14 +457,8 @@ public sealed partial class VirtualParadiseClient
             : await GetWorldAsync(worldName).ConfigureAwait(false))!;
         var location = new Location(world, position, rotation);
 
-        VirtualParadiseAvatar avatar = GetAvatar(session)!;
-        avatar.Location = location;
-
-        if (world != CurrentWorld)
-        {
-            _avatars.TryRemove(session, out _);
-        }
-
+        CurrentAvatar!.Location = location;
+        VirtualParadiseAvatar avatar = GetAvatar(session)!; 
         var args = new TeleportedEventArgs(avatar, location);
         _teleported.OnNext(args);
     }
