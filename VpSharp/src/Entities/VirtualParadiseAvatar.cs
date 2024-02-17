@@ -390,7 +390,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
         bool isSelf = this == _client.CurrentAvatar;
         bool isNewWorld = world != Location.World.Name;
 
-        if (world == Location.World.Name)
+        if (!isNewWorld)
         {
             world = string.Empty;
         }
