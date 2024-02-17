@@ -16,7 +16,7 @@ VP# is a high performance .NET wrapper for the [Virtual Paradise](https://virtua
 ## Installation
 ### NuGet installation
 ```ps
-Install-Package VpSharp -Version 0.1.0
+Install-Package VpSharp -Version 1.0.0
 ```
 
 ### Manual installation
