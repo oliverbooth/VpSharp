@@ -1,67 +1,29 @@
-﻿using System.Drawing;
-
-namespace VpSharp.Entities;
+﻿namespace VpSharp.Entities;
 
 /// <summary>
 ///     Represents a message.
 /// </summary>
-public sealed class Message
+public abstract class Message : IMessage
 {
-    internal Message(
-        MessageType type,
-        string? name,
-        string content,
-        IAvatar author,
-        FontStyle style,
-        Color color)
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Message" /> class.
+    /// </summary>
+    /// <param name="author">The author of the message.</param>
+    /// <param name="name">The apparent sender's name of the message.</param>
+    /// <param name="content">The content of the message.</param>
+    protected Message(IAvatar author, string name, string content)
     {
-        Type = type;
-        Name = string.IsNullOrWhiteSpace(name) ? null : name;
-        Content = content;
         Author = author;
-        Style = style;
-        Color = color;
+        Content = content;
+        Name = name;
     }
-
-    /// <summary>
-    ///     Gets the message author.
-    /// </summary>
-    /// <value>The message author.</value>
-    public IAvatar Author { get; }
-
-    /// <summary>
-    ///     Gets the message content.
-    /// </summary>
-    /// <value>The message content.</value>
-    public string Content { get; }
-
-    /// <summary>
-    ///     Gets the message name.
-    /// </summary>
-    /// <value>The message name. This will always be equal to the name of the <see cref="Author" /> for chat messages.</value>
-    public string? Name { get; }
-
-    /// <summary>
-    ///     Gets the message color.
-    /// </summary>
-    /// <value>The message color. This will always be <see cref="System.Drawing.Color.Black" /> for chat messages.</value>
-    public Color Color { get; }
-
-    /// <summary>
-    ///     Gets the message font style.
-    /// </summary>
-    /// <value>The message font style. This will always be <see cref="FontStyle.Regular" /> for chat messages.</value>
-    public FontStyle Style { get; }
-
-    /// <summary>
-    ///     Gets the type of this message.
-    /// </summary>
-    /// <value>The type of this message.</value>
-    public MessageType Type { get; }
 
     /// <inheritdoc />
-    public override string ToString()
-    {
-        return $"Message {Author}; Type {Type}; Content {Content}";
-    }
+    public IAvatar Author { get; }
+
+    /// <inheritdoc />
+    public string Content { get; }
+
+    /// <inheritdoc />
+    public string Name { get; }
 }

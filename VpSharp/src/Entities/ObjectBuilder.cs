@@ -43,7 +43,7 @@ public abstract class ObjectBuilder
     ///     This property may only be set during an object load, and will throw <see cref="InvalidOperationException" /> at
     ///     any other point.
     /// </remarks>
-    public Option<User> Owner { get; set; }
+    public Option<IUser> Owner { get; set; }
 
     /// <summary>
     ///     Gets or sets the position of the object.
@@ -90,7 +90,7 @@ public abstract class ObjectBuilder
             throw new InvalidOperationException("Owner can only be assigned during an object load.");
         }
 
-        User oldOwner = TargetObject.Owner;
+        IUser oldOwner = TargetObject.Owner;
         _ = vp_int_set(handle, ObjectUserId, Owner.ValueOr(oldOwner).Id);
     }
 

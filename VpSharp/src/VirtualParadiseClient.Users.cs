@@ -16,7 +16,7 @@ public sealed partial class VirtualParadiseClient
     /// <returns>
     ///     The user whose ID is equal to <paramref name="userId" />, or <see langword="null" /> if no match was found.
     /// </returns>
-    public async Task<User> GetUserAsync(int userId)
+    public async Task<IUser> GetUserAsync(int userId)
     {
         if (_users.TryGetValue(userId, out User? user))
         {

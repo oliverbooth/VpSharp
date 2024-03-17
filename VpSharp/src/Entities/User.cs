@@ -8,7 +8,7 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents a Virtual Paradise user.
 /// </summary>
-public sealed class User : IEquatable<User>
+public sealed class User : IEquatable<User>, IUser
 {
     private readonly VirtualParadiseClient _client;
 

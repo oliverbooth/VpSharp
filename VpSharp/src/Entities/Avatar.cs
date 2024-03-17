@@ -13,7 +13,7 @@ namespace VpSharp.Entities;
 public sealed class Avatar : IEquatable<Avatar>, IAvatar
 {
     private readonly VirtualParadiseClient _client;
-    private User? _user;
+    private IUser? _user;
 
     internal Avatar(VirtualParadiseClient client, int session)
     {
@@ -172,7 +172,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     ///     Gets the user associated with this avatar.
     /// </summary>
     /// <returns>The user.</returns>
-    public async Task<User> GetUserAsync()
+    public async Task<IUser> GetUserAsync()
     {
         _user ??= await _client.GetUserAsync(UserId).ConfigureAwait(false);
         return _user;
@@ -196,7 +196,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<Message> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    public Task<IConsoleMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
     {
         return SendMessageAsync(null, message, fontStyle, color);
     }
@@ -221,7 +221,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
     /// <remarks>Passing <see langword="null" /> to <paramref name="name" /> will hide the name from the recipient.</remarks>
-    public Task<Message> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    public Task<IConsoleMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
     {
         if (message is null)
         {
@@ -267,13 +267,12 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
             avatar = _client.CurrentAvatar!;
         }
 
-        return Task.FromResult(new Message(
-            MessageType.ConsoleMessage,
-            name,
-            message,
+        return Task.FromResult((IConsoleMessage)new ConsoleMessage(
             avatar,
-            fontStyle,
-            color
+            avatar.Name,
+            message,
+            color,
+            fontStyle
         ));
     }
 

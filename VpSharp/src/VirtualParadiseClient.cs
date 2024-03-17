@@ -83,9 +83,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     Gets the current user to which this client is logged in.
     /// </summary>
     /// <value>
-    ///     An instance of <see cref="User" />, or <see langword="null" /> if this client is not logged in.
+    ///     An instance of <see cref="IUser" />, or <see langword="null" /> if this client is not logged in.
     /// </value>
-    public User? CurrentUser { get; internal set; }
+    public IUser? CurrentUser { get; internal set; }
 
     /// <summary>
     ///     Gets the world to which this client is currently connected.
@@ -565,7 +565,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<Message> SendMessageAsync(string message)
+    public Task<IUserMessage> SendMessageAsync(string message)
     {
         if (message is null)
         {
@@ -593,14 +593,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        IAvatar? avatar = CurrentAvatar;
-        return Task.FromResult(new Message(
-            MessageType.ChatMessage,
-            avatar!.Name,
-            message,
-            avatar,
-            FontStyle.Regular,
-            Color.Black
+        return Task.FromResult((IUserMessage)new UserMessage(
+            CurrentAvatar!,
+            message
         ));
     }
 
@@ -620,7 +615,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<Message> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    public Task<IConsoleMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
     {
         return SendMessageAsync(null, message, fontStyle, color);
     }
@@ -642,7 +637,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<Message> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    public Task<IConsoleMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
     {
         if (message is null)
         {
@@ -680,13 +675,13 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        return Task.FromResult(new Message(
-            MessageType.ConsoleMessage,
-            name,
+        IAvatar avatar = CurrentAvatar!;
+        return Task.FromResult((IConsoleMessage)new ConsoleMessage(
+            avatar,
+            avatar.Name,
             message,
-            CurrentAvatar!,
-            fontStyle,
-            color
+            color,
+            fontStyle
         ));
     }
 

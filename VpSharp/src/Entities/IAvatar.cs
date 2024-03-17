@@ -70,7 +70,7 @@ public interface IAvatar
     ///     Gets the user associated with this avatar.
     /// </summary>
     /// <returns>The user.</returns>
-    Task<User> GetUserAsync();
+    Task<IUser> GetUserAsync();
 
     /// <summary>
     ///     Sends a console message to the avatar with no name.
@@ -90,7 +90,7 @@ public interface IAvatar
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    Task<Message> SendMessageAsync(string message, FontStyle fontStyle, Color color);
+    Task<IConsoleMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color);
 
     /// <summary>
     ///     Sends a console message to the avatar.
@@ -112,7 +112,7 @@ public interface IAvatar
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
     /// <remarks>Passing <see langword="null" /> to <paramref name="name" /> will hide the name from the recipient.</remarks>
-    Task<Message> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color);
+    Task<IConsoleMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color);
 
     /// <summary>
     ///     Sends a URI to this avatar.

@@ -9,7 +9,7 @@ namespace VpSharp.Commands;
 /// </summary>
 public sealed class CommandContext
 {
-    internal CommandContext(VirtualParadiseClient client, Avatar avatar, string commandName, string alias,
+    internal CommandContext(VirtualParadiseClient client, IAvatar avatar, string commandName, string alias,
         string rawArguments)
     {
         Client = client;
@@ -36,8 +36,8 @@ public sealed class CommandContext
     ///     Gets the avatar who executed the command.
     /// </summary>
     /// <value>The executing avatar.</value>
-    public Avatar Avatar { get; }
-    
+    public IAvatar Avatar { get; }
+
     /// <summary>
     ///     Gets the client which raised the event.
     /// </summary>
@@ -65,10 +65,11 @@ public sealed class CommandContext
     ///     regular chat message.
     /// </param>
     /// <returns>The message which was sent.</returns>
-    public Task<Message> RespondAsync(string message, bool ephemeral = false)
+    public async Task<IMessage> RespondAsync(string message, bool ephemeral = false)
     {
         return ephemeral
-            ? Avatar.SendMessageAsync(Client.CurrentAvatar?.Name, message, FontStyle.Regular, Color.Black)
-            : Client.SendMessageAsync(message);
+            ? await Avatar.SendMessageAsync(Client.CurrentAvatar?.Name, message, FontStyle.Regular, Color.Black)
+                .ConfigureAwait(false)
+            : await Client.SendMessageAsync(message).ConfigureAwait(false);
     }
 }

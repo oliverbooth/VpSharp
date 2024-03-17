@@ -13,7 +13,7 @@ public sealed partial class VirtualParadiseClient
     private readonly Subject<AvatarTypeChangedEventArgs> _avatarTypeChanged = new();
     private readonly Subject<InviteRequest> _inviteRequestReceived = new();
     private readonly Subject<JoinRequest> _joinRequestReceived = new();
-    private readonly Subject<Message> _messageReceived = new();
+    private readonly Subject<IMessage> _messageReceived = new();
     private readonly Subject<ObjectBumpEventArgs> _objectBump = new();
     private readonly Subject<ObjectChangedEventArgs> _objectChanged = new();
     private readonly Subject<ObjectClickedEventArgs> _objectClicked = new();
@@ -83,7 +83,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when a chat message or console message has been received.
     /// </summary>
-    public IObservable<Message> MessageReceived
+    public IObservable<IMessage> MessageReceived
     {
         get => _messageReceived;
     }

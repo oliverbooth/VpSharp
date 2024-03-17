@@ -52,7 +52,7 @@ public sealed partial class VirtualParadiseClient
 
     private void OnChatNativeEvent(nint sender)
     {
-        Message message;
+        IMessage message;
 
         lock (Lock)
         {
@@ -61,6 +61,7 @@ public sealed partial class VirtualParadiseClient
             string content = vp_string(sender, StringAttribute.ChatMessage);
 
             int type = vp_int(sender, IntegerAttribute.ChatType);
+            IAvatar avatar = GetAvatar(session)!;
 
             Color color = Color.Black;
             var style = FontStyle.Regular;
@@ -72,10 +73,12 @@ public sealed partial class VirtualParadiseClient
                 int b = vp_int(sender, IntegerAttribute.ChatColorBlue);
                 color = Color.FromArgb(r, g, b);
                 style = (FontStyle)vp_int(sender, IntegerAttribute.ChatEffects);
+                message = new ConsoleMessage(avatar, name, content, color, style);
             }
-
-            IAvatar avatar = GetAvatar(session)!;
-            message = new Message((MessageType)type, name, content, avatar, style, color);
+            else
+            {
+                message = new UserMessage(avatar, content);
+            }
         }
 
         _messageReceived.OnNext(message);
@@ -332,7 +335,7 @@ public sealed partial class VirtualParadiseClient
             userId = vp_int(sender, IntegerAttribute.FriendUserId);
         }
 
-        User user = await GetUserAsync(userId).ConfigureAwait(false);
+        var user = (User)await GetUserAsync(userId).ConfigureAwait(false);
         _friends.AddOrUpdate(userId, user, (_, _) => user);
     }
 
@@ -548,7 +551,7 @@ public sealed partial class VirtualParadiseClient
             name = vp_string(NativeInstanceHandle, StringAttribute.JoinName);
         }
 
-        User user = await GetUserAsync(userId).ConfigureAwait(false);
+        IUser user = await GetUserAsync(userId).ConfigureAwait(false);
         var joinRequest = new JoinRequest(this, requestId, name, user);
         _joinRequestReceived.OnNext(joinRequest);
     }
@@ -582,7 +585,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         World world = (await GetWorldAsync(worldName).ConfigureAwait(false))!;
-        User user = await GetUserAsync(userId).ConfigureAwait(false);
+        IUser user = await GetUserAsync(userId).ConfigureAwait(false);
 
         var location = new Location(world, position, rotation);
         var request = new InviteRequest(this, requestId, avatarName, user, location);

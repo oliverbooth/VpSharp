@@ -51,7 +51,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     ///     Gets the owner of this object.
     /// </summary>
     /// <value>The owner of this object.</value>
-    public User Owner { get; internal set; } = null!;
+    public IUser Owner { get; internal set; } = null!;
 
     internal byte[] Data { get; set; } = Array.Empty<byte>();
 
