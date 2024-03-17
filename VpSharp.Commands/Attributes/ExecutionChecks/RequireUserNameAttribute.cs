@@ -54,7 +54,7 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
             throw new ArgumentNullException(nameof(context));
         }
 
-        VirtualParadiseUser user = await context.Avatar.GetUserAsync().ConfigureAwait(false);
+        User user = await context.Avatar.GetUserAsync().ConfigureAwait(false);
         return Names.Contains(user.Name);
     }
 }

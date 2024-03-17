@@ -8,11 +8,11 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Provides mutability for <see cref="VirtualParadiseObject" />.
 /// </summary>
-public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBuilder
+public sealed class ModelObjectBuilder : ObjectBuilder
 {
-    internal VirtualParadiseModelObjectBuilder(
+    internal ModelObjectBuilder(
         VirtualParadiseClient client,
-        VirtualParadiseModelObject targetObject,
+        ModelObject targetObject,
         ObjectBuilderMode mode
     )
         : base(client, targetObject, mode)
@@ -42,7 +42,7 @@ public sealed class VirtualParadiseModelObjectBuilder : VirtualParadiseObjectBui
         base.ApplyChanges();
 
         nint handle = Client.NativeInstanceHandle;
-        var targetObject = (VirtualParadiseModelObject)TargetObject;
+        var targetObject = (ModelObject)TargetObject;
         vp_string_set(handle, ObjectModel, Model.ValueOr(targetObject.Model));
         vp_string_set(handle, ObjectDescription, Description.ValueOr(targetObject.Description));
         vp_string_set(handle, ObjectAction, Action.ValueOr(targetObject.Action));

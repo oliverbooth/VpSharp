@@ -5,16 +5,16 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents a world in the Virtual Paradise universe.
 /// </summary>
-public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
+public sealed class World : IEquatable<World>
 {
     /// <summary>
     ///     A world that represents no world in the universe.
     /// </summary>
-    public static readonly VirtualParadiseWorld Nowhere = new(null!, "") {IsNowhere = true};
+    public static readonly World Nowhere = new(null!, "") {IsNowhere = true};
 
     private readonly VirtualParadiseClient _client;
 
-    internal VirtualParadiseWorld(VirtualParadiseClient client, string name)
+    internal World(VirtualParadiseClient client, string name)
     {
         _client = client;
         Name = name ?? throw new ArgumentNullException(nameof(name));
@@ -53,7 +53,7 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     internal bool IsNowhere { get; private init; }
 
     /// <summary>
-    ///     Determines if two <see cref="VirtualParadiseWorld" /> instances are equal.
+    ///     Determines if two <see cref="World" /> instances are equal.
     /// </summary>
     /// <param name="left">The first instance.</param>
     /// <param name="right">The second instance.</param>
@@ -61,13 +61,13 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     ///     <see langword="true" /> if <paramref name="left" /> is equal to <paramref name="right" />; otherwise,
     ///     <see langword="false" />.
     /// </returns>
-    public static bool operator ==(VirtualParadiseWorld? left, VirtualParadiseWorld? right)
+    public static bool operator ==(World? left, World? right)
     {
         return Equals(left, right);
     }
 
     /// <summary>
-    ///     Determines if two <see cref="VirtualParadiseWorld" /> instances are not equal.
+    ///     Determines if two <see cref="World" /> instances are not equal.
     /// </summary>
     /// <param name="left">The first instance.</param>
     /// <param name="right">The second instance.</param>
@@ -75,19 +75,19 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     ///     <see langword="true" /> if <paramref name="left" /> is not equal to <paramref name="right" />; otherwise,
     ///     <see langword="false" />.
     /// </returns>
-    public static bool operator !=(VirtualParadiseWorld? left, VirtualParadiseWorld? right)
+    public static bool operator !=(World? left, World? right)
     {
         return !Equals(left, right);
     }
 
     /// <summary>
-    ///     Determines if two <see cref="VirtualParadiseWorld" /> instances are equal.
+    ///     Determines if two <see cref="World" /> instances are equal.
     /// </summary>
     /// <param name="other">The other instance.</param>
     /// <returns>
     ///     <see langword="true" /> if this instance is equal to <paramref name="other" />; otherwise, <see langword="false" />.
     /// </returns>
-    public bool Equals(VirtualParadiseWorld? other)
+    public bool Equals(World? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -105,7 +105,7 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, obj) || (obj is VirtualParadiseWorld other && Equals(other));
+        return ReferenceEquals(this, obj) || (obj is World other && Equals(other));
     }
 
     /// <inheritdoc />

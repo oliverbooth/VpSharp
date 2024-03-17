@@ -13,7 +13,7 @@ public sealed class ObjectBumpEventArgs : EventArgs
     /// <param name="avatar">The avatar.</param>
     /// <param name="bumpedObject">The bumped object.</param>
     /// <param name="phase">The bump phase.</param>
-    public ObjectBumpEventArgs(VirtualParadiseAvatar avatar, VirtualParadiseObject bumpedObject, BumpPhase phase)
+    public ObjectBumpEventArgs(Avatar avatar, VirtualParadiseObject bumpedObject, BumpPhase phase)
     {
         Avatar = avatar;
         BumpedObject = bumpedObject;
@@ -24,7 +24,7 @@ public sealed class ObjectBumpEventArgs : EventArgs
     ///     Gets the avatar responsible for the bump.
     /// </summary>
     /// <value>The avatar responsible for the bump.</value>
-    public VirtualParadiseAvatar Avatar { get; }
+    public Avatar Avatar { get; }
 
     /// <summary>
     ///     Gets the object to which this event pertains.

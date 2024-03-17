@@ -51,7 +51,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     ///     Gets the owner of this object.
     /// </summary>
     /// <value>The owner of this object.</value>
-    public VirtualParadiseUser Owner { get; internal set; } = null!;
+    public User Owner { get; internal set; } = null!;
 
     internal byte[] Data { get; set; } = Array.Empty<byte>();
 
@@ -90,7 +90,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     ///     The target avatar to receive the event. If this value is <see langword="null" />, the bump will be broadcast to
     ///     all avatars in the world.
     /// </param>
-    public async Task BumpAsync(BumpPhase? phase = null, VirtualParadiseAvatar? target = null)
+    public async Task BumpAsync(BumpPhase? phase = null, Avatar? target = null)
     {
         int session = target?.Session ?? 0;
 
@@ -139,7 +139,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     ///     The target avatar which will receive the event, or <see langword="null" /> to broadcast to every avatar.
     /// </param>
     /// <exception cref="InvalidOperationException"><paramref name="target" /> is the client's current avatar.</exception>
-    public Task ClickAsync(Vector3d? position = null, VirtualParadiseAvatar? target = null)
+    public Task ClickAsync(Vector3d? position = null, Avatar? target = null)
     {
         if (target == Client.CurrentAvatar)
         {
@@ -236,10 +236,10 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     }
 
     /// <summary>
-    ///     Updates the object by extracting the values provided by a specified <see cref="VirtualParadiseObjectBuilder" />.
+    ///     Updates the object by extracting the values provided by a specified <see cref="ObjectBuilder" />.
     /// </summary>
     /// <param name="builder">The builder whose values to extract.</param>
-    protected internal virtual void ExtractFromBuilder(VirtualParadiseObjectBuilder builder)
+    protected internal virtual void ExtractFromBuilder(ObjectBuilder builder)
     {
         if (builder is null)
         {

@@ -10,9 +10,9 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents the base class for object builders.
 /// </summary>
-public abstract class VirtualParadiseObjectBuilder
+public abstract class ObjectBuilder
 {
-    private protected VirtualParadiseObjectBuilder(
+    private protected ObjectBuilder(
         VirtualParadiseClient client,
         VirtualParadiseObject targetObject,
         ObjectBuilderMode mode
@@ -43,7 +43,7 @@ public abstract class VirtualParadiseObjectBuilder
     ///     This property may only be set during an object load, and will throw <see cref="InvalidOperationException" /> at
     ///     any other point.
     /// </remarks>
-    public Option<VirtualParadiseUser> Owner { get; set; }
+    public Option<User> Owner { get; set; }
 
     /// <summary>
     ///     Gets or sets the position of the object.
@@ -90,7 +90,7 @@ public abstract class VirtualParadiseObjectBuilder
             throw new InvalidOperationException("Owner can only be assigned during an object load.");
         }
 
-        VirtualParadiseUser oldOwner = TargetObject.Owner;
+        User oldOwner = TargetObject.Owner;
         _ = vp_int_set(handle, ObjectUserId, Owner.ValueOr(oldOwner).Id);
     }
 

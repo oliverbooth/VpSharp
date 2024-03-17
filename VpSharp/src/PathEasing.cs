@@ -3,7 +3,7 @@
 namespace VpSharp;
 
 /// <summary>
-///     An enumeration of easings for use with <see cref="VirtualParadisePath" />.
+///     An enumeration of easings for use with <see cref="Entities.Path" />.
 /// </summary>
 public enum PathEasing
 {

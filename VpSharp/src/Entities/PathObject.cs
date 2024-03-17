@@ -9,15 +9,15 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents a path object.
 /// </summary>
-public sealed class VirtualParadisePathObject : VirtualParadiseObject
+public sealed class PathObject : VirtualParadiseObject
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="VirtualParadisePathObject" /> class.
+    ///     Initializes a new instance of the <see cref="PathObject" /> class.
     /// </summary>
     /// <param name="client">The owning client.</param>
     /// <param name="id">The object ID.</param>
     /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
-    internal VirtualParadisePathObject(VirtualParadiseClient client, int id)
+    internal PathObject(VirtualParadiseClient client, int id)
         : base(client, id)
     {
     }
@@ -26,17 +26,17 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
     ///     Gets the path in this object.
     /// </summary>
     /// <value>The path in this object.</value>
-    public VirtualParadisePath Path { get; set; } = null!;
+    public Path Path { get; set; } = null!;
 
     /// <inheritdoc />
     protected internal override void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
-        if (virtualParadiseObject is not VirtualParadisePathObject path)
+        if (virtualParadiseObject is not PathObject path)
         {
             return;
         }
 
-        Path = (VirtualParadisePath)path.Path.Clone();
+        Path = (Path)path.Path.Clone();
     }
 
     /// <inheritdoc />
@@ -92,7 +92,7 @@ public sealed class VirtualParadisePathObject : VirtualParadiseObject
             buffer.Append(current);
         }
 
-        Path = new VirtualParadisePath((PathEasing)pathType, name, points, closed == 1);
+        Path = new Path((PathEasing)pathType, name, points, closed == 1);
         buffer.Dispose();
     }
 

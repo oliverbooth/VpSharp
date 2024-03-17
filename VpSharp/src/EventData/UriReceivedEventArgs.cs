@@ -13,7 +13,7 @@ public sealed class UriReceivedEventArgs : EventArgs
     /// <param name="uri">The received URI.</param>
     /// <param name="target">The URI target.</param>
     /// <param name="avatar">The avatar who sent the URI.</param>
-    public UriReceivedEventArgs(Uri uri, UriTarget target, VirtualParadiseAvatar avatar)
+    public UriReceivedEventArgs(Uri uri, UriTarget target, Avatar avatar)
     {
         Uri = uri;
         Target = target;
@@ -24,7 +24,7 @@ public sealed class UriReceivedEventArgs : EventArgs
     ///     Gets the avatar who sent the URI.
     /// </summary>
     /// <value>The avatar who sent the URI.</value>
-    public VirtualParadiseAvatar Avatar { get; }
+    public Avatar Avatar { get; }
 
     /// <summary>
     ///     Gets the URI target.

@@ -27,7 +27,7 @@ public abstract class VirtualParadiseClientExtension
     ///     Called when a chat message is received.
     /// </summary>
     /// <param name="args">An object containing event data.</param>
-    protected internal virtual Task OnMessageReceived(VirtualParadiseMessage message)
+    protected internal virtual Task OnMessageReceived(Message message)
     {
         return Task.CompletedTask;
     }

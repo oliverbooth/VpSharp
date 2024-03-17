@@ -176,7 +176,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     }
 
     /// <inheritdoc />
-    protected internal override Task OnMessageReceived(VirtualParadiseMessage message)
+    protected internal override Task OnMessageReceived(Message message)
     {
         if (message is null)
         {

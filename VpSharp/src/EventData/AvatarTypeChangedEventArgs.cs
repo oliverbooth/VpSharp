@@ -13,7 +13,7 @@ public sealed class AvatarTypeChangedEventArgs : EventArgs
     /// <param name="avatar">The avatar whose type was changed.</param>
     /// <param name="typeAfter">The avatar's new type.</param>
     /// <param name="typeBefore">The avatar's old type.</param>
-    public AvatarTypeChangedEventArgs(VirtualParadiseAvatar avatar, int typeAfter, int? typeBefore)
+    public AvatarTypeChangedEventArgs(Avatar avatar, int typeAfter, int? typeBefore)
     {
         Avatar = avatar;
         TypeAfter = typeAfter;
@@ -24,7 +24,7 @@ public sealed class AvatarTypeChangedEventArgs : EventArgs
     ///     Gets the avatar whose type was changed.
     /// </summary>
     /// <value>The avatar whose type was changed.</value>
-    public VirtualParadiseAvatar Avatar { get; }
+    public Avatar Avatar { get; }
 
     /// <summary>
     ///     Gets the avatar's type after the change.

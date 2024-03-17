@@ -5,13 +5,13 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents a message.
 /// </summary>
-public sealed class VirtualParadiseMessage
+public sealed class Message
 {
-    internal VirtualParadiseMessage(
+    internal Message(
         MessageType type,
         string? name,
         string content,
-        VirtualParadiseAvatar author,
+        Avatar author,
         FontStyle style,
         Color color)
     {
@@ -27,7 +27,7 @@ public sealed class VirtualParadiseMessage
     ///     Gets the message author.
     /// </summary>
     /// <value>The message author.</value>
-    public VirtualParadiseAvatar Author { get; }
+    public Avatar Author { get; }
 
     /// <summary>
     ///     Gets the message content.

@@ -1,11 +1,11 @@
 ﻿namespace VpSharp.Entities;
 
 /// <summary>
-///     Represents a path contained by a <see cref="VirtualParadisePathObject" />.
+///     Represents a path contained by a <see cref="PathObject" />.
 /// </summary>
-public sealed class VirtualParadisePath : ICloneable
+public sealed class Path : ICloneable
 {
-    internal VirtualParadisePath(PathEasing easing, string name, IEnumerable<PathPoint> points, bool isClosed)
+    internal Path(PathEasing easing, string name, IEnumerable<PathPoint> points, bool isClosed)
     {
         Easing = easing;
         Name = name;
@@ -40,6 +40,6 @@ public sealed class VirtualParadisePath : ICloneable
     /// <inheritdoc />
     public object Clone()
     {
-        return new VirtualParadisePath(Easing, Name, Points, IsClosed);
+        return new Path(Easing, Name, Points, IsClosed);
     }
 }

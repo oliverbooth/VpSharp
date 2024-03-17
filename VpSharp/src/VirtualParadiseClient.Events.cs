@@ -7,13 +7,13 @@ namespace VpSharp;
 public sealed partial class VirtualParadiseClient
 {
     private readonly Subject<AvatarClickedEventArgs> _avatarClicked = new();
-    private readonly Subject<VirtualParadiseAvatar> _avatarJoined = new();
-    private readonly Subject<VirtualParadiseAvatar> _avatarLeft = new();
+    private readonly Subject<Avatar> _avatarJoined = new();
+    private readonly Subject<Avatar> _avatarLeft = new();
     private readonly Subject<AvatarMovedEventArgs> _avatarMoved = new();
     private readonly Subject<AvatarTypeChangedEventArgs> _avatarTypeChanged = new();
     private readonly Subject<InviteRequest> _inviteRequestReceived = new();
     private readonly Subject<JoinRequest> _joinRequestReceived = new();
-    private readonly Subject<VirtualParadiseMessage> _messageReceived = new();
+    private readonly Subject<Message> _messageReceived = new();
     private readonly Subject<ObjectBumpEventArgs> _objectBump = new();
     private readonly Subject<ObjectChangedEventArgs> _objectChanged = new();
     private readonly Subject<ObjectClickedEventArgs> _objectClicked = new();
@@ -35,7 +35,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when an avatar has entered the vicinity of the client.
     /// </summary>
-    public IObservable<VirtualParadiseAvatar> AvatarJoined
+    public IObservable<Avatar> AvatarJoined
     {
         get => _avatarJoined;
     }
@@ -43,7 +43,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when an avatar has left the vicinity of the client.
     /// </summary>
-    public IObservable<VirtualParadiseAvatar> AvatarLeft
+    public IObservable<Avatar> AvatarLeft
     {
         get => _avatarLeft;
     }
@@ -83,7 +83,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when a chat message or console message has been received.
     /// </summary>
-    public IObservable<VirtualParadiseMessage> MessageReceived
+    public IObservable<Message> MessageReceived
     {
         get => _messageReceived;
     }

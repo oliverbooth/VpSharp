@@ -4,7 +4,7 @@ using VpSharp.Entities;
 namespace VpSharp;
 
 /// <summary>
-///     Represents a point along a <see cref="VirtualParadisePath" />.
+///     Represents a point along a <see cref="Entities.Path" />.
 /// </summary>
 #pragma warning disable CA1815
 public readonly struct PathPoint

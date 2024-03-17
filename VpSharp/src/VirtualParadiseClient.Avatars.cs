@@ -10,7 +10,7 @@ namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
-    private readonly ConcurrentDictionary<int, VirtualParadiseAvatar> _avatars = new();
+    private readonly ConcurrentDictionary<int, Avatar> _avatars = new();
 
     /// <summary>
     ///     Gets the avatar with the specified session.
@@ -20,18 +20,18 @@ public sealed partial class VirtualParadiseClient
     ///     The avatar whose session is equal to <paramref name="session" />, or <see langword="null" /> if no match was
     ///     found.
     /// </returns>
-    public VirtualParadiseAvatar? GetAvatar(int session)
+    public Avatar? GetAvatar(int session)
     {
-        _avatars.TryGetValue(session, out VirtualParadiseAvatar? avatar);
+        _avatars.TryGetValue(session, out Avatar? avatar);
         return avatar;
     }
 
-    private VirtualParadiseAvatar AddOrUpdateAvatar(VirtualParadiseAvatar avatar)
+    private Avatar AddOrUpdateAvatar(Avatar avatar)
     {
         return _avatars.AddOrUpdate(avatar.Session, avatar, (_, existing) =>
         {
             // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
-            existing ??= new VirtualParadiseAvatar(this, avatar.Session);
+            existing ??= new Avatar(this, avatar.Session);
             existing.Name = avatar.Name;
             existing.Location = avatar.Location;
             existing.Application = avatar.Application;
@@ -41,7 +41,7 @@ public sealed partial class VirtualParadiseClient
         });
     }
 
-    private VirtualParadiseAvatar ExtractAvatar(nint sender)
+    private Avatar ExtractAvatar(nint sender)
     {
         lock (Lock)
         {
@@ -58,7 +58,7 @@ public sealed partial class VirtualParadiseClient
             string applicationVersion = vp_string(sender, StringAttribute.AvatarApplicationVersion);
 
             int session = vp_int(sender, IntegerAttribute.AvatarSession);
-            return new VirtualParadiseAvatar(this, session)
+            return new Avatar(this, session)
             {
                 Name = vp_string(sender, StringAttribute.AvatarName),
                 Location = new Location(CurrentWorld!, position, rotation),

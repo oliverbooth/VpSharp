@@ -24,7 +24,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
     private readonly VirtualParadiseConfiguration _configuration;
 
-    private readonly ConcurrentDictionary<int, VirtualParadiseUser> _friends = new();
+    private readonly ConcurrentDictionary<int, User> _friends = new();
     private readonly Dictionary<int, TaskCompletionSource<ReasonCode>> _inviteCompletionSources = new();
     private readonly Dictionary<int, TaskCompletionSource<ReasonCode>> _joinCompletionSources = new();
 
@@ -66,7 +66,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     Gets a read-only view of the cached avatars.
     /// </summary>
     /// <value>The cached avatars.</value>
-    public IReadOnlyList<VirtualParadiseAvatar> Avatars
+    public IReadOnlyList<Avatar> Avatars
     {
         get => _avatars.Values.ToArray();
     }
@@ -75,17 +75,17 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     Gets the current avatar associated with this client.
     /// </summary>
     /// <value>
-    ///     An instance of <see cref="VirtualParadiseAvatar" />, or <see langword="null" /> if this client is not in a world.
+    ///     An instance of <see cref="Avatar" />, or <see langword="null" /> if this client is not in a world.
     /// </value>
-    public VirtualParadiseAvatar? CurrentAvatar { get; internal set; }
+    public Avatar? CurrentAvatar { get; internal set; }
 
     /// <summary>
     ///     Gets the current user to which this client is logged in.
     /// </summary>
     /// <value>
-    ///     An instance of <see cref="VirtualParadiseUser" />, or <see langword="null" /> if this client is not logged in.
+    ///     An instance of <see cref="User" />, or <see langword="null" /> if this client is not logged in.
     /// </value>
-    public VirtualParadiseUser? CurrentUser { get; internal set; }
+    public User? CurrentUser { get; internal set; }
 
     /// <summary>
     ///     Gets the world to which this client is currently connected.
@@ -94,7 +94,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     The world to which this client is currently connected, or <see langword="null" /> if this client is not currently
     ///     in a world.
     /// </value>
-    public VirtualParadiseWorld? CurrentWorld
+    public World? CurrentWorld
     {
         get => CurrentAvatar?.Location.World;
     }
@@ -109,7 +109,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     Gets a read-only view of the cached worlds.
     /// </summary>
     /// <value>The cached worlds.</value>
-    public IReadOnlyList<VirtualParadiseWorld> Worlds
+    public IReadOnlyList<World> Worlds
     {
         get => _worlds.Values.ToArray();
     }
@@ -225,7 +225,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="Exception">Connection to the universe server was lost, or connecting to the world failed.</exception>
     /// <exception cref="WorldNotFoundException">The specified world was not found.</exception>
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
-    public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position)
+    public async Task<World> EnterAsync(string worldName, Vector3d position)
     {
         await EnterAsync(worldName).ConfigureAwait(false);
         await CurrentAvatar!.TeleportAsync(position, Rotation.None).ConfigureAwait(false);
@@ -245,7 +245,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="Exception">Connection to the universe server was lost, or connecting to the world failed.</exception>
     /// <exception cref="WorldNotFoundException">The specified world was not found.</exception>
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
-    public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position, Rotation rotation)
+    public async Task<World> EnterAsync(string worldName, Vector3d position, Rotation rotation)
     {
         await EnterAsync(worldName).ConfigureAwait(false);
         await CurrentAvatar!.TeleportAsync(position, rotation).ConfigureAwait(false);
@@ -264,7 +264,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="Exception">Connection to the universe server was lost, or connecting to the world failed.</exception>
     /// <exception cref="WorldNotFoundException">The specified world was not found.</exception>
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
-    public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position)
+    public async Task EnterAsync(World world, Vector3d position)
     {
         await EnterAsync(world).ConfigureAwait(false);
         await CurrentAvatar!.TeleportAsync(position, Rotation.None).ConfigureAwait(false);
@@ -283,7 +283,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="Exception">Connection to the universe server was lost, or connecting to the world failed.</exception>
     /// <exception cref="WorldNotFoundException">The specified world was not found.</exception>
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
-    public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position, Rotation rotation)
+    public async Task EnterAsync(World world, Vector3d position, Rotation rotation)
     {
         await EnterAsync(world).ConfigureAwait(false);
         await CurrentAvatar!.TeleportAsync(position, rotation).ConfigureAwait(false);
@@ -300,7 +300,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="Exception">Connection to the universe server was lost, or connecting to the world failed.</exception>
     /// <exception cref="WorldNotFoundException">The specified world was not found.</exception>
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
-    public async Task EnterAsync(VirtualParadiseWorld world)
+    public async Task EnterAsync(World world)
     {
         if (world is null)
         {
@@ -314,7 +314,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     Enters a specified world.
     /// </summary>
     /// <param name="worldName">The world to enter.</param>
-    /// <returns>A <see cref="VirtualParadiseWorld" /> representing the world.</returns>
+    /// <returns>A <see cref="World" /> representing the world.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="worldName" /> is <see langword="null" />.</exception>
     /// <exception cref="InvalidOperationException">
     ///     A world enter was attempted before the client was connected to a universe.
@@ -323,7 +323,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="Exception">Connection to the universe server was lost, or connecting to the world failed.</exception>
     /// <exception cref="WorldNotFoundException">The specified world was not found.</exception>
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
-    public async Task<VirtualParadiseWorld> EnterAsync(string worldName)
+    public async Task<World> EnterAsync(string worldName)
     {
         if (worldName is null)
         {
@@ -389,21 +389,22 @@ public sealed partial class VirtualParadiseClient : IDisposable
 
         await _worldSettingsCompletionSource.Task.ConfigureAwait(false);
 
-        VirtualParadiseWorld? world = await GetWorldAsync(worldName).ConfigureAwait(false);
+        World? world = await GetWorldAsync(worldName).ConfigureAwait(false);
         if (world is null)
         {
             // we entered the world but it wasn't listed. unlisted world. we'll try our best to create details for it
-            world = new VirtualParadiseWorld(this, worldName);
+            world = new World(this, worldName);
         }
 
         if (CurrentAvatar is not null)
         {
+            // TODO why is this here? we reassign CurrentAvatar right below!
             CurrentAvatar.Location = new Location(world);
         }
 
         world.Size = new Size(size, size);
 
-        CurrentAvatar = new VirtualParadiseAvatar(this, -1)
+        CurrentAvatar = new Avatar(this, -1)
         {
             Application = _configuration.Application!,
             Name = $"[{_configuration.BotName}]",
@@ -564,7 +565,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string message)
+    public Task<Message> SendMessageAsync(string message)
     {
         if (message is null)
         {
@@ -592,8 +593,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        VirtualParadiseAvatar? avatar = CurrentAvatar;
-        return Task.FromResult(new VirtualParadiseMessage(
+        Avatar? avatar = CurrentAvatar;
+        return Task.FromResult(new Message(
             MessageType.ChatMessage,
             avatar!.Name,
             message,
@@ -619,7 +620,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    public Task<Message> SendMessageAsync(string message, FontStyle fontStyle, Color color)
     {
         return SendMessageAsync(null, message, fontStyle, color);
     }
@@ -641,7 +642,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    public Task<Message> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
     {
         if (message is null)
         {
@@ -679,8 +680,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        VirtualParadiseAvatar avatar = CurrentAvatar!;
-        return Task.FromResult(new VirtualParadiseMessage(
+        Avatar avatar = CurrentAvatar!;
+        return Task.FromResult(new Message(
             MessageType.ConsoleMessage,
             name,
             message,
@@ -738,7 +739,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             pair.Value.TrySetCanceled();
         }
 
-        foreach (KeyValuePair<int, TaskCompletionSource<VirtualParadiseUser>> pair in _usersCompletionSources)
+        foreach (KeyValuePair<int, TaskCompletionSource<User>> pair in _usersCompletionSources)
         {
             pair.Value.TrySetCanceled();
         }

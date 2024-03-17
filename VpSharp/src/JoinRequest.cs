@@ -12,7 +12,7 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
     private readonly VirtualParadiseClient _client;
     private readonly int _requestId;
 
-    internal JoinRequest(VirtualParadiseClient client, int requestId, string name, VirtualParadiseUser user)
+    internal JoinRequest(VirtualParadiseClient client, int requestId, string name, User user)
     {
         Name = name;
         User = user;
@@ -30,7 +30,7 @@ public sealed class JoinRequest : IEquatable<JoinRequest>
     ///     Gets the user which sent the request.
     /// </summary>
     /// <value>The user which sent the request.</value>
-    public VirtualParadiseUser User { get; }
+    public User User { get; }
 
     /// <summary>
     ///     Returns a value indicating whether two <see cref="JoinRequest" /> instances are equal.

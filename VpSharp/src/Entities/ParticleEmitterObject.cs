@@ -13,15 +13,15 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents a particle emitter object.
 /// </summary>
-public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
+public sealed class ParticleEmitterObject : VirtualParadiseObject
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="VirtualParadiseParticleEmitterObject" /> class.
+    ///     Initializes a new instance of the <see cref="ParticleEmitterObject" /> class.
     /// </summary>
     /// <param name="client">The owning client.</param>
     /// <param name="id">The object ID.</param>
     /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
-    internal VirtualParadiseParticleEmitterObject(VirtualParadiseClient client, int id)
+    internal ParticleEmitterObject(VirtualParadiseClient client, int id)
         : base(client, id)
     {
     }
@@ -217,13 +217,13 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
     /// <inheritdoc />
     protected internal override void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
-        if (virtualParadiseObject is not VirtualParadiseParticleEmitterObject emitter)
+        if (virtualParadiseObject is not ParticleEmitterObject emitter)
         {
             return;
         }
 
         const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-        PropertyInfo[] properties = typeof(VirtualParadiseParticleEmitterObject).GetProperties(bindingFlags);
+        PropertyInfo[] properties = typeof(ParticleEmitterObject).GetProperties(bindingFlags);
 
         foreach (PropertyInfo property in properties)
         {
@@ -243,7 +243,7 @@ public sealed class VirtualParadiseParticleEmitterObject : VirtualParadiseObject
 
 #pragma warning disable 612
         const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-        PropertyInfo[] properties = typeof(VirtualParadiseParticleEmitterObject).GetProperties(bindingFlags);
+        PropertyInfo[] properties = typeof(ParticleEmitterObject).GetProperties(bindingFlags);
         var keymap = new Dictionary<string, PropertyInfo>();
         var converterMap = new Dictionary<string, ValueConverter>();
 
