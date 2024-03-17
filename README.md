@@ -1,4 +1,4 @@
-<h1 align="center"><img src="banner.png"></h1>
+<h1 align="center"><img src="branding_Banner.png"></h1>
 <p align="center">
 <a href="https://github.com/oliverbooth/VpSharp/actions?query=workflow%3A%22.NET%22"><img src="https://img.shields.io/github/actions/workflow/status/oliverbooth/VpSharp/dotnet.yml?style=flat-square" alt="GitHub Workflow Status" title="GitHub Workflow Status"></a>
 <a href="https://github.com/oliverbooth/VpSharp/issues"><img src="https://img.shields.io/github/issues/oliverbooth/VpSharp?style=flat-square" alt="GitHub Issues" title="GitHub Issues"></a>

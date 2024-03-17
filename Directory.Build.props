@@ -16,7 +16,7 @@
         <RepositoryType>git</RepositoryType>
         <Description>A modern Virtual Paradise SDK wrapper for .NET</Description>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-        <PackageIcon>icon.png</PackageIcon>
+        <PackageIcon>branding_Icon.png</PackageIcon>
         <PackageIconUrl/>
         <PackageTags>bot wrapper sdk dotnet wrapper-api wrapper-library virtual-paradise</PackageTags>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -47,7 +47,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\icon.png">
+        <None Include="..\branding_Icon.png">
             <Pack>True</Pack>
             <PackagePath/>
         </None>
