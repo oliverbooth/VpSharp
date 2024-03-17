@@ -66,7 +66,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     Gets a read-only view of the cached avatars.
     /// </summary>
     /// <value>The cached avatars.</value>
-    public IReadOnlyList<Avatar> Avatars
+    public IReadOnlyList<IAvatar> Avatars
     {
         get => _avatars.Values.ToArray();
     }
@@ -77,7 +77,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <value>
     ///     An instance of <see cref="Avatar" />, or <see langword="null" /> if this client is not in a world.
     /// </value>
-    public Avatar? CurrentAvatar { get; internal set; }
+    public IAvatar? CurrentAvatar { get; internal set; }
 
     /// <summary>
     ///     Gets the current user to which this client is logged in.
@@ -399,7 +399,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
         if (CurrentAvatar is not null)
         {
             // TODO why is this here? we reassign CurrentAvatar right below!
-            CurrentAvatar.Location = new Location(world);
+            ((Avatar)CurrentAvatar).Location = new Location(world);
         }
 
         world.Size = new Size(size, size);
@@ -593,7 +593,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        Avatar? avatar = CurrentAvatar;
+        IAvatar? avatar = CurrentAvatar;
         return Task.FromResult(new Message(
             MessageType.ChatMessage,
             avatar!.Name,
@@ -680,12 +680,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        Avatar avatar = CurrentAvatar!;
         return Task.FromResult(new Message(
             MessageType.ConsoleMessage,
             name,
             message,
-            avatar,
+            CurrentAvatar!,
             fontStyle,
             color
         ));

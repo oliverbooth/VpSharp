@@ -11,7 +11,7 @@ public sealed class Message
         MessageType type,
         string? name,
         string content,
-        Avatar author,
+        IAvatar author,
         FontStyle style,
         Color color)
     {
@@ -27,7 +27,7 @@ public sealed class Message
     ///     Gets the message author.
     /// </summary>
     /// <value>The message author.</value>
-    public Avatar Author { get; }
+    public IAvatar Author { get; }
 
     /// <summary>
     ///     Gets the message content.

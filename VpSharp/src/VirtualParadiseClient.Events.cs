@@ -7,8 +7,8 @@ namespace VpSharp;
 public sealed partial class VirtualParadiseClient
 {
     private readonly Subject<AvatarClickedEventArgs> _avatarClicked = new();
-    private readonly Subject<Avatar> _avatarJoined = new();
-    private readonly Subject<Avatar> _avatarLeft = new();
+    private readonly Subject<IAvatar> _avatarJoined = new();
+    private readonly Subject<IAvatar> _avatarLeft = new();
     private readonly Subject<AvatarMovedEventArgs> _avatarMoved = new();
     private readonly Subject<AvatarTypeChangedEventArgs> _avatarTypeChanged = new();
     private readonly Subject<InviteRequest> _inviteRequestReceived = new();
@@ -35,7 +35,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when an avatar has entered the vicinity of the client.
     /// </summary>
-    public IObservable<Avatar> AvatarJoined
+    public IObservable<IAvatar> AvatarJoined
     {
         get => _avatarJoined;
     }
@@ -43,7 +43,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when an avatar has left the vicinity of the client.
     /// </summary>
-    public IObservable<Avatar> AvatarLeft
+    public IObservable<IAvatar> AvatarLeft
     {
         get => _avatarLeft;
     }

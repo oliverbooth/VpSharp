@@ -10,7 +10,7 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents an avatar within a world.
 /// </summary>
-public sealed class Avatar : IEquatable<Avatar>
+public sealed class Avatar : IEquatable<Avatar>, IAvatar
 {
     private readonly VirtualParadiseClient _client;
     private User? _user;
@@ -233,7 +233,7 @@ public sealed class Avatar : IEquatable<Avatar>
             throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(message));
         }
 
-        Avatar avatar;
+        IAvatar avatar;
 
         lock (_client.Lock)
         {

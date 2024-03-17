@@ -13,7 +13,7 @@ public sealed class ObjectDeletedEventArgs : EventArgs
     /// <param name="avatar">The avatar responsible for the object being deleted.</param>
     /// <param name="objectId">The ID of the deleted object.</param>
     /// <param name="deletedObject">The deleted object.</param>
-    public ObjectDeletedEventArgs(Avatar avatar, int objectId, VirtualParadiseObject deletedObject)
+    public ObjectDeletedEventArgs(IAvatar avatar, int objectId, VirtualParadiseObject deletedObject)
     {
         Avatar = avatar;
         ObjectId = objectId;
@@ -24,7 +24,7 @@ public sealed class ObjectDeletedEventArgs : EventArgs
     ///     Gets the avatar responsible for the object being deleted.
     /// </summary>
     /// <value>The avatar responsible for the object being deleted.</value>
-    public Avatar Avatar { get; }
+    public IAvatar Avatar { get; }
 
     /// <summary>
     ///     Gets the object which was deleted.

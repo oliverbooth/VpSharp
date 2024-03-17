@@ -74,7 +74,7 @@ public sealed partial class VirtualParadiseClient
                 style = (FontStyle)vp_int(sender, IntegerAttribute.ChatEffects);
             }
 
-            Avatar avatar = GetAvatar(session)!;
+            IAvatar avatar = GetAvatar(session)!;
             message = new Message((MessageType)type, name, content, avatar, style, color);
         }
 
@@ -115,7 +115,7 @@ public sealed partial class VirtualParadiseClient
             rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
         }
 
-        Avatar avatar = GetAvatar(session)!;
+        var avatar = (Avatar)GetAvatar(session)!;
         if (type != avatar.Type)
         {
             int oldType = avatar.Type;
@@ -145,7 +145,7 @@ public sealed partial class VirtualParadiseClient
             session = vp_int(sender, IntegerAttribute.AvatarSession);
         }
 
-        Avatar avatar = GetAvatar(session)!;
+        IAvatar avatar = GetAvatar(session)!;
         _avatars.TryRemove(session, out Avatar _);
         _avatarLeft.OnNext(avatar);
     }
@@ -173,7 +173,7 @@ public sealed partial class VirtualParadiseClient
         }
         else
         {
-            Avatar avatar = GetAvatar(session)!;
+            IAvatar avatar = GetAvatar(session)!;
             var args = new ObjectCreatedEventArgs(avatar, virtualParadiseObject);
             _objectCreated.OnNext(args);
         }
@@ -190,7 +190,7 @@ public sealed partial class VirtualParadiseClient
             session = vp_int(sender, IntegerAttribute.AvatarSession);
         }
 
-        Avatar avatar = GetAvatar(session)!;
+        IAvatar avatar = GetAvatar(session)!;
         VirtualParadiseObject? cachedObject = null;
 
         if (_objects.TryGetValue(objectId, out VirtualParadiseObject? virtualParadiseObject))
@@ -226,7 +226,7 @@ public sealed partial class VirtualParadiseClient
             session = vp_int(sender, IntegerAttribute.AvatarSession);
         }
 
-        Avatar? avatar = GetAvatar(session);
+        IAvatar avatar = GetAvatar(session)!;
         VirtualParadiseObject? virtualParadiseObject;
 
         try
@@ -240,7 +240,7 @@ public sealed partial class VirtualParadiseClient
 
         _objects.TryRemove(objectId, out VirtualParadiseObject _);
 
-        var args = new ObjectDeletedEventArgs(avatar!, objectId, virtualParadiseObject!);
+        var args = new ObjectDeletedEventArgs(avatar, objectId, virtualParadiseObject!);
         _objectDeleted.OnNext(args);
     }
 
@@ -261,7 +261,7 @@ public sealed partial class VirtualParadiseClient
             clickPoint = new Vector3d(x, y, z);
         }
 
-        Avatar avatar = GetAvatar(session)!;
+        IAvatar avatar = GetAvatar(session)!;
         try
         {
             VirtualParadiseObject virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
@@ -423,8 +423,8 @@ public sealed partial class VirtualParadiseClient
             clickPoint = new Vector3d(x, y, z);
         }
 
-        Avatar avatar = GetAvatar(session)!;
-        Avatar clickedAvatar = GetAvatar(clickedSession)!;
+        IAvatar avatar = GetAvatar(session)!;
+        IAvatar clickedAvatar = GetAvatar(clickedSession)!;
         var args = new AvatarClickedEventArgs(avatar, clickedAvatar, clickPoint);
         _avatarClicked.OnNext(args);
     }
@@ -457,8 +457,8 @@ public sealed partial class VirtualParadiseClient
             : await GetWorldAsync(worldName).ConfigureAwait(false))!;
         var location = new Location(world, position, rotation);
 
-        CurrentAvatar!.Location = location;
-        Avatar avatar = GetAvatar(session)!; 
+        ((Avatar)CurrentAvatar!).Location = location;
+        IAvatar avatar = GetAvatar(session)!;
         var args = new TeleportedEventArgs(avatar, location);
         _teleported.OnNext(args);
     }
@@ -474,7 +474,7 @@ public sealed partial class VirtualParadiseClient
             objectId = vp_int(sender, IntegerAttribute.ObjectId);
         }
 
-        Avatar avatar = GetAvatar(session)!;
+        IAvatar avatar = GetAvatar(session)!;
         try
         {
             var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
@@ -505,7 +505,7 @@ public sealed partial class VirtualParadiseClient
             return;
         }
 
-        Avatar avatar = GetAvatar(session)!;
+        IAvatar avatar = GetAvatar(session)!;
         var uri = new Uri(url);
         var args = new UriReceivedEventArgs(uri, target, avatar);
         _uriReceived.OnNext(args);
@@ -522,7 +522,7 @@ public sealed partial class VirtualParadiseClient
             objectId = vp_int(sender, IntegerAttribute.ObjectId);
         }
 
-        Avatar avatar = GetAvatar(session)!;
+        IAvatar avatar = GetAvatar(session)!;
         try
         {
             var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);

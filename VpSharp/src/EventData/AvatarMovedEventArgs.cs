@@ -13,7 +13,7 @@ public sealed class AvatarMovedEventArgs : EventArgs
     /// <param name="avatar">The avatar whose type was changed.</param>
     /// <param name="locationAfter">The avatar's new location.</param>
     /// <param name="locationBefore">The avatar's old location.</param>
-    public AvatarMovedEventArgs(Avatar avatar, Location locationAfter, Location? locationBefore)
+    public AvatarMovedEventArgs(IAvatar avatar, Location locationAfter, Location? locationBefore)
     {
         Avatar = avatar;
         LocationAfter = locationAfter;
@@ -24,7 +24,7 @@ public sealed class AvatarMovedEventArgs : EventArgs
     ///     Gets the avatar whose location was changed.
     /// </summary>
     /// <value>The avatar whose location was changed.</value>
-    public Avatar Avatar { get; }
+    public IAvatar Avatar { get; }
 
     /// <summary>
     ///     Gets the avatar's location after the change.

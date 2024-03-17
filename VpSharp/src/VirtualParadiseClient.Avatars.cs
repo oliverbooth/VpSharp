@@ -20,7 +20,7 @@ public sealed partial class VirtualParadiseClient
     ///     The avatar whose session is equal to <paramref name="session" />, or <see langword="null" /> if no match was
     ///     found.
     /// </returns>
-    public Avatar? GetAvatar(int session)
+    public IAvatar? GetAvatar(int session)
     {
         _avatars.TryGetValue(session, out Avatar? avatar);
         return avatar;

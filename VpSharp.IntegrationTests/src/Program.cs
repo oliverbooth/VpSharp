@@ -45,7 +45,7 @@ Console.WriteLine(@"Entering world");
 World world = await client.EnterAsync("Mutation");
 Console.WriteLine(@"Entered world!");
 
-Avatar avatar = client.CurrentAvatar!;
+IAvatar avatar = client.CurrentAvatar!;
 
 Console.WriteLine($@"My name is {avatar.Name} and I am at {avatar.Location}");
 Console.WriteLine($@"Entered {world.Name} with size {world.Size}");
