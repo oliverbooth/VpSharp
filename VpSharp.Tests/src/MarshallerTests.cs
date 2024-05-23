@@ -1,29 +1,29 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using NUnit.Framework;
 using VpSharp.Internal;
 
 namespace VpSharp.Tests;
 
-[TestClass]
-public class MarshellerTests
+internal sealed class MarshallerTests
 {
     private static readonly Utf8StringToNative ManagedToNativeMarshaller = new();
     private static readonly Utf8StringToManaged NativeToManagedMarshaller = new();
     private static readonly Random Random = new();
 
-    [TestMethod]
+    [Test]
     public unsafe void MarshalNativeToManaged_ShouldReturnPointerToUtf8Bytes_GivenString()
     {
         string value = GenerateRandomString();
         byte* pointer = GetBytePointer(value, out int count);
         string expected = Encoding.UTF8.GetString(pointer, count);
         var actual = (string)NativeToManagedMarshaller.MarshalNativeToManaged((nint)pointer);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
 
         CleanUpNativeData(pointer);
     }
 
-    [TestMethod]
+    [Test]
     public unsafe void MarshalManagedToNative_ShouldReturnPointerToUtf8Bytes_GivenString()
     {
         string value = GenerateRandomString();
@@ -31,7 +31,7 @@ public class MarshellerTests
         string result = Encoding.UTF8.GetString(pointer, count);
 
         Trace.WriteLine($"Test string: {value}");
-        Assert.AreEqual(value, result);
+        Assert.That(result, Is.EqualTo(value));
 
         CleanUpNativeData(pointer);
     }

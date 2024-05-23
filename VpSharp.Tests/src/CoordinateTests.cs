@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
+using NUnit.Framework;
 
 namespace VpSharp.Tests;
 
-[TestClass]
-public sealed class CoordinateTests
+internal sealed class CoordinateTests
 {
-    [TestMethod]
+    [Test]
     public void TestAbsolute()
     {
         TestCoordinates("asdf", 0.0, 0.0, 0.0, 0.0, world: "asdf");
@@ -16,12 +16,30 @@ public sealed class CoordinateTests
         TestCoordinates("2355.71S 3429.68E -0.37a 0", -3429.68, -0.37, -2355.71);
     }
 
-    [TestMethod]
+    [Test]
     public void TestRelative()
     {
         TestCoordinates("-1.1 +0 -1.2a", 0.0, -1.2, -1.1, 0.0, true);
         TestCoordinates("+0   +0 +5a", 0.0, 5.0, 0.0, 0.0, true);
         TestCoordinates("+1 +1 +1a", 1.0, 1.0, 1.0, 0.0, true);
+    }
+
+    [Test]
+    public void ToString_ShouldReturnFormattedString_GivenCoordinates()
+    {
+        Coordinates coordinates = Coordinates.Parse("10n 5e 1a 123");
+        string result = coordinates.ToString();
+        
+        Assert.That(result, Is.EqualTo("10.00n 5.00e 1.00a 123.00"));
+    }
+
+    [Test]
+    public void ToString_ShouldReturnFormattedString_GivenArguments()
+    {
+        Coordinates coordinates = Coordinates.Parse("10n 5e 1a 123");
+        string result = coordinates.ToString("0");
+        
+        Assert.That(result, Is.EqualTo("10n 5e 1a 123"));
     }
 
     private static void TestCoordinates(
@@ -41,18 +59,22 @@ public sealed class CoordinateTests
         Trace.WriteLine($"Parsed: {coordinates}");
         Trace.WriteLine("----");
 
-        Assert.AreEqual(x, coordinates.X);
-        Assert.AreEqual(y, coordinates.Y);
-        Assert.AreEqual(z, coordinates.Z);
-        Assert.AreEqual(yaw, coordinates.Yaw);
-        Assert.AreEqual(isRelative, coordinates.IsRelative);
+        Assert.Multiple(() =>
+        {
+            Assert.That(coordinates.X, Is.EqualTo(x));
+            Assert.That(coordinates.Y, Is.EqualTo(y));
+            Assert.That(coordinates.Z, Is.EqualTo(z));
+            Assert.That(coordinates.Yaw, Is.EqualTo(yaw));
+            Assert.That(coordinates.IsRelative, Is.EqualTo(isRelative));
+        });
+        
         if (string.IsNullOrWhiteSpace(world))
         {
             Assert.IsTrue(string.IsNullOrWhiteSpace(coordinates.World));
         }
         else
         {
-            Assert.AreEqual(world, coordinates.World);
+            Assert.That(coordinates.World, Is.EqualTo(world));
         }
     }
 }
