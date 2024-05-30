@@ -10,12 +10,12 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents an avatar within a world.
 /// </summary>
-public sealed class Avatar : IEquatable<Avatar>, IAvatar
+public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 {
     private readonly VirtualParadiseClient _client;
-    private IUser? _user;
+    private VirtualParadiseUser? _user;
 
-    internal Avatar(VirtualParadiseClient client, int session)
+    internal VirtualParadiseAvatar(VirtualParadiseClient client, int session)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
         Session = session;
@@ -33,7 +33,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     /// <value><see langword="true" /> if this avatar is a bot; otherwise, <see langword="false" />.</value>
     public bool IsBot
     {
-        get => Name is { Length: > 1 } name && name[0] == '[' && name[^1] == ']';
+        get => Name is {Length: > 1} name && name[0] == '[' && name[^1] == ']';
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     public int UserId { get; internal set; }
 
     /// <summary>
-    ///     Determines if two <see cref="Avatar" /> instances are equal.
+    ///     Determines if two <see cref="VirtualParadiseAvatar" /> instances are equal.
     /// </summary>
     /// <param name="left">The first instance.</param>
     /// <param name="right">The second instance.</param>
@@ -75,13 +75,13 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     ///     <see langword="true" /> if <paramref name="left" /> is equal to <paramref name="right" />; otherwise,
     ///     <see langword="false" />.
     /// </returns>
-    public static bool operator ==(Avatar? left, Avatar? right)
+    public static bool operator ==(VirtualParadiseAvatar? left, VirtualParadiseAvatar? right)
     {
         return Equals(left, right);
     }
 
     /// <summary>
-    ///     Determines if two <see cref="Avatar" /> instances are not equal.
+    ///     Determines if two <see cref="VirtualParadiseAvatar" /> instances are not equal.
     /// </summary>
     /// <param name="left">The first instance.</param>
     /// <param name="right">The second instance.</param>
@@ -89,7 +89,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     ///     <see langword="true" /> if <paramref name="left" /> is not equal to <paramref name="right" />; otherwise,
     ///     <see langword="false" />.
     /// </returns>
-    public static bool operator !=(Avatar? left, Avatar? right)
+    public static bool operator !=(VirtualParadiseAvatar? left, VirtualParadiseAvatar? right)
     {
         return !Equals(left, right);
     }
@@ -133,13 +133,13 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     }
 
     /// <summary>
-    ///     Determines if two <see cref="Avatar" /> instances are equal.
+    ///     Determines if two <see cref="VirtualParadiseAvatar" /> instances are equal.
     /// </summary>
     /// <param name="other">The other instance.</param>
     /// <returns>
     ///     <see langword="true" /> if this instance is equal to <paramref name="other" />; otherwise, <see langword="false" />.
     /// </returns>
-    public bool Equals(Avatar? other)
+    public bool Equals(VirtualParadiseAvatar? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -157,7 +157,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, obj) || (obj is Avatar other && Equals(other));
+        return ReferenceEquals(this, obj) || (obj is VirtualParadiseAvatar other && Equals(other));
     }
 
     /// <inheritdoc />
@@ -172,7 +172,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     ///     Gets the user associated with this avatar.
     /// </summary>
     /// <returns>The user.</returns>
-    public async Task<IUser> GetUserAsync()
+    public async Task<VirtualParadiseUser> GetUserAsync()
     {
         _user ??= await _client.GetUserAsync(UserId).ConfigureAwait(false);
         return _user;
@@ -196,8 +196,9 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<IConsoleMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    public Task<VirtualParadiseMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
     {
+        // ReSharper disable once InconsistentlySynchronizedField
         return SendMessageAsync(null, message, fontStyle, color);
     }
 
@@ -221,7 +222,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
     /// <remarks>Passing <see langword="null" /> to <paramref name="name" /> will hide the name from the recipient.</remarks>
-    public Task<IConsoleMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
     {
         if (message is null)
         {
@@ -233,7 +234,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
             throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(message));
         }
 
-        IAvatar avatar;
+        VirtualParadiseAvatar avatar;
 
         lock (_client.Lock)
         {
@@ -248,7 +249,6 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
                 color.B
             );
 
-            // TODO remove if statement
             if (reason != ReasonCode.Success)
             {
                 switch (reason)
@@ -267,12 +267,13 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
             avatar = _client.CurrentAvatar!;
         }
 
-        return Task.FromResult((IConsoleMessage)new ConsoleMessage(
-            avatar,
-            avatar.Name,
+        return Task.FromResult(new VirtualParadiseMessage(
+            MessageType.ConsoleMessage,
+            name,
             message,
-            color,
-            fontStyle
+            avatar,
+            fontStyle,
+            color
         ));
     }
 
@@ -330,7 +331,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     /// <param name="world">The name of the world to which this avatar should be teleported.</param>
     /// <param name="position">The position to which this avatar should be teleported.</param>
     /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
-    public Task TeleportAsync(World world, Vector3d position)
+    public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position)
     {
         if (world is null)
         {
@@ -347,7 +348,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     /// <param name="position">The position to which this avatar should be teleported.</param>
     /// <param name="rotation">The rotation to which this avatar should be teleported.</param>
     /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
-    public Task TeleportAsync(World world, Vector3d position, Rotation rotation)
+    public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position, Rotation rotation)
     {
         if (world is null)
         {
@@ -442,8 +443,8 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
             }
         }
 
-        World? updatedWorld = isNewWorld ? await _client.GetWorldAsync(world) : Location.World;
-        updatedWorld ??= new World(_client, world);
+        VirtualParadiseWorld? updatedWorld = isNewWorld ? await _client.GetWorldAsync(world) : Location.World;
+        updatedWorld ??= new VirtualParadiseWorld(_client, world);
         Location = new Location(updatedWorld, position, rotation);
         // ReSharper restore InconsistentlySynchronizedField
     }
@@ -454,7 +455,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     /// <param name="position">The position to which this avatar should be teleported.</param>
     public Task TeleportAsync(Vector3d position)
     {
-        return TeleportAsync(Location with { Position = position });
+        return TeleportAsync(Location with {Position = position});
     }
 
     /// <summary>
@@ -464,7 +465,7 @@ public sealed class Avatar : IEquatable<Avatar>, IAvatar
     /// <param name="rotation">The rotation to which this avatar should be teleported</param>
     public Task TeleportAsync(Vector3d position, Rotation rotation)
     {
-        return TeleportAsync(Location with { Position = position, Rotation = rotation });
+        return TeleportAsync(Location with {Position = position, Rotation = rotation});
     }
 
     /// <summary>

@@ -9,15 +9,15 @@ namespace VpSharp.Entities;
 ///     Represents an object which renders as a 3D model. A "model" object will contain a <c>Model</c>, <c>Description</c>
 ///     and <c>Action</c> field.
 /// </summary>
-public class ModelObject : VirtualParadiseObject
+public class VirtualParadiseModelObject : VirtualParadiseObject
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ModelObject" /> class.
+    ///     Initializes a new instance of the <see cref="VirtualParadiseModelObject" /> class.
     /// </summary>
     /// <param name="client">The owning client.</param>
     /// <param name="id">The object ID.</param>
     /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
-    internal ModelObject(VirtualParadiseClient client, int id)
+    internal VirtualParadiseModelObject(VirtualParadiseClient client, int id)
         : base(client, id)
     {
     }
@@ -46,11 +46,11 @@ public class ModelObject : VirtualParadiseObject
     /// <param name="action">The builder which defines parameters to change.</param>
     /// <exception cref="ArgumentNullException"><paramref name="action" /> is <see langword="null" />.</exception>
     /// <exception cref="InvalidOperationException">
-    ///     <para><see cref="ModelObjectBuilder.ModificationTimestamp" /> was assigned.</para>
+    ///     <para><see cref="VirtualParadiseModelObjectBuilder.ModificationTimestamp" /> was assigned.</para>
     ///     -or-
-    ///     <para><see cref="ModelObjectBuilder.Owner" /> was assigned.</para>
+    ///     <para><see cref="VirtualParadiseModelObjectBuilder.Owner" /> was assigned.</para>
     /// </exception>
-    public async Task ModifyAsync(Action<ModelObjectBuilder> action)
+    public async Task ModifyAsync(Action<VirtualParadiseModelObjectBuilder> action)
     {
         if (action is null)
         {
@@ -58,7 +58,7 @@ public class ModelObject : VirtualParadiseObject
         }
 
         var taskCompletionSource = new TaskCompletionSource<ReasonCode>();
-        var builder = new ModelObjectBuilder(Client, this, ObjectBuilderMode.Modify);
+        var builder = new VirtualParadiseModelObjectBuilder(Client, this, ObjectBuilderMode.Modify);
         await Task.Run(() => action(builder)).ConfigureAwait(false);
 
         lock (Client.Lock)
@@ -90,9 +90,9 @@ public class ModelObject : VirtualParadiseObject
     }
 
     /// <inheritdoc />
-    protected internal override void ExtractFromBuilder(ObjectBuilder builder)
+    protected internal override void ExtractFromBuilder(VirtualParadiseObjectBuilder builder)
     {
-        if (builder is not ModelObjectBuilder modelObjectBuilder)
+        if (builder is not VirtualParadiseModelObjectBuilder modelObjectBuilder)
         {
             return;
         }
@@ -107,7 +107,7 @@ public class ModelObject : VirtualParadiseObject
     /// <inheritdoc />
     protected internal override void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
-        if (virtualParadiseObject is not ModelObject model)
+        if (virtualParadiseObject is not VirtualParadiseModelObject model)
         {
             return;
         }

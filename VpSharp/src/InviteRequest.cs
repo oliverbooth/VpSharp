@@ -16,7 +16,7 @@ public sealed class InviteRequest : IEquatable<InviteRequest>
         VirtualParadiseClient client,
         int requestId,
         string name,
-        IUser user,
+        VirtualParadiseUser user,
         Location location)
     {
         Name = name;
@@ -42,7 +42,7 @@ public sealed class InviteRequest : IEquatable<InviteRequest>
     ///     Gets the user which sent the request.
     /// </summary>
     /// <value>The user which sent the request.</value>
-    public IUser User { get; }
+    public VirtualParadiseUser User { get; }
 
     /// <summary>
     ///     Returns a value indicating whether two <see cref="InviteRequest" /> instances are equal.

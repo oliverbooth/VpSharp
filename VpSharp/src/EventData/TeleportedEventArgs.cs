@@ -12,7 +12,7 @@ public sealed class TeleportedEventArgs : EventArgs
     /// </summary>
     /// <param name="avatar">The avatar which initiated the teleport.</param>
     /// <param name="location">The target location of the teleport.</param>
-    public TeleportedEventArgs(IAvatar avatar, Location location)
+    public TeleportedEventArgs(VirtualParadiseAvatar avatar, Location location)
     {
         Avatar = avatar;
         Location = location;
@@ -22,7 +22,7 @@ public sealed class TeleportedEventArgs : EventArgs
     ///     Gets the avatar which initiated the teleport.
     /// </summary>
     /// <value>The avatar which initiated the teleport.</value>
-    public IAvatar Avatar { get; }
+    public VirtualParadiseAvatar Avatar { get; }
 
     /// <summary>
     ///     Gets the target location of the teleport.

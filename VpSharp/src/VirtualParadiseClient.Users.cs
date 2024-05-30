@@ -6,8 +6,8 @@ namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
-    private readonly ConcurrentDictionary<int, User> _users = new();
-    private readonly ConcurrentDictionary<int, TaskCompletionSource<User>> _usersCompletionSources = new();
+    private readonly ConcurrentDictionary<int, VirtualParadiseUser> _users = new();
+    private readonly ConcurrentDictionary<int, TaskCompletionSource<VirtualParadiseUser>> _usersCompletionSources = new();
 
     /// <summary>
     ///     Gets a user by their ID.
@@ -16,19 +16,19 @@ public sealed partial class VirtualParadiseClient
     /// <returns>
     ///     The user whose ID is equal to <paramref name="userId" />, or <see langword="null" /> if no match was found.
     /// </returns>
-    public async Task<IUser> GetUserAsync(int userId)
+    public async Task<VirtualParadiseUser> GetUserAsync(int userId)
     {
-        if (_users.TryGetValue(userId, out User? user))
+        if (_users.TryGetValue(userId, out VirtualParadiseUser? user))
         {
             return user;
         }
 
-        if (_usersCompletionSources.TryGetValue(userId, out TaskCompletionSource<User>? taskCompletionSource))
+        if (_usersCompletionSources.TryGetValue(userId, out TaskCompletionSource<VirtualParadiseUser>? taskCompletionSource))
         {
             return await taskCompletionSource.Task.ConfigureAwait(false);
         }
 
-        taskCompletionSource = new TaskCompletionSource<User>();
+        taskCompletionSource = new TaskCompletionSource<VirtualParadiseUser>();
         _usersCompletionSources.TryAdd(userId, taskCompletionSource);
 
         lock (Lock)
@@ -39,16 +39,16 @@ public sealed partial class VirtualParadiseClient
         user = await taskCompletionSource.Task.ConfigureAwait(false);
         user = AddOrUpdateUser(user);
 
-        _usersCompletionSources.TryRemove(userId, out TaskCompletionSource<User> _);
+        _usersCompletionSources.TryRemove(userId, out TaskCompletionSource<VirtualParadiseUser> _);
         return user;
     }
 
-    private User AddOrUpdateUser(User user)
+    private VirtualParadiseUser AddOrUpdateUser(VirtualParadiseUser user)
     {
         return _users.AddOrUpdate(user.Id, user, (_, existing) =>
         {
             // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
-            existing ??= new User(this, user.Id);
+            existing ??= new VirtualParadiseUser(this, user.Id);
             existing.Name = user.Name;
             existing.EmailAddress = user.EmailAddress;
             existing.LastLogin = user.LastLogin;

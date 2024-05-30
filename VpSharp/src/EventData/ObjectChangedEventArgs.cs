@@ -14,7 +14,7 @@ public sealed class ObjectChangedEventArgs : EventArgs
     /// <param name="objectBefore">The state of the object prior to the change.</param>
     /// <param name="objectAfter">The object which was changed, containing updated values.</param>
     public ObjectChangedEventArgs(
-        IAvatar avatar,
+        VirtualParadiseAvatar avatar,
         VirtualParadiseObject? objectBefore,
         VirtualParadiseObject objectAfter)
     {
@@ -27,7 +27,7 @@ public sealed class ObjectChangedEventArgs : EventArgs
     ///     Gets the avatar which changed the object.
     /// </summary>
     /// <value>The avatar which changed the object.</value>
-    public IAvatar Avatar { get; }
+    public VirtualParadiseAvatar Avatar { get; }
 
     /// <summary>
     ///     Gets the object which was changed.

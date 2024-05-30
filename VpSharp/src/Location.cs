@@ -10,7 +10,7 @@ public readonly struct Location : IEquatable<Location>
     /// <summary>
     ///     A location that represents nowhere in the universe.
     /// </summary>
-    public static readonly Location Nowhere = new(Entities.World.Nowhere);
+    public static readonly Location Nowhere = new(VirtualParadiseWorld.Nowhere);
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Location" /> struct.
@@ -22,7 +22,7 @@ public readonly struct Location : IEquatable<Location>
     ///     <paramref name="world" /> parameter.
     /// </param>
     /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
-    public Location(World world, in Coordinates coordinates)
+    public Location(VirtualParadiseWorld world, in Coordinates coordinates)
     {
         World = world ?? throw new ArgumentNullException(nameof(world));
         Position = new Vector3d(coordinates.X, coordinates.Y, coordinates.Z);
@@ -36,7 +36,7 @@ public readonly struct Location : IEquatable<Location>
     /// <param name="position">The position.</param>
     /// <param name="rotation">The rotation.</param>
     /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
-    public Location(World world, Vector3d position = default, Rotation rotation = default)
+    public Location(VirtualParadiseWorld world, Vector3d position = default, Rotation rotation = default)
     {
         World = world ?? throw new ArgumentNullException(nameof(world));
         Position = position;
@@ -67,7 +67,7 @@ public readonly struct Location : IEquatable<Location>
     ///     Gets the world represented by this location.
     /// </summary>
     /// <value>The world.</value>
-    public World World { get; init; }
+    public VirtualParadiseWorld World { get; init; }
 
     /// <summary>
     ///     Determines if two <see cref="Location" /> instances are equal.

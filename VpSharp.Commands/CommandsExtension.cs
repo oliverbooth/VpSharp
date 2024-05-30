@@ -176,14 +176,14 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
     }
 
     /// <inheritdoc />
-    protected internal override Task OnMessageReceived(IMessage message)
+    protected internal override Task OnMessageReceived(VirtualParadiseMessage message)
     {
         if (message is null)
         {
             throw new ArgumentNullException(nameof(message));
         }
 
-        if (message is IUserMessage)
+        if (message.Type != MessageType.ChatMessage)
         {
             return base.OnMessageReceived(message);
         }

@@ -214,9 +214,9 @@ public sealed partial class VirtualParadiseClient
 
         VirtualParadiseObject virtualParadiseObject = type switch
         {
-            ObjectType.Model => new ModelObject(this, id),
-            ObjectType.ParticleEmitter => new ParticleEmitterObject(this, id),
-            ObjectType.Path => new PathObject(this, id),
+            ObjectType.Model => new VirtualParadiseModelObject(this, id),
+            ObjectType.ParticleEmitter => new VirtualParadiseParticleEmitterObject(this, id),
+            ObjectType.Path => new VirtualParadisePathObject(this, id),
             _ => throw new NotSupportedException(ExceptionMessages.UnsupportedObjectType)
         };
 

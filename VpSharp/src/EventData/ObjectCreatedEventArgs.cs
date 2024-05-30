@@ -12,7 +12,7 @@ public sealed class ObjectCreatedEventArgs : EventArgs
     /// </summary>
     /// <param name="avatar">The avatar responsible for the object being created.</param>
     /// <param name="createdObject">The created object.</param>
-    public ObjectCreatedEventArgs(IAvatar avatar, VirtualParadiseObject createdObject)
+    public ObjectCreatedEventArgs(VirtualParadiseAvatar avatar, VirtualParadiseObject createdObject)
     {
         Avatar = avatar;
         CreatedObject = createdObject;
@@ -22,7 +22,7 @@ public sealed class ObjectCreatedEventArgs : EventArgs
     ///     Gets the avatar responsible for the object being created.
     /// </summary>
     /// <value>The avatar responsible for the object being created.</value>
-    public IAvatar Avatar { get; }
+    public VirtualParadiseAvatar Avatar { get; }
 
     /// <summary>
     ///     Gets the object which was created.

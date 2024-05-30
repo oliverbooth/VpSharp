@@ -7,13 +7,13 @@ namespace VpSharp;
 public sealed partial class VirtualParadiseClient
 {
     private readonly Subject<AvatarClickedEventArgs> _avatarClicked = new();
-    private readonly Subject<IAvatar> _avatarJoined = new();
-    private readonly Subject<IAvatar> _avatarLeft = new();
+    private readonly Subject<VirtualParadiseAvatar> _avatarJoined = new();
+    private readonly Subject<VirtualParadiseAvatar> _avatarLeft = new();
     private readonly Subject<AvatarMovedEventArgs> _avatarMoved = new();
     private readonly Subject<AvatarTypeChangedEventArgs> _avatarTypeChanged = new();
     private readonly Subject<InviteRequest> _inviteRequestReceived = new();
     private readonly Subject<JoinRequest> _joinRequestReceived = new();
-    private readonly Subject<IMessage> _messageReceived = new();
+    private readonly Subject<VirtualParadiseMessage> _messageReceived = new();
     private readonly Subject<ObjectBumpEventArgs> _objectBump = new();
     private readonly Subject<ObjectChangedEventArgs> _objectChanged = new();
     private readonly Subject<ObjectClickedEventArgs> _objectClicked = new();
@@ -35,7 +35,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when an avatar has entered the vicinity of the client.
     /// </summary>
-    public IObservable<IAvatar> AvatarJoined
+    public IObservable<VirtualParadiseAvatar> AvatarJoined
     {
         get => _avatarJoined;
     }
@@ -43,7 +43,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when an avatar has left the vicinity of the client.
     /// </summary>
-    public IObservable<IAvatar> AvatarLeft
+    public IObservable<VirtualParadiseAvatar> AvatarLeft
     {
         get => _avatarLeft;
     }
@@ -83,7 +83,7 @@ public sealed partial class VirtualParadiseClient
     /// <summary>
     ///     Occurs when a chat message or console message has been received.
     /// </summary>
-    public IObservable<IMessage> MessageReceived
+    public IObservable<VirtualParadiseMessage> MessageReceived
     {
         get => _messageReceived;
     }

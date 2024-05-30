@@ -14,7 +14,7 @@ public sealed class ObjectClickedEventArgs : EventArgs
     /// <param name="clickedObject">The clicked object.</param>
     /// <param name="clickPoint">The click point.</param>
     public ObjectClickedEventArgs(
-        IAvatar avatar,
+        VirtualParadiseAvatar avatar,
         VirtualParadiseObject clickedObject,
         Vector3d clickPoint)
     {
@@ -27,7 +27,7 @@ public sealed class ObjectClickedEventArgs : EventArgs
     ///     Gets the avatar responsible for the click.
     /// </summary>
     /// <value>The avatar responsible for the click.</value>
-    public IAvatar Avatar { get; }
+    public VirtualParadiseAvatar Avatar { get; }
 
     /// <summary>
     ///     Gets the clicked object.

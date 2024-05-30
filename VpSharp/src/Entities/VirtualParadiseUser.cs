@@ -8,11 +8,11 @@ namespace VpSharp.Entities;
 /// <summary>
 ///     Represents a Virtual Paradise user.
 /// </summary>
-public sealed class User : IEquatable<User>, IUser
+public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
 {
     private readonly VirtualParadiseClient _client;
 
-    internal User(VirtualParadiseClient client, int id)
+    internal VirtualParadiseUser(VirtualParadiseClient client, int id)
     {
         _client = client;
         Id = id;
@@ -55,7 +55,7 @@ public sealed class User : IEquatable<User>, IUser
     public DateTimeOffset RegistrationTime { get; internal set; }
 
     /// <summary>
-    ///     Determines if two <see cref="User" /> instances are equal.
+    ///     Determines if two <see cref="VirtualParadiseUser" /> instances are equal.
     /// </summary>
     /// <param name="left">The first instance.</param>
     /// <param name="right">The second instance.</param>
@@ -63,13 +63,13 @@ public sealed class User : IEquatable<User>, IUser
     ///     <see langword="true" /> if <paramref name="left" /> is equal to <paramref name="right" />; otherwise,
     ///     <see langword="false" />.
     /// </returns>
-    public static bool operator ==(User? left, User? right)
+    public static bool operator ==(VirtualParadiseUser? left, VirtualParadiseUser? right)
     {
         return Equals(left, right);
     }
 
     /// <summary>
-    ///     Determines if two <see cref="User" /> instances are not equal.
+    ///     Determines if two <see cref="VirtualParadiseUser" /> instances are not equal.
     /// </summary>
     /// <param name="left">The first instance.</param>
     /// <param name="right">The second instance.</param>
@@ -77,19 +77,19 @@ public sealed class User : IEquatable<User>, IUser
     ///     <see langword="true" /> if <paramref name="left" /> is not equal to <paramref name="right" />; otherwise,
     ///     <see langword="false" />.
     /// </returns>
-    public static bool operator !=(User? left, User? right)
+    public static bool operator !=(VirtualParadiseUser? left, VirtualParadiseUser? right)
     {
         return !Equals(left, right);
     }
 
     /// <summary>
-    ///     Determines if two <see cref="User" /> instances are equal.
+    ///     Determines if two <see cref="VirtualParadiseUser" /> instances are equal.
     /// </summary>
     /// <param name="other">The other instance.</param>
     /// <returns>
     ///     <see langword="true" /> if this instance is equal to <paramref name="other" />; otherwise, <see langword="false" />.
     /// </returns>
-    public bool Equals(User? other)
+    public bool Equals(VirtualParadiseUser? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -107,7 +107,7 @@ public sealed class User : IEquatable<User>, IUser
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, obj) || (obj is User other && Equals(other));
+        return ReferenceEquals(this, obj) || (obj is VirtualParadiseUser other && Equals(other));
     }
 
     /// <inheritdoc />
@@ -214,7 +214,7 @@ public sealed class User : IEquatable<User>, IUser
 
             var position = new Vector3d(x, y, z);
             var rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
-            World world = (await _client.GetWorldAsync(worldName).ConfigureAwait(false))!;
+            VirtualParadiseWorld world = (await _client.GetWorldAsync(worldName).ConfigureAwait(false))!;
 
             location = new Location(world, position, rotation);
 
