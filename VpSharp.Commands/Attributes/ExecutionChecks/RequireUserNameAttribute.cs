@@ -47,14 +47,14 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
     public IReadOnlyList<string> Names { get; }
 
     /// <inheritdoc />
-    protected internal override async Task<bool> PerformAsync(CommandContext context)
+    protected internal override Task<bool> PerformAsync(CommandContext context)
     {
         if (context is null)
         {
             throw new ArgumentNullException(nameof(context));
         }
 
-        VirtualParadiseUser user = await context.Avatar.GetUserAsync().ConfigureAwait(false);
-        return Names.Contains(user.Name);
+        VirtualParadiseUser user = context.Avatar.User;
+        return Task.FromResult(Names.Contains(user.Name));
     }
 }

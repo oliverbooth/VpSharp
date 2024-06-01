@@ -408,7 +408,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             Application = _configuration.Application!,
             Name = $"[{_configuration.BotName}]",
             Location = new Location(world, Vector3d.Zero, Rotation.None),
-            UserId = CurrentUser!.Id
+            User = CurrentUser!
         };
 
         if (CurrentWorld is not null)

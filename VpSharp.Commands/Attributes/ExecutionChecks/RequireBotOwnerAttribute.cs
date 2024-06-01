@@ -13,6 +13,6 @@ public sealed class RequireBotOwnerAttribute : PreExecutionCheckAttribute
             throw new ArgumentNullException(nameof(context));
         }
 
-        return Task.FromResult(context.Avatar.UserId == context.Client.CurrentUser?.Id);
+        return Task.FromResult(context.Avatar.User == context.Client.CurrentUser);
     }
 }

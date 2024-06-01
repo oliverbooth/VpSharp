@@ -52,6 +52,6 @@ public sealed class RequireUserIdAttribute : PreExecutionCheckAttribute
             throw new ArgumentNullException(nameof(context));
         }
 
-        return Task.FromResult(UserIds.Contains(context.Avatar.UserId));
+        return Task.FromResult(UserIds.Any(i => context.Avatar.User.Id == i));
     }
 }

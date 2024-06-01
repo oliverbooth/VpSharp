@@ -36,7 +36,7 @@ public sealed partial class VirtualParadiseClient
             existing.Location = avatar.Location;
             existing.Application = avatar.Application;
             existing.Type = avatar.Type;
-            existing.UserId = avatar.UserId;
+            existing.User = avatar.User;
             return existing;
         });
     }
@@ -62,8 +62,7 @@ public sealed partial class VirtualParadiseClient
             {
                 Name = vp_string(sender, StringAttribute.AvatarName),
                 Location = new Location(CurrentWorld!, position, rotation),
-                Application = new Application(applicationName, applicationVersion),
-                UserId = vp_int(sender, IntegerAttribute.UserId)
+                Application = new Application(applicationName, applicationVersion)
             };
         }
     }

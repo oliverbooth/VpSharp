@@ -13,7 +13,6 @@ namespace VpSharp.Entities;
 public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 {
     private readonly VirtualParadiseClient _client;
-    private VirtualParadiseUser? _user;
 
     internal VirtualParadiseAvatar(VirtualParadiseClient client, int session)
     {
@@ -61,10 +60,10 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     public int Type { get; internal set; }
 
     /// <summary>
-    ///     Gets the user ID associated with this avatar.
+    ///     Gets the user associated with this avatar.
     /// </summary>
-    /// <value>The user ID.</value>
-    public int UserId { get; internal set; }
+    /// <value>The user.</value>
+    public VirtualParadiseUser User { get; internal set; } = null!;
 
     /// <summary>
     ///     Determines if two <see cref="VirtualParadiseAvatar" /> instances are equal.
@@ -151,7 +150,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             return true;
         }
 
-        return Session == other.Session && UserId.Equals(other.UserId);
+        return Session == other.Session && User.Equals(other.User);
     }
 
     /// <inheritdoc />
@@ -164,18 +163,8 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     public override int GetHashCode()
     {
         // ReSharper disable NonReadonlyMemberInGetHashCode
-        return HashCode.Combine(Session, UserId);
+        return HashCode.Combine(Session, User);
         // ReSharper restore NonReadonlyMemberInGetHashCode
-    }
-
-    /// <summary>
-    ///     Gets the user associated with this avatar.
-    /// </summary>
-    /// <returns>The user.</returns>
-    public async Task<VirtualParadiseUser> GetUserAsync()
-    {
-        _user ??= await _client.GetUserAsync(UserId).ConfigureAwait(false);
-        return _user;
     }
 
     /// <summary>
@@ -480,6 +469,6 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"Avatar #{Session}; User #{UserId} ({Name})";
+        return $"Avatar #{Session}; {User.Name} ({Name})";
     }
 }
