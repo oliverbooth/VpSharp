@@ -1,4 +1,4 @@
-using VpSharp;
+﻿using VpSharp;
 using VpSharp.Commands;
 using VpSharp.Entities;
 using VpSharp.IntegrationTests.CommandModules;
@@ -45,5 +45,14 @@ VirtualParadiseAvatar avatar = client.CurrentAvatar!;
 
 Console.WriteLine($@"My name is {avatar.Name} and I am at {avatar.Location}");
 Console.WriteLine($@"Entered {world.Name} with size {world.Size}");
+
+var user = await client.GetUserAsync(11);
+Console.WriteLine(user is null);
+Console.WriteLine(user is not null ? $"User 11 is {user.Name}" : "User 11 does not exist");
+
+var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+user = await client.GetUserAsync(9999, cts.Token);
+Console.WriteLine(user is null);
+Console.WriteLine(user is not null ? $"User 9999 is {user.Name}" : "User 9999 does not exist");
 
 await Task.Delay(-1);
