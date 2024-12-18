@@ -151,7 +151,7 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     /// <returns>The cell result of the conversion.</returns>
     public static Cell FromVector3(in Vector3 vector)
     {
-        return new Cell((int)vector.X, (int)vector.Y);
+        return new Cell((int)vector.X, (int)vector.Z);
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ public readonly struct Cell : IEquatable<Cell>, IFormattable
     /// <returns>The cell result of the conversion.</returns>
     public static Cell FromVector3d(in Vector3d vector)
     {
-        return new Cell((int)vector.X, (int)vector.Y);
+        return new Cell((int)vector.X, (int)vector.Z);
     }
 
     /// <summary>
