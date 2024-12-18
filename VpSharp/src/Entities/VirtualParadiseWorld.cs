@@ -10,7 +10,7 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     /// <summary>
     ///     A world that represents no world in the universe.
     /// </summary>
-    public static readonly VirtualParadiseWorld Nowhere = new(null!, "") {IsNowhere = true};
+    public static readonly VirtualParadiseWorld Nowhere = new(null!, "") { IsNowhere = true };
 
     private readonly VirtualParadiseClient _client;
 
@@ -121,7 +121,7 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     /// <param name="action">The builder which defines parameters to change.</param>
     /// <exception cref="ArgumentNullException"><paramref name="action" /> is <see langword="null" />.</exception>
     /// <exception cref="UnauthorizedAccessException">The client does not have permission to modify world settings.</exception>
-    public async Task ModifyAsync(Action<WorldSettingsBuilder> action)
+    public void Modify(Action<WorldSettingsBuilder> action)
     {
         if (action is null)
         {
@@ -129,7 +129,7 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
         }
 
         var builder = new WorldSettingsBuilder(_client);
-        await Task.Run(() => action(builder)).ConfigureAwait(false);
+        action(builder);
 
         builder.SendChanges();
     }

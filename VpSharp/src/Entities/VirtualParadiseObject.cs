@@ -134,7 +134,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     ///     The target avatar which will receive the event, or <see langword="null" /> to broadcast to every avatar.
     /// </param>
     /// <exception cref="InvalidOperationException"><paramref name="target" /> is the client's current avatar.</exception>
-    public Task ClickAsync(Vector3d? position = null, VirtualParadiseAvatar? target = null)
+    public void Click(Vector3d? position = null, VirtualParadiseAvatar? target = null)
     {
         if (target == Client.CurrentAvatar)
         {
@@ -148,8 +148,6 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
 
             _ = vp_object_click(Client.NativeInstanceHandle, Id, session, x, y, z);
         }
-
-        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -157,7 +155,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// </summary>
     /// <exception cref="InvalidOperationException">The client is not connected to a world.</exception>
     /// <exception cref="ObjectNotFoundException">The object does not exist.</exception>
-    public Task DeleteAsync()
+    public void Delete()
     {
         lock (Client.Lock)
         {
@@ -166,14 +164,12 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
             switch (reason)
             {
                 case ReasonCode.NotInWorld:
-                    return Task.FromException(ThrowHelper.NotInWorldException());
+                    throw ThrowHelper.NotInWorldException();
 
                 case ReasonCode.ObjectNotFound:
-                    return Task.FromException(ThrowHelper.ObjectNotFoundException());
+                    throw ThrowHelper.ObjectNotFoundException();
             }
         }
-
-        return Task.CompletedTask;
     }
 
     /// <summary>
