@@ -33,6 +33,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VpSharp.Building", "VpSharp.Building\VpSharp.Building.csproj", "{1382442F-C5EC-4607-8C27-F443B20C7D13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VpSharp.Building.Tests", "VpSharp.Building.Tests\VpSharp.Building.Tests.csproj", "{64C3E4DA-3644-4DD6-9EF3-40736B854AAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,14 @@ Global
 		{EF3BBA1B-8E9B-49A7-87C0-BE7D99E86B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF3BBA1B-8E9B-49A7-87C0-BE7D99E86B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF3BBA1B-8E9B-49A7-87C0-BE7D99E86B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1382442F-C5EC-4607-8C27-F443B20C7D13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1382442F-C5EC-4607-8C27-F443B20C7D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1382442F-C5EC-4607-8C27-F443B20C7D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1382442F-C5EC-4607-8C27-F443B20C7D13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64C3E4DA-3644-4DD6-9EF3-40736B854AAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C3E4DA-3644-4DD6-9EF3-40736B854AAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C3E4DA-3644-4DD6-9EF3-40736B854AAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C3E4DA-3644-4DD6-9EF3-40736B854AAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7B075CFD-CD89-4C6C-ADAC-C8FA39A1C2E1} = {FB67E448-5EFC-4703-922E-7CB00B070CF4}
