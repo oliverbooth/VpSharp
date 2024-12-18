@@ -70,7 +70,7 @@ internal sealed class CoordinateTests
         
         if (string.IsNullOrWhiteSpace(world))
         {
-            Assert.IsTrue(string.IsNullOrWhiteSpace(coordinates.World));
+            Assert.That(string.IsNullOrWhiteSpace(coordinates.World));
         }
         else
         {
