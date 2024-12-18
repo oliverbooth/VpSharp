@@ -59,7 +59,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
 
         var taskCompletionSource = new TaskCompletionSource<ReasonCode>();
         var builder = new VirtualParadiseModelObjectBuilder(Client, this, ObjectBuilderMode.Modify);
-        await Task.Run(() => action(builder)).ConfigureAwait(false);
+        action(builder);
 
         lock (Client.Lock)
         {
@@ -78,7 +78,7 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
             }
         }
 
-        ReasonCode result = await taskCompletionSource.Task.ConfigureAwait(false);
+        ReasonCode result = await taskCompletionSource.Task;
         Client.RemoveObjectUpdateCompletionSource(Id);
 
         if (result != ReasonCode.Success)

@@ -148,7 +148,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             _ = vp_invite(_client.NativeInstanceHandle, Id, world, x, y, z, (float)yaw, (float)pitch);
         }
 
-        ReasonCode reason = await taskCompletionSource.Task.ConfigureAwait(false);
+        ReasonCode reason = await taskCompletionSource.Task;
         return reason switch
         {
             ReasonCode.Success => InviteResponse.Accepted,
@@ -191,7 +191,7 @@ public sealed class VirtualParadiseUser : IEquatable<VirtualParadiseUser>
             taskCompletionSource = _client.AddJoinCompletionSource(reference);
         }
 
-        ReasonCode reason = await taskCompletionSource.Task.ConfigureAwait(false);
+        ReasonCode reason = await taskCompletionSource.Task;
         Location? location = null;
 
         if (reason == ReasonCode.Success)
