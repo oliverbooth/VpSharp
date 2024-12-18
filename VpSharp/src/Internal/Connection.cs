@@ -7,10 +7,10 @@ namespace VpSharp.Internal;
 internal sealed class Connection : IDisposable
 {
     private readonly object _lockObject;
-    private readonly List<byte[]> _readyBuffers = new();
+    private readonly List<byte[]> _readyBuffers = [];
     private readonly Socket _socket;
 
-    private byte[] _pendingBuffer = Array.Empty<byte>();
+    private byte[] _pendingBuffer = [];
     private Timer? _timer;
     private nint _vpConnection;
 

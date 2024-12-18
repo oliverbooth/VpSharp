@@ -18,7 +18,7 @@ internal static class Program
         };
 
         s_client = new VirtualParadiseClient(configuration);
-        var commands = s_client.UseCommands(new CommandsExtensionConfiguration {Prefixes = new[] {"/"}});
+        var commands = s_client.UseCommands(new CommandsExtensionConfiguration {Prefixes = ["/"] });
         commands.RegisterCommands<SayCommand>();
 
         s_client.AvatarJoined.SubscribeAsync(async avatar => await s_client.SendMessageAsync($"Hello, {avatar.Name}!"));

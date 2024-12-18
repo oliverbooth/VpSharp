@@ -1,4 +1,4 @@
-﻿using VpSharp;
+using VpSharp;
 using VpSharp.Commands;
 using VpSharp.Entities;
 using VpSharp.IntegrationTests.CommandModules;
@@ -28,7 +28,7 @@ var configuration = new VirtualParadiseConfiguration
 };
 
 using var client = new VirtualParadiseClient(configuration);
-CommandsExtension commands = client.UseCommands(new CommandsExtensionConfiguration {Prefixes = new[] {"!"}});
+CommandsExtension commands = client.UseCommands(new CommandsExtensionConfiguration { Prefixes = ["!"] });
 commands.RegisterCommands<TestCommands>();
 
 Console.WriteLine(@"Connecting to universe");

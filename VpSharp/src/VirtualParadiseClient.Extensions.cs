@@ -7,7 +7,7 @@ namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
-    private readonly List<VirtualParadiseClientExtension> _extensions = new();
+    private readonly List<VirtualParadiseClientExtension> _extensions = [];
 
     /// <summary>
     ///     Gets a read-only view of the extensions currently added to this client.
@@ -63,7 +63,7 @@ public sealed partial class VirtualParadiseClient
             throw new ArgumentException(ExceptionMessages.TypeCannotBeAbstract, nameof(type));
         }
 
-        object?[] argumentsActual = {this};
+        object?[] argumentsActual = [this];
         if (arguments is not null)
         {
             argumentsActual = argumentsActual.Concat(arguments).ToArray();

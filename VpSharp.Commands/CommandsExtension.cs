@@ -227,7 +227,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
                 }
             }
 
-            object?[] arguments = {context};
+            object?[] arguments = [context];
             arguments = ParseArguments(rawArguments, arguments, command);
 
             ParameterInfo[] parameters = commandMethod.GetParameters();
