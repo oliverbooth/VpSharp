@@ -442,20 +442,19 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="InvalidOperationException">
     ///     An attempt was made to leave a world when the client was not present in one.
     /// </exception>
-    public Task LeaveAsync()
+    public void Leave()
     {
         lock (Lock)
         {
             var reason = (ReasonCode)vp_leave(NativeInstanceHandle);
             if (reason == ReasonCode.NotInWorld)
             {
-                return Task.FromException(ThrowHelper.NotInWorldException());
+                ThrowHelper.ThrowNotInWorldException();
             }
         }
 
         _avatars.Clear();
         _objects.Clear();
-        return Task.CompletedTask;
     }
 
     /// <summary>
