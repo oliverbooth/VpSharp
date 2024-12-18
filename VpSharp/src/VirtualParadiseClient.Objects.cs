@@ -225,7 +225,9 @@ public sealed partial class VirtualParadiseClient
         var location = new Location(CurrentWorld!, position, rotation);
         virtualParadiseObject.Location = location;
         virtualParadiseObject.ModificationTimestamp = DateTimeOffset.FromUnixTimeSeconds(time);
-        virtualParadiseObject.Owner = await GetUserAsync(owner).ConfigureAwait(false);
+
+        var ctx = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        virtualParadiseObject.Owner = (await GetUserAsync(owner, ctx.Token).ConfigureAwait(false))!;
 
         return virtualParadiseObject;
     }

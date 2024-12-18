@@ -89,7 +89,7 @@ public sealed partial class VirtualParadiseClient
     private void OnAvatarAddNativeEvent(nint sender)
     {
         VirtualParadiseAvatar avatar = ExtractAvatar(sender);
-        avatar.User = GetUserAsync(vp_int(sender, IntegerAttribute.UserId)).ConfigureAwait(false).GetAwaiter().GetResult();
+        avatar.User = GetUserAsync(vp_int(sender, IntegerAttribute.UserId)).ConfigureAwait(false).GetAwaiter().GetResult()!;
         avatar = AddOrUpdateAvatar(avatar);
         _avatarJoined.OnNext(avatar);
     }
@@ -549,7 +549,7 @@ public sealed partial class VirtualParadiseClient
             name = vp_string(NativeInstanceHandle, StringAttribute.JoinName);
         }
 
-        VirtualParadiseUser user = await GetUserAsync(userId).ConfigureAwait(false);
+        VirtualParadiseUser user = (await GetUserAsync(userId).ConfigureAwait(false))!;
         var joinRequest = new JoinRequest(this, requestId, name, user);
         _joinRequestReceived.OnNext(joinRequest);
     }
@@ -583,7 +583,7 @@ public sealed partial class VirtualParadiseClient
         }
 
         VirtualParadiseWorld world = (await GetWorldAsync(worldName).ConfigureAwait(false))!;
-        VirtualParadiseUser user = await GetUserAsync(userId).ConfigureAwait(false);
+        VirtualParadiseUser user = (await GetUserAsync(userId).ConfigureAwait(false))!;
 
         var location = new Location(world, position, rotation);
         var request = new InviteRequest(this, requestId, avatarName, user, location);
