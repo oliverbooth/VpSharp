@@ -7,15 +7,17 @@ internal sealed class TestCommands : CommandModule
 {
     [Command("echo")]
     [Aliases("say")]
-    public async Task EchoCommand(CommandContext context, [Remainder] string message)
+    public Task EchoCommand(CommandContext context, [Remainder] string message)
     {
-        await context.RespondAsync(message);
+        context.Respond(message);
+        return Task.CompletedTask;
     }
 
     [Command("ping")]
     [Aliases("pong", "pingpong")]
-    public async Task PingAsync(CommandContext context)
+    public Task PingAsync(CommandContext context)
     {
-        await context.RespondAsync("Pong!");
+        context.Respond("Pong!");
+        return Task.CompletedTask;
     }
 }

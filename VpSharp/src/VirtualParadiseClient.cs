@@ -563,7 +563,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string message)
+    public VirtualParadiseMessage SendMessage(string message)
     {
         if (message is null)
         {
@@ -592,14 +592,14 @@ public sealed partial class VirtualParadiseClient : IDisposable
         }
 
         VirtualParadiseAvatar? avatar = CurrentAvatar;
-        return Task.FromResult(new VirtualParadiseMessage(
+        return new VirtualParadiseMessage(
             MessageType.ChatMessage,
             avatar!.Name,
             message,
             avatar,
             FontStyle.Regular,
             Color.Black
-        ));
+        );
     }
 
     /// <summary>
@@ -618,9 +618,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    public VirtualParadiseMessage SendMessage(string message, FontStyle fontStyle, Color color)
     {
-        return SendMessageAsync(null, message, fontStyle, color);
+        return SendMessage(null, message, fontStyle, color);
     }
 
     /// <summary>
@@ -640,7 +640,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    public VirtualParadiseMessage SendMessage(string? name, string message, FontStyle fontStyle, Color color)
     {
         if (message is null)
         {
@@ -679,14 +679,14 @@ public sealed partial class VirtualParadiseClient : IDisposable
         }
 
         VirtualParadiseAvatar avatar = CurrentAvatar!;
-        return Task.FromResult(new VirtualParadiseMessage(
+        return new VirtualParadiseMessage(
             MessageType.ConsoleMessage,
             name,
             message,
             avatar,
             fontStyle,
             color
-        ));
+        );
     }
 
     internal TaskCompletionSource<ReasonCode> AddJoinCompletionSource(int reference)

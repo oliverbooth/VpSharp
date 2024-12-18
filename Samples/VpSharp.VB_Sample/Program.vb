@@ -1,6 +1,4 @@
 Imports VpSharp.Commands
-Imports VpSharp.EventData
-Imports VpSharp.Extensions
 
 Module Program
     Private WithEvents _client As VirtualParadiseClient
@@ -19,9 +17,9 @@ Module Program
                 }
 
         _client = New VirtualParadiseClient(configuration)
-        
-        _client.AvatarJoined.SubscribeAsync(Async Function(avatar) Await _client.SendMessageAsync($"Hello, {avatar.Name}"))
-        
+
+        _client.AvatarJoined.Subscribe(Function(avatar) _client.SendMessage($"Hello, {avatar.Name}"))
+
         Dim commands = _client.UseCommands(New CommandsExtensionConfiguration With { .Prefixes = {"/"} })
         commands.RegisterCommands(GetType(SayCommand))
 

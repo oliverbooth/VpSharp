@@ -37,7 +37,7 @@ public sealed class CommandContext
     /// </summary>
     /// <value>The executing avatar.</value>
     public VirtualParadiseAvatar Avatar { get; }
-    
+
     /// <summary>
     ///     Gets the client which raised the event.
     /// </summary>
@@ -65,10 +65,10 @@ public sealed class CommandContext
     ///     regular chat message.
     /// </param>
     /// <returns>The message which was sent.</returns>
-    public Task<VirtualParadiseMessage> RespondAsync(string message, bool ephemeral = false)
+    public VirtualParadiseMessage Respond(string message, bool ephemeral = false)
     {
         return ephemeral
-            ? Avatar.SendMessageAsync(Client.CurrentAvatar?.Name, message, FontStyle.Regular, Color.Black)
-            : Client.SendMessageAsync(message);
+            ? Avatar.SendMessage(Client.CurrentAvatar?.Name, message, FontStyle.Regular, Color.Black)
+            : Client.SendMessage(message);
     }
 }
