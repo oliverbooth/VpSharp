@@ -20,12 +20,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     protected internal VirtualParadiseObject(VirtualParadiseClient client, int id)
     {
-        if (client is null)
-        {
-            throw new ArgumentNullException(nameof(client));
-        }
-
-        Client = client;
+        Client = client ?? throw new ArgumentNullException(nameof(client));
         Id = id;
     }
 

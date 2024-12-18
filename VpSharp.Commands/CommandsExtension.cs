@@ -38,13 +38,8 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             throw new ArgumentNullException(nameof(client));
         }
 
-        if (configuration is null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
 
-
-        _configuration = configuration;
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _configuration.Services ??= client.Services;
     }
 
