@@ -30,7 +30,7 @@ public sealed partial class VirtualParadiseClient
             {
                 await using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled()))
                 {
-                    return await taskCompletionSource.Task.ConfigureAwait(false);
+                    return await taskCompletionSource.Task;
                 }
             }
             catch (TaskCanceledException)
@@ -52,7 +52,7 @@ public sealed partial class VirtualParadiseClient
         {
             await using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled()))
             {
-                user = await taskCompletionSource.Task.ConfigureAwait(false);
+                user = await taskCompletionSource.Task;
                 user = AddOrUpdateUser(user);
             }
         }

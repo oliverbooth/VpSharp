@@ -83,7 +83,7 @@ public sealed partial class VirtualParadiseClient
             tasks.Add(task);
         }
 
-        await Task.WhenAll(tasks).ConfigureAwait(false);
+        await Task.WhenAll(tasks);
 
         foreach (VirtualParadiseObject current in objects)
         {
@@ -128,7 +128,7 @@ public sealed partial class VirtualParadiseClient
             }
         }
 
-        (reason, virtualParadiseObject) = await taskCompletionSource.Task.ConfigureAwait(false);
+        (reason, virtualParadiseObject) = await taskCompletionSource.Task;
         _objectCompletionSources.TryRemove(id, out _);
 
         if (virtualParadiseObject is not null)

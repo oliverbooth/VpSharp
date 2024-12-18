@@ -32,7 +32,7 @@ CommandsExtension commands = client.UseCommands(new CommandsExtensionConfigurati
 commands.RegisterCommands<TestCommands>();
 
 Console.WriteLine(@"Connecting to universe");
-await client.ConnectAsync().ConfigureAwait(false);
+await client.ConnectAsync();
 
 Console.WriteLine(@"Logging in");
 await client.LoginAsync();
