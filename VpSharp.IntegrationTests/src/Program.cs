@@ -38,7 +38,7 @@ Console.WriteLine(@"Logging in");
 await client.LoginAsync();
 
 Console.WriteLine(@"Entering world");
-VirtualParadiseWorld world = await client.EnterAsync("Mutation");
+VirtualParadiseWorld world = await client.EnterAsync(Environment.GetEnvironmentVariable("world") ?? "Blizzard");
 Console.WriteLine(@"Entered world!");
 
 VirtualParadiseAvatar avatar = client.CurrentAvatar!;
