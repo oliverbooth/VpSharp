@@ -160,7 +160,10 @@ public sealed partial class VirtualParadiseClient
 
     private VirtualParadiseObject AddOrUpdateObject(VirtualParadiseObject obj)
     {
-        ArgumentNullException.ThrowIfNull(obj);
+        if (obj is null)
+        {
+            throw new ArgumentNullException(nameof(obj));
+        }
 
         return _objects.AddOrUpdate(obj.Id, obj, (_, existing) =>
         {

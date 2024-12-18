@@ -46,7 +46,10 @@ public sealed partial class VirtualParadiseClient
     /// </exception>
     public VirtualParadiseClientExtension AddExtension(Type type, params object?[]? arguments)
     {
-        ArgumentNullException.ThrowIfNull(type);
+        if (type is null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
 
         if (!type.IsSubclassOf(typeof(VirtualParadiseClientExtension)))
         {
@@ -85,7 +88,10 @@ public sealed partial class VirtualParadiseClient
     /// <exception cref="InvalidOperationException">No extension with the specified type is added to this client.</exception>
     public VirtualParadiseClientExtension GetExtension(Type type)
     {
-        ArgumentNullException.ThrowIfNull(type);
+        if (type is null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
 
         VirtualParadiseClientExtension? result = _extensions.Find(e => e.GetType() == type);
         if (result is null)
@@ -126,7 +132,10 @@ public sealed partial class VirtualParadiseClient
     /// <exception cref="InvalidOperationException">No extension with the specified type is added to this client.</exception>
     public bool TryGetExtension(Type type, [NotNullWhen(true)] out VirtualParadiseClientExtension? extension)
     {
-        ArgumentNullException.ThrowIfNull(type);
+        if (type is null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
 
         extension = _extensions.Find(e => e.GetType() == type);
         return extension is not null;

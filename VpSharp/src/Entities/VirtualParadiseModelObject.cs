@@ -52,7 +52,10 @@ public class VirtualParadiseModelObject : VirtualParadiseObject
     /// </exception>
     public async Task ModifyAsync(Action<VirtualParadiseModelObjectBuilder> action)
     {
-        ArgumentNullException.ThrowIfNull(action);
+        if (action is null)
+        {
+            throw new ArgumentNullException(nameof(action));
+        }
 
         var taskCompletionSource = new TaskCompletionSource<ReasonCode>();
         var builder = new VirtualParadiseModelObjectBuilder(Client, this, ObjectBuilderMode.Modify);

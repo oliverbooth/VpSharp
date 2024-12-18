@@ -1,4 +1,6 @@
-﻿namespace VpSharp.Commands.Attributes.ExecutionChecks;
+﻿using VpSharp.Entities;
+
+namespace VpSharp.Commands.Attributes.ExecutionChecks;
 
 #pragma warning disable CA1019 // Define accessors for attribute arguments
 
@@ -14,7 +16,11 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
     /// <exception cref="ArgumentNullException"><paramref name="names" /> is <see langword="null" />.</exception>
     public RequireUserNameAttribute(IEnumerable<string> names)
     {
-        ArgumentNullException.ThrowIfNull(names);
+        if (names is null)
+        {
+            throw new ArgumentNullException(nameof(names));
+        }
+
         Names = names.ToArray();
     }
 
@@ -26,7 +32,11 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
     [CLSCompliant(false)]
     public RequireUserNameAttribute(params string[] names)
     {
-        ArgumentNullException.ThrowIfNull(names);
+        if (names is null)
+        {
+            throw new ArgumentNullException(nameof(names));
+        }
+
         Names = names[..];
     }
 
@@ -39,7 +49,12 @@ public sealed class RequireUserNameAttribute : PreExecutionCheckAttribute
     /// <inheritdoc />
     protected internal override Task<bool> PerformAsync(CommandContext context)
     {
-        ArgumentNullException.ThrowIfNull(context);
-        return Task.FromResult(Names.Contains(context.Avatar.User.Name));
+        if (context is null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
+
+        VirtualParadiseUser user = context.Avatar.User;
+        return Task.FromResult(Names.Contains(user.Name));
     }
 }

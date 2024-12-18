@@ -20,7 +20,11 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     protected internal VirtualParadiseObject(VirtualParadiseClient client, int id)
     {
-        ArgumentNullException.ThrowIfNull(client);
+        if (client is null)
+        {
+            throw new ArgumentNullException(nameof(client));
+        }
+
         Client = client;
         Id = id;
     }
@@ -237,7 +241,10 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <param name="builder">The builder whose values to extract.</param>
     protected internal virtual void ExtractFromBuilder(VirtualParadiseObjectBuilder builder)
     {
-        ArgumentNullException.ThrowIfNull(builder);
+        if (builder is null)
+        {
+            throw new ArgumentNullException(nameof(builder));
+        }
 
         Location location = Location;
         Vector3d position = builder.Position.ValueOr(location.Position);
@@ -256,7 +263,11 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <exception cref="ArgumentNullException"><paramref name="virtualParadiseObject" /> is <see langword="null" />.</exception>
     protected internal virtual void ExtractFromOther(VirtualParadiseObject virtualParadiseObject)
     {
-        ArgumentNullException.ThrowIfNull(virtualParadiseObject);
+        if (virtualParadiseObject is null)
+        {
+            throw new ArgumentNullException(nameof(virtualParadiseObject));
+        }
+
         Location = virtualParadiseObject.Location;
         ModificationTimestamp = virtualParadiseObject.ModificationTimestamp;
         Owner = virtualParadiseObject.Owner;

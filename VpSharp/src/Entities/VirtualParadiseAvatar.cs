@@ -213,7 +213,11 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <remarks>Passing <see langword="null" /> to <paramref name="name" /> will hide the name from the recipient.</remarks>
     public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
     {
-        ArgumentNullException.ThrowIfNull(message);
+        if (message is null)
+        {
+            throw new ArgumentNullException(nameof(message));
+        }
+
         if (string.IsNullOrWhiteSpace(message))
         {
             throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(message));
@@ -271,7 +275,10 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <exception cref="ArgumentNullException"><paramref name="uri" /> is <see langword="null" />.</exception>
     public Task SendUriAsync(Uri uri, UriTarget target = UriTarget.Browser)
     {
-        ArgumentNullException.ThrowIfNull(uri);
+        if (uri is null)
+        {
+            throw new ArgumentNullException(nameof(uri));
+        }
 
         // ReSharper disable once InconsistentlySynchronizedField
         if (this == _client.CurrentAvatar)
@@ -295,7 +302,10 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <exception cref="UnauthorizedAccessException">The client does not have permission to modify world settings.</exception>
     public async Task SendWorldSettings(Action<WorldSettingsBuilder> action)
     {
-        ArgumentNullException.ThrowIfNull(action);
+        if (action is null)
+        {
+            throw new ArgumentNullException(nameof(action));
+        }
 
         // ReSharper disable once InconsistentlySynchronizedField
         var builder = new WorldSettingsBuilder(_client, Session);
@@ -312,7 +322,11 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
     public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position)
     {
-        ArgumentNullException.ThrowIfNull(world);
+        if (world is null)
+        {
+            throw new ArgumentNullException(nameof(world));
+        }
+
         return TeleportAsync(world.Name, position, Rotation.None);
     }
 
@@ -325,7 +339,11 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <exception cref="ArgumentNullException"><paramref name="world" /> is <see langword="null" />.</exception>
     public Task TeleportAsync(VirtualParadiseWorld world, Vector3d position, Rotation rotation)
     {
-        ArgumentNullException.ThrowIfNull(world);
+        if (world is null)
+        {
+            throw new ArgumentNullException(nameof(world));
+        }
+
         return TeleportAsync(world.Name, position, rotation);
     }
 
@@ -347,21 +365,21 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="rotation">The rotation to which this avatar should be teleported.</param>
     public async Task TeleportAsync(string world, Vector3d position, Rotation rotation)
     {
-        ArgumentNullException.ThrowIfNull(world);
-#if NET7_0_OR_GREATER
-        ArgumentException.ThrowIfNullOrEmpty(world);
-#else
+        if (world is null)
+        {
+            throw new ArgumentNullException(nameof(world));
+        }
+
         if (string.IsNullOrEmpty(world))
         {
             throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(world));
         }
-#endif
 
         // ReSharper disable InconsistentlySynchronizedField
         bool isSelf = this == _client.CurrentAvatar;
         bool isNewWorld = world != Location.World.Name;
 
-        if (world == Location.World.Name)
+        if (!isNewWorld)
         {
             world = string.Empty;
         }
@@ -414,7 +432,9 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             }
         }
 
-        Location = new Location(new VirtualParadiseWorld(_client, world), position, rotation);
+        VirtualParadiseWorld? updatedWorld = isNewWorld ? await _client.GetWorldAsync(world) : Location.World;
+        updatedWorld ??= new VirtualParadiseWorld(_client, world);
+        Location = new Location(updatedWorld, position, rotation);
         // ReSharper restore InconsistentlySynchronizedField
     }
 

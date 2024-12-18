@@ -14,7 +14,11 @@ public sealed class CommandAttribute : Attribute
     /// <exception cref="ArgumentException"><paramref name="name" /> is empty, or consists of only whitespace.</exception>
     public CommandAttribute(string name)
     {
-        ArgumentNullException.ThrowIfNull(name);
+        if (name is null)
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+
         if (string.IsNullOrWhiteSpace(name))
         {
             throw new ArgumentException("Name cannot be empty");

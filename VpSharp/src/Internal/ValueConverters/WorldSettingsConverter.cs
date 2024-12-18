@@ -23,7 +23,7 @@ internal static class WorldSettingsConverter
             object? propertyValue = property.GetValue(settings);
             Type propertyType = property.PropertyType;
 
-            if (propertyValue is null)
+            if (propertyValue is null || (propertyType.IsValueType && propertyValue == Activator.CreateInstance(propertyType)))
             {
                 continue;
             }

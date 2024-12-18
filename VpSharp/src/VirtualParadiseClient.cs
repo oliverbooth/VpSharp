@@ -46,7 +46,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="ArgumentNullException"><paramref name="configuration" /> is <see langword="null" />.</exception>
     public VirtualParadiseClient(VirtualParadiseConfiguration configuration)
     {
-        ArgumentNullException.ThrowIfNull(configuration);
+        if (configuration is null)
+        {
+            throw new ArgumentNullException(nameof(configuration));
+        }
+
         Services = configuration.Services;
         _configuration = new VirtualParadiseConfiguration(configuration);
         Initialize();
@@ -298,7 +302,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task EnterAsync(VirtualParadiseWorld world)
     {
-        ArgumentNullException.ThrowIfNull(world);
+        if (world is null)
+        {
+            throw new ArgumentNullException(nameof(world));
+        }
+
         await EnterAsync(world.Name).ConfigureAwait(false);
     }
 
@@ -317,7 +325,10 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task<VirtualParadiseWorld> EnterAsync(string worldName)
     {
-        ArgumentNullException.ThrowIfNull(worldName);
+        if (worldName is null)
+        {
+            throw new ArgumentNullException(nameof(worldName));
+        }
 
         if (CurrentWorld is not null)
         {
@@ -555,7 +566,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// </exception>
     public Task<VirtualParadiseMessage> SendMessageAsync(string message)
     {
-        ArgumentNullException.ThrowIfNull(message);
+        if (message is null)
+        {
+            throw new ArgumentNullException(nameof(message));
+        }
+
         if (string.IsNullOrWhiteSpace(message))
         {
             throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(message));
@@ -628,7 +643,11 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// </exception>
     public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
     {
-        ArgumentNullException.ThrowIfNull(message);
+        if (message is null)
+        {
+            throw new ArgumentNullException(nameof(message));
+        }
+
         if (string.IsNullOrWhiteSpace(message))
         {
             throw new ArgumentException(ExceptionMessages.ValueCannotBeEmpty, nameof(message));

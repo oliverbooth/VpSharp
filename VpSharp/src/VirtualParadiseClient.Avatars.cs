@@ -36,6 +36,7 @@ public sealed partial class VirtualParadiseClient
             existing.Location = avatar.Location;
             existing.Application = avatar.Application;
             existing.Type = avatar.Type;
+            existing.User = avatar.User;
             return existing;
         });
     }

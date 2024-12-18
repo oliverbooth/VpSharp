@@ -216,7 +216,7 @@ public readonly partial struct Coordinates : IEquatable<Coordinates>, IFormattab
     /// <returns>A <see cref="string" /> representation of these coordinates.</returns>
     public string ToString(string? format, IFormatProvider? formatProvider = null)
     {
-        format ??= "{0}";
+        format ??= "F";
         return Serializer.Serialize(this, format, formatProvider ?? CultureInfo.InvariantCulture);
     }
 }

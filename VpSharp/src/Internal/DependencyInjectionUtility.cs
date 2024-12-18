@@ -17,14 +17,26 @@ internal static class DependencyInjectionUtility
 
     public static object CreateInstance(Type type, VirtualParadiseClient client)
     {
-        ArgumentNullException.ThrowIfNull(type);
-        ArgumentNullException.ThrowIfNull(client);
+        if (type is null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
+
+        if (client is null)
+        {
+            throw new ArgumentNullException(nameof(client));
+        }
+
         return CreateInstance(type, client.Services);
     }
 
     public static object CreateInstance(Type type, IServiceProvider? serviceProvider = null)
     {
-        ArgumentNullException.ThrowIfNull(type);
+        if (type is null)
+        {
+            throw new ArgumentNullException(nameof(type));
+        }
+
         object? instance;
 
         TypeInfo typeInfo = type.GetTypeInfo();

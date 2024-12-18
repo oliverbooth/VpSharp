@@ -3,7 +3,8 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <RootNamespace>VpSharp.VB_Sample</RootNamespace>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>16.9</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

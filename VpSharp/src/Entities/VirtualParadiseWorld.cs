@@ -123,7 +123,10 @@ public sealed class VirtualParadiseWorld : IEquatable<VirtualParadiseWorld>
     /// <exception cref="UnauthorizedAccessException">The client does not have permission to modify world settings.</exception>
     public async Task ModifyAsync(Action<WorldSettingsBuilder> action)
     {
-        ArgumentNullException.ThrowIfNull(action);
+        if (action is null)
+        {
+            throw new ArgumentNullException(nameof(action));
+        }
 
         var builder = new WorldSettingsBuilder(_client);
         await Task.Run(() => action(builder)).ConfigureAwait(false);
