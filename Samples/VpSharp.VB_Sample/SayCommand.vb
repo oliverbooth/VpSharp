@@ -1,4 +1,4 @@
-﻿Imports VpSharp.Commands
+Imports VpSharp.Commands
 Imports VpSharp.Commands.Attributes
 
 Public Class SayCommand

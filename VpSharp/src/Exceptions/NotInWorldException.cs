@@ -1,4 +1,4 @@
-﻿using VpSharp.Internal;
+using VpSharp.Internal;
 
 namespace VpSharp.Exceptions;
 

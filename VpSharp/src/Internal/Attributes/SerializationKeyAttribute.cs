@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Internal.Attributes;
+namespace VpSharp.Internal.Attributes;
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 internal sealed class SerializationKeyAttribute : Attribute

@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Commands;
+namespace VpSharp.Commands;
 
 /// <summary>
 ///     Extension methods for <see cref="VirtualParadiseClient" />.

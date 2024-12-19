@@ -1,4 +1,4 @@
-﻿using Optional;
+using Optional;
 using VpSharp.Internal;
 using static VpSharp.Internal.NativeAttributes.StringAttribute;
 using static VpSharp.Internal.NativeMethods;

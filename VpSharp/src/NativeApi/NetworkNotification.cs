@@ -1,4 +1,4 @@
-﻿namespace VpSharp.NativeApi;
+namespace VpSharp.NativeApi;
 
 internal enum NetworkNotification
 {

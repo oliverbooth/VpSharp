@@ -1,4 +1,4 @@
-﻿using VpSharp.Commands;
+using VpSharp.Commands;
 using VpSharp.Commands.Attributes;
 
 namespace VpSharp.IntegrationTests.CommandModules;

@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Internal.NativeAttributes;
+namespace VpSharp.Internal.NativeAttributes;
 
 internal enum DataAttribute
 {
