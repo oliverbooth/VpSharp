@@ -1,3 +1,5 @@
+﻿using Microsoft.Extensions.Logging;
+
 namespace VpSharp;
 
 /// <summary>
@@ -31,6 +33,7 @@ public sealed class VirtualParadiseConfiguration
 
         AutoQuery = configuration.AutoQuery;
         BotName = new string(configuration.BotName);
+        LoggerFactory = configuration.LoggerFactory;
         Services = configuration.Services;
         Password = new string(configuration.Password);
         Username = new string(configuration.Username);
@@ -55,6 +58,12 @@ public sealed class VirtualParadiseConfiguration
     /// </summary>
     /// <value>The bot name.</value>
     public string BotName { internal get; set; } = string.Empty;
+
+    /// <summary>
+    ///     Sets the logger implementation to be used by the client.
+    /// </summary>
+    /// <value>The logger factory.</value>
+    public ILoggerFactory? LoggerFactory { internal get; set; }
 
     /// <summary>
     ///     Sets the login password.

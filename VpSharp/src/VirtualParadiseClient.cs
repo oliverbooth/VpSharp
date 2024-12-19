@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Threading.Channels;
+using Microsoft.Extensions.Logging;
 using VpSharp.Entities;
 using VpSharp.Exceptions;
 using VpSharp.Internal;
@@ -52,6 +53,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
         }
 
         _configuration = new VirtualParadiseConfiguration(configuration);
+
+        _configuration.LoggerFactory ??= LoggerFactory.Create(builder => builder.AddConsole());
+        Logger = _configuration.LoggerFactory.CreateLogger<VirtualParadiseClient>();
         Services = _configuration.Services;
         Initialize();
     }
@@ -98,6 +102,12 @@ public sealed partial class VirtualParadiseClient : IDisposable
     {
         get => CurrentAvatar?.Location.World;
     }
+
+    /// <summary>
+    ///     Gets the logger for this client.
+    /// </summary>
+    /// <value>The logger.</value>
+    public ILogger<VirtualParadiseClient> Logger { get; }
 
     /// <summary>
     ///     Gets the service provider.
