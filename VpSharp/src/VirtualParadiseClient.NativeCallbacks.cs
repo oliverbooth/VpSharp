@@ -40,17 +40,23 @@ public sealed partial class VirtualParadiseClient
 
     private async void OnObjectGetNativeCallback(nint sender, ReasonCode reason, int reference)
     {
-        if (!_objectCompletionSources.TryGetValue(reference,
-                out TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>? taskCompletionSource))
+        try
         {
-            return;
+            if (!_objectCompletionSources.TryGetValue(reference, out var taskCompletionSource))
+            {
+                return;
+            }
+
+            VirtualParadiseObject? virtualParadiseObject = reason == ReasonCode.Success
+                ? await ExtractObjectAsync(sender).ConfigureAwait(true)
+                : null;
+
+            taskCompletionSource.SetResult((reason, virtualParadiseObject));
         }
-
-        VirtualParadiseObject? virtualParadiseObject = reason == ReasonCode.Success
-            ? await ExtractObjectAsync(sender).ConfigureAwait(true)
-            : null;
-
-        taskCompletionSource.SetResult((reason, virtualParadiseObject));
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Failed to handle object get callback");
+        }
     }
 
     private void OnObjectChangeNativeCallback(nint sender, ReasonCode reason, int reference)
