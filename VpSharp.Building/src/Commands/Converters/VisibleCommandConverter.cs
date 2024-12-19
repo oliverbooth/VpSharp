@@ -53,9 +53,6 @@ public sealed class VisibleCommandConverter : CommandConverter<VisibleCommand>
             return;
         }
 
-        writer.Write(command.GetCommandName());
-        writer.Write(' ');
-        writer.Write(command.IsVisible);
-        WriteProperties(writer, command, options);
+        writer.Write(command.IsVisible ? "on" : "off");
     }
 }
