@@ -31,6 +31,7 @@ public sealed class VirtualParadiseConfiguration
 
         AutoQuery = configuration.AutoQuery;
         BotName = new string(configuration.BotName);
+        Services = configuration.Services;
         Password = new string(configuration.Password);
         Username = new string(configuration.Username);
     }

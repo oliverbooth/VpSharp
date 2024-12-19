@@ -51,8 +51,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
             throw new ArgumentNullException(nameof(configuration));
         }
 
-        Services = configuration.Services;
         _configuration = new VirtualParadiseConfiguration(configuration);
+        Services = _configuration.Services;
         Initialize();
     }
 
