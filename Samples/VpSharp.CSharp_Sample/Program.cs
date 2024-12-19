@@ -1,5 +1,4 @@
 using VpSharp.Commands;
-using VpSharp.Extensions;
 
 namespace VpSharp.CSharp_Sample;
 

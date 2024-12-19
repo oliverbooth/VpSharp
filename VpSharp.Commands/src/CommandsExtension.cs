@@ -1,11 +1,9 @@
 using System.Globalization;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 using VpSharp.ClientExtensions;
 using VpSharp.Commands.Attributes;
 using VpSharp.Commands.Attributes.ExecutionChecks;
 using VpSharp.Entities;
-using VpSharp.EventData;
 using VpSharp.Internal;
 
 namespace VpSharp.Commands;
