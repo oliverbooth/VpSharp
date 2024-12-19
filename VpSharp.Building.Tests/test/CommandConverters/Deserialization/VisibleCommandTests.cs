@@ -1,9 +1,9 @@
 ﻿using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
-namespace VpSharp.Building.Tests;
+namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
 
-internal sealed class VisibleCommandDeserializeTests
+internal sealed class VisibleCommandTests
 {
     [Test]
     public void Deserialize_ShouldDeserialize_CreateVisibleOff()
