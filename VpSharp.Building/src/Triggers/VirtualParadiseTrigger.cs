@@ -1,4 +1,6 @@
-﻿namespace VpSharp.Building;
+﻿using VpSharp.Building.Commands;
+
+namespace VpSharp.Building.Triggers;
 
 /// <summary>
 ///     Represents a trigger.

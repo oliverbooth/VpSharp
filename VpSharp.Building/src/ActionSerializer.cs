@@ -1,9 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using Cysharp.Text;
+using VpSharp.Building.Commands;
 using VpSharp.Building.Extensions;
+using VpSharp.Building.Triggers;
+using X10D.Reflection;
 
 namespace VpSharp.Building;
 
@@ -145,7 +149,53 @@ public static class ActionSerializer
             HandleToken(action, token, ref currentTrigger, ref currentCommand, options);
         }
 
+        ConvertCommand(action, options);
         return action;
+    }
+
+    private static void ConvertCommand(VirtualParadiseAction action, ActionSerializerOptions options)
+    {
+        foreach (VirtualParadiseCommand command in action.Triggers.SelectMany(t => t.Commands))
+        {
+            var type = command.GetType();
+            var attribute = type.GetCustomAttribute<CommandAttribute>();
+            if (attribute?.ConverterType is not { } converterType)
+            {
+                continue;
+            }
+
+            if (Activator.CreateInstance(converterType) is not CommandConverter converter || !converter.CanConvert(type))
+            {
+                continue;
+            }
+
+            string rawArguments = string.Join(' ', command.RawArguments);
+            string arguments = rawArguments;
+            int index = rawArguments.IndexOf('=');
+            int spaceIndex = 0;
+            if (index != -1)
+            {
+                spaceIndex = rawArguments.AsSpan()[..index].LastIndexOf(' ');
+                arguments = rawArguments[..spaceIndex];
+            }
+
+            using (var reader = new StringReader(arguments))
+            {
+                reader.SkipWhitespace();
+                converter.Read(reader, type, command, options);
+
+                if (index == -1)
+                {
+                    continue;
+                }
+            }
+
+            using (var reader = new StringReader(rawArguments[(spaceIndex + 1)..]))
+            {
+                reader.SkipWhitespace();
+                converter.ReadProperties(reader, command, options);
+            }
+        }
     }
 
     private static void HandleToken(VirtualParadiseAction action,

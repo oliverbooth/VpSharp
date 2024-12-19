@@ -1,6 +1,6 @@
 ﻿using VpSharp.Building.Annotations;
 
-namespace VpSharp.Building;
+namespace VpSharp.Building.Commands;
 
 /// <summary>
 ///     Represents a command.
@@ -26,6 +26,6 @@ public abstract class VirtualParadiseCommand
     ///     Gets the target name.
     /// </summary>
     /// <value>The target name.</value>
-    [Property("name", IsOptional = true)]
-    public virtual string? TargetName { get; internal set; }
+    [Property("name")]
+    public string? TargetName { get; internal set; }
 }

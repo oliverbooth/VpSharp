@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using VpSharp.Building.Annotations;
 
 namespace VpSharp.Building.Commands;
 
@@ -13,6 +12,5 @@ public sealed class MoveCommand : VirtualParadiseCommand
     ///     Gets or sets the move value.
     /// </summary>
     /// <value>The move value.</value>
-    [Parameter(0)]
     public Vector3 Movement { get; set; } = Vector3.Zero;
 }

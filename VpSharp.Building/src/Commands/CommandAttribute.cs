@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Building.Annotations;
+﻿namespace VpSharp.Building.Commands;
 
 /// <summary>
 ///     Specifies the name of a command.
@@ -21,4 +21,10 @@ public sealed class CommandAttribute : Attribute
     /// </summary>
     /// <value>The command name.</value>
     public string CommandName { get; }
+
+    /// <summary>
+    ///     Gets or initializes the type of the converter for this command.
+    /// </summary>
+    /// <value>The type of the converter for this command.</value>
+    public Type? ConverterType { get; init; }
 }

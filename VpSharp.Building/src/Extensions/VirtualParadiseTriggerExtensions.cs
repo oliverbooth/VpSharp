@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
-using VpSharp.Building.Annotations;
+using VpSharp.Building.Commands;
+using VpSharp.Building.Triggers;
 using X10D.Reflection;
 
 namespace VpSharp.Building.Extensions;

@@ -1,6 +1,4 @@
-﻿using VpSharp.Building.Annotations;
-
-namespace VpSharp.Building.Commands;
+﻿namespace VpSharp.Building.Commands;
 
 /// <summary>
 ///     Represents the <c>name</c> command.
@@ -12,6 +10,5 @@ public sealed class NameCommand : VirtualParadiseCommand
     ///     Gets or sets the name value.
     /// </summary>
     /// <value>The name value.</value>
-    [Parameter(0)]
     public string Name { get; set; } = string.Empty;
 }

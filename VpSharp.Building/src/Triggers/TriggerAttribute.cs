@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Building.Annotations;
+﻿namespace VpSharp.Building.Triggers;
 
 /// <summary>
 ///     Specifies the name of a trigger.
