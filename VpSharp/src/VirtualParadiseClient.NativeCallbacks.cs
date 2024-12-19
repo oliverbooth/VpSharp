@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using VpSharp.Entities;
 using VpSharp.Internal;
 using static VpSharp.Internal.NativeMethods;
@@ -7,7 +9,9 @@ namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
-    private readonly ConcurrentDictionary<NativeCallback, NativeCallbackHandler> _nativeCallbackHandlers = new();
+    // we need to keep the NativeCallbackHandler alive otherwise GC will collect it and the event will not be triggered
+    [SuppressMessage("ReSharper", "CollectionNeverQueried.Local", Justification = "GC bypass")]
+    private readonly ConcurrentDictionary<NativeCallback, NativeCallbackHandler> _nativeCallbackHandlers = [];
 
     private void SetNativeCallbacks()
     {
@@ -40,17 +44,23 @@ public sealed partial class VirtualParadiseClient
 
     private async void OnObjectGetNativeCallback(nint sender, ReasonCode reason, int reference)
     {
-        if (!_objectCompletionSources.TryGetValue(reference,
-                out TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>? taskCompletionSource))
+        try
         {
-            return;
+            if (!_objectCompletionSources.TryGetValue(reference, out var taskCompletionSource))
+            {
+                return;
+            }
+
+            VirtualParadiseObject? virtualParadiseObject = reason == ReasonCode.Success
+                ? await ExtractObjectAsync(sender).ConfigureAwait(true)
+                : null;
+
+            taskCompletionSource.SetResult((reason, virtualParadiseObject));
         }
-
-        VirtualParadiseObject? virtualParadiseObject = reason == ReasonCode.Success
-            ? await ExtractObjectAsync(sender).ConfigureAwait(true)
-            : null;
-
-        taskCompletionSource.SetResult((reason, virtualParadiseObject));
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Failed to handle object get callback");
+        }
     }
 
     private void OnObjectChangeNativeCallback(nint sender, ReasonCode reason, int reference)

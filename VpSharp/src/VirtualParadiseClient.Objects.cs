@@ -65,7 +65,7 @@ public sealed partial class VirtualParadiseClient
 
         var centerPosition = center.ToVector3d();
         var cells = new List<Cell>(hashSet);
-        cells.Sort((a, b) => Vector3d.DistanceSquared(a.ToVector3d(), centerPosition).CompareTo(Vector3d.Distance(b.ToVector3d(), centerPosition)));
+        cells.Sort((a, b) => Vector3d.DistanceSquared(a.ToVector3d(), centerPosition).CompareTo(Vector3d.DistanceSquared(b.ToVector3d(), centerPosition)));
 
         var objects = new List<VirtualParadiseObject>();
         var tasks = new List<Task>();
@@ -111,8 +111,7 @@ public sealed partial class VirtualParadiseClient
 
         ReasonCode reason;
 
-        if (!_objectCompletionSources.TryGetValue(id,
-                out TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>? taskCompletionSource))
+        if (!_objectCompletionSources.TryGetValue(id, out var taskCompletionSource))
         {
             taskCompletionSource = new TaskCompletionSource<(ReasonCode, VirtualParadiseObject?)>();
             _objectCompletionSources.TryAdd(id, taskCompletionSource);

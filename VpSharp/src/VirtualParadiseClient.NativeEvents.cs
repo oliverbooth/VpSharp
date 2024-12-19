@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Threading.Channels;
+using Microsoft.Extensions.Logging;
 using VpSharp.ClientExtensions;
 using VpSharp.Entities;
 using VpSharp.EventData;
@@ -13,7 +15,9 @@ namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
-    private readonly ConcurrentDictionary<NativeEvent, NativeEventHandler> _nativeEventHandlers = new();
+    // we need to keep the NativeEventHandler alive otherwise GC will collect it and the event will not be triggered
+    [SuppressMessage("ReSharper", "CollectionNeverQueried.Local", Justification = "GC bypass")]
+    private readonly ConcurrentDictionary<NativeEvent, NativeEventHandler> _nativeEventHandlers = [];
 
     private void SetNativeEvents()
     {
@@ -86,12 +90,20 @@ public sealed partial class VirtualParadiseClient
         }
     }
 
-    private void OnAvatarAddNativeEvent(nint sender)
+    private async void OnAvatarAddNativeEvent(nint sender)
     {
-        VirtualParadiseAvatar avatar = ExtractAvatar(sender);
-        avatar.User = GetUserAsync(vp_int(sender, IntegerAttribute.UserId)).ConfigureAwait(false).GetAwaiter().GetResult()!;
-        avatar = AddOrUpdateAvatar(avatar);
-        _avatarJoined.OnNext(avatar);
+        try
+        {
+            VirtualParadiseAvatar avatar = ExtractAvatar(sender);
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            avatar.User = (await GetUserAsync(vp_int(sender, IntegerAttribute.UserId), cts.Token).ConfigureAwait(false))!;
+            avatar = AddOrUpdateAvatar(avatar);
+            _avatarJoined.OnNext(avatar);
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Failed to process avatar add event");
+        }
     }
 
     private void OnAvatarChangeNativeEvent(nint sender)
@@ -153,159 +165,194 @@ public sealed partial class VirtualParadiseClient
 
     private async void OnObjectNativeEvent(nint sender)
     {
-        int session;
-
-        lock (Lock)
+        try
         {
-            session = vp_int(sender, IntegerAttribute.AvatarSession);
-        }
+            int session;
 
-        VirtualParadiseObject virtualParadiseObject = await ExtractObjectAsync(sender).ConfigureAwait(false);
-        Cell cell = virtualParadiseObject.Location.Cell;
-
-        virtualParadiseObject = AddOrUpdateObject(virtualParadiseObject);
-
-        if (session == 0)
-        {
-            if (_cellChannels.TryGetValue(cell, out Channel<VirtualParadiseObject>? channel))
+            lock (Lock)
             {
-                await channel.Writer.WriteAsync(virtualParadiseObject).ConfigureAwait(false);
+                session = vp_int(sender, IntegerAttribute.AvatarSession);
+            }
+
+            VirtualParadiseObject virtualParadiseObject = await ExtractObjectAsync(sender).ConfigureAwait(false);
+            Cell cell = virtualParadiseObject.Location.Cell;
+
+            virtualParadiseObject = AddOrUpdateObject(virtualParadiseObject);
+
+            if (session == 0)
+            {
+                if (_cellChannels.TryGetValue(cell, out Channel<VirtualParadiseObject>? channel))
+                {
+                    await channel.Writer.WriteAsync(virtualParadiseObject).ConfigureAwait(false);
+                }
+            }
+            else
+            {
+                VirtualParadiseAvatar avatar = GetAvatar(session)!;
+                var args = new ObjectCreatedEventArgs(avatar, virtualParadiseObject);
+                _objectCreated.OnNext(args);
             }
         }
-        else
+        catch (Exception exception)
         {
-            VirtualParadiseAvatar avatar = GetAvatar(session)!;
-            var args = new ObjectCreatedEventArgs(avatar, virtualParadiseObject);
-            _objectCreated.OnNext(args);
+            Logger.LogError(exception, "Failed to process object event");
         }
     }
 
     private async void OnObjectChangeNativeEvent(nint sender)
     {
-        int objectId;
-        int session;
-
-        lock (Lock)
+        try
         {
-            objectId = vp_int(sender, IntegerAttribute.ObjectId);
-            session = vp_int(sender, IntegerAttribute.AvatarSession);
+            int objectId;
+            int session;
+
+            lock (Lock)
+            {
+                objectId = vp_int(sender, IntegerAttribute.ObjectId);
+                session = vp_int(sender, IntegerAttribute.AvatarSession);
+            }
+
+            VirtualParadiseAvatar avatar = GetAvatar(session)!;
+            VirtualParadiseObject? cachedObject = null;
+
+            if (_objects.TryGetValue(objectId, out VirtualParadiseObject? virtualParadiseObject))
+            {
+                cachedObject = await ExtractObjectAsync(sender).ConfigureAwait(false); // data discarded, but used to pull type
+                cachedObject.ExtractFromOther(virtualParadiseObject);
+
+                virtualParadiseObject.ExtractFromInstance(sender); // update existing instance
+            }
+            else
+            {
+                virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+            }
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (virtualParadiseObject is not null)
+            {
+                AddOrUpdateObject(virtualParadiseObject);
+            }
+
+            var args = new ObjectChangedEventArgs(avatar, cachedObject, virtualParadiseObject!);
+            _objectChanged.OnNext(args);
         }
-
-        VirtualParadiseAvatar avatar = GetAvatar(session)!;
-        VirtualParadiseObject? cachedObject = null;
-
-        if (_objects.TryGetValue(objectId, out VirtualParadiseObject? virtualParadiseObject))
+        catch (Exception exception)
         {
-            cachedObject = await ExtractObjectAsync(sender).ConfigureAwait(false); // data discarded, but used to pull type
-            cachedObject.ExtractFromOther(virtualParadiseObject);
-
-            virtualParadiseObject.ExtractFromInstance(sender); // update existing instance
+            Logger.LogError(exception, "Failed to process object change event");
         }
-        else
-        {
-            virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
-        }
-
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        if (virtualParadiseObject is not null)
-        {
-            AddOrUpdateObject(virtualParadiseObject);
-        }
-
-        var args = new ObjectChangedEventArgs(avatar, cachedObject, virtualParadiseObject!);
-        _objectChanged.OnNext(args);
     }
 
     private async void OnObjectDeleteNativeEvent(nint sender)
     {
-        int objectId;
-        int session;
-
-        lock (Lock)
-        {
-            objectId = vp_int(sender, IntegerAttribute.ObjectId);
-            session = vp_int(sender, IntegerAttribute.AvatarSession);
-        }
-
-        VirtualParadiseAvatar? avatar = GetAvatar(session);
-        VirtualParadiseObject? virtualParadiseObject;
-
         try
         {
-            virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+            int objectId;
+            int session;
+
+            lock (Lock)
+            {
+                objectId = vp_int(sender, IntegerAttribute.ObjectId);
+                session = vp_int(sender, IntegerAttribute.AvatarSession);
+            }
+
+            VirtualParadiseAvatar? avatar = GetAvatar(session);
+            VirtualParadiseObject? virtualParadiseObject;
+
+            try
+            {
+                virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+            }
+            catch (VirtualParadiseException) // any exception: we don't care about GetObject failing. ID is always available
+            {
+                virtualParadiseObject = null;
+            }
+
+            _objects.TryRemove(objectId, out VirtualParadiseObject _);
+
+            var args = new ObjectDeletedEventArgs(avatar!, objectId, virtualParadiseObject!);
+            _objectDeleted.OnNext(args);
         }
-        catch (VirtualParadiseException) // any exception: we don't care about GetObject failing. ID is always available
+        catch (Exception exception)
         {
-            virtualParadiseObject = null;
+            Logger.LogError(exception, "Failed to process object delete event");
         }
-
-        _objects.TryRemove(objectId, out VirtualParadiseObject _);
-
-        var args = new ObjectDeletedEventArgs(avatar!, objectId, virtualParadiseObject!);
-        _objectDeleted.OnNext(args);
     }
 
     private async void OnObjectClickNativeEvent(nint sender)
     {
-        Vector3d clickPoint;
-        int objectId;
-        int session;
-
-        lock (Lock)
-        {
-            session = vp_int(sender, IntegerAttribute.AvatarSession);
-            objectId = vp_int(sender, IntegerAttribute.ObjectId);
-
-            double x = vp_double(sender, FloatAttribute.ClickHitX);
-            double y = vp_double(sender, FloatAttribute.ClickHitY);
-            double z = vp_double(sender, FloatAttribute.ClickHitZ);
-            clickPoint = new Vector3d(x, y, z);
-        }
-
-        VirtualParadiseAvatar avatar = GetAvatar(session)!;
         try
         {
-            VirtualParadiseObject virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
-            var args = new ObjectClickedEventArgs(avatar, virtualParadiseObject, clickPoint);
-            _objectClicked.OnNext(args);
+            Vector3d clickPoint;
+            int objectId;
+            int session;
+
+            lock (Lock)
+            {
+                session = vp_int(sender, IntegerAttribute.AvatarSession);
+                objectId = vp_int(sender, IntegerAttribute.ObjectId);
+
+                double x = vp_double(sender, FloatAttribute.ClickHitX);
+                double y = vp_double(sender, FloatAttribute.ClickHitY);
+                double z = vp_double(sender, FloatAttribute.ClickHitZ);
+                clickPoint = new Vector3d(x, y, z);
+            }
+
+            VirtualParadiseAvatar avatar = GetAvatar(session)!;
+            try
+            {
+                VirtualParadiseObject virtualParadiseObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+                var args = new ObjectClickedEventArgs(avatar, virtualParadiseObject, clickPoint);
+                _objectClicked.OnNext(args);
+            }
+            catch (ObjectNotFoundException)
+            {
+                // ignored
+            }
         }
-        catch (ObjectNotFoundException)
+        catch (Exception exception)
         {
-            // ignored
+            Logger.LogError(exception, "Failed to process object click event");
         }
     }
 
     private async void OnWorldListNativeEvent(nint sender)
     {
-        VirtualParadiseWorld world;
-        string name;
-        int avatarCount;
-        WorldState state;
-
-        lock (Lock)
-        {
-            name = vp_string(sender, StringAttribute.WorldName);
-            avatarCount = vp_int(sender, IntegerAttribute.WorldUsers);
-            state = (WorldState)vp_int(sender, IntegerAttribute.WorldState);
-
-            world = new VirtualParadiseWorld(this, name) { AvatarCount = avatarCount, State = state };
-            _worlds[name] = world;
-        }
-
         try
         {
-            if (_worldListChannel is not null)
+            VirtualParadiseWorld world;
+            string name;
+            int avatarCount;
+            WorldState state;
+
+            lock (Lock)
             {
-                await _worldListChannel.Writer.WriteAsync(world).ConfigureAwait(false);
+                name = vp_string(sender, StringAttribute.WorldName);
+                avatarCount = vp_int(sender, IntegerAttribute.WorldUsers);
+                state = (WorldState)vp_int(sender, IntegerAttribute.WorldState);
+
+                world = new VirtualParadiseWorld(this, name) { AvatarCount = avatarCount, State = state };
+                _worlds[name] = world;
+            }
+
+            try
+            {
+                if (_worldListChannel is not null)
+                {
+                    await _worldListChannel.Writer.WriteAsync(world).ConfigureAwait(false);
+                }
+            }
+            catch (ChannelClosedException)
+            {
+                if (_worlds.TryGetValue(name, out world!))
+                {
+                    world.AvatarCount = avatarCount;
+                    world.State = state;
+                }
             }
         }
-        catch (ChannelClosedException)
+        catch (Exception exception)
         {
-            if (_worlds.TryGetValue(name, out world!))
-            {
-                world.AvatarCount = avatarCount;
-                world.State = state;
-            }
+            Logger.LogError(exception, "Failed to process world list event");
         }
     }
 
@@ -326,15 +373,28 @@ public sealed partial class VirtualParadiseClient
 
     private async void OnFriendNativeEvent(nint sender)
     {
-        int userId;
-
-        lock (Lock)
+        try
         {
-            userId = vp_int(sender, IntegerAttribute.FriendUserId);
-        }
+            int userId;
 
-        VirtualParadiseUser user = await GetUserAsync(userId).ConfigureAwait(false);
-        _friends.AddOrUpdate(userId, user, (_, _) => user);
+            lock (Lock)
+            {
+                userId = vp_int(sender, IntegerAttribute.FriendUserId);
+            }
+
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            VirtualParadiseUser? user = await GetUserAsync(userId, cts.Token).ConfigureAwait(false);
+            if (user is null)
+            {
+                return;
+            }
+
+            _friends.AddOrUpdate(userId, user, (_, _) => user);
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Failed to process friend event");
+        }
     }
 
     private void OnWorldDisconnectNativeEvent(nint sender)
@@ -432,59 +492,73 @@ public sealed partial class VirtualParadiseClient
 
     private async void OnTeleportNativeEvent(nint sender)
     {
-        int session;
-        string worldName;
-        Vector3d position;
-        Rotation rotation;
-
-        lock (Lock)
+        try
         {
-            session = vp_int(sender, IntegerAttribute.AvatarSession);
+            int session;
+            string worldName;
+            Vector3d position;
+            Rotation rotation;
 
-            double x = vp_double(sender, FloatAttribute.TeleportX);
-            double y = vp_double(sender, FloatAttribute.TeleportY);
-            double z = vp_double(sender, FloatAttribute.TeleportZ);
-            position = new Vector3d(x, y, z);
+            lock (Lock)
+            {
+                session = vp_int(sender, IntegerAttribute.AvatarSession);
 
-            float yaw = vp_float(sender, FloatAttribute.TeleportYaw);
-            float pitch = vp_float(sender, FloatAttribute.TeleportPitch);
-            rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
+                double x = vp_double(sender, FloatAttribute.TeleportX);
+                double y = vp_double(sender, FloatAttribute.TeleportY);
+                double z = vp_double(sender, FloatAttribute.TeleportZ);
+                position = new Vector3d(x, y, z);
 
-            worldName = vp_string(sender, StringAttribute.TeleportWorld);
+                float yaw = vp_float(sender, FloatAttribute.TeleportYaw);
+                float pitch = vp_float(sender, FloatAttribute.TeleportPitch);
+                rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
+
+                worldName = vp_string(sender, StringAttribute.TeleportWorld);
+            }
+
+            VirtualParadiseWorld world = (string.IsNullOrWhiteSpace(worldName)
+                ? CurrentWorld
+                : await GetWorldAsync(worldName).ConfigureAwait(false))!;
+            var location = new Location(world, position, rotation);
+
+            CurrentAvatar!.Location = location;
+            VirtualParadiseAvatar avatar = GetAvatar(session)!;
+            var args = new TeleportedEventArgs(avatar, location);
+            _teleported.OnNext(args);
         }
-
-        VirtualParadiseWorld world = (string.IsNullOrWhiteSpace(worldName)
-            ? CurrentWorld
-            : await GetWorldAsync(worldName).ConfigureAwait(false))!;
-        var location = new Location(world, position, rotation);
-
-        CurrentAvatar!.Location = location;
-        VirtualParadiseAvatar avatar = GetAvatar(session)!; 
-        var args = new TeleportedEventArgs(avatar, location);
-        _teleported.OnNext(args);
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Failed to process teleport event");
+        }
     }
 
     private async void OnObjectBumpEndNativeEvent(nint sender)
     {
-        int session;
-        int objectId;
-
-        lock (Lock)
-        {
-            session = vp_int(sender, IntegerAttribute.AvatarSession);
-            objectId = vp_int(sender, IntegerAttribute.ObjectId);
-        }
-
-        VirtualParadiseAvatar avatar = GetAvatar(session)!;
         try
         {
-            var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
-            var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.End);
-            _objectBump.OnNext(args);
+            int session;
+            int objectId;
+
+            lock (Lock)
+            {
+                session = vp_int(sender, IntegerAttribute.AvatarSession);
+                objectId = vp_int(sender, IntegerAttribute.ObjectId);
+            }
+
+            VirtualParadiseAvatar avatar = GetAvatar(session)!;
+            try
+            {
+                var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+                var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.End);
+                _objectBump.OnNext(args);
+            }
+            catch (ObjectNotFoundException)
+            {
+                // ignored
+            }
         }
-        catch (ObjectNotFoundException)
+        catch (Exception exception)
         {
-            // ignored
+            Logger.LogError(exception, "Failed to process object bump end event");
         }
     }
 
@@ -514,79 +588,100 @@ public sealed partial class VirtualParadiseClient
 
     private async void OnObjectBumpBeginNativeEvent(nint sender)
     {
-        int session;
-        int objectId;
-
-        lock (Lock)
-        {
-            session = vp_int(sender, IntegerAttribute.AvatarSession);
-            objectId = vp_int(sender, IntegerAttribute.ObjectId);
-        }
-
-        VirtualParadiseAvatar avatar = GetAvatar(session)!;
         try
         {
-            var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
-            var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.Begin);
-            _objectBump.OnNext(args);
+            int session;
+            int objectId;
+
+            lock (Lock)
+            {
+                session = vp_int(sender, IntegerAttribute.AvatarSession);
+                objectId = vp_int(sender, IntegerAttribute.ObjectId);
+            }
+
+            VirtualParadiseAvatar avatar = GetAvatar(session)!;
+            try
+            {
+                var vpObject = await GetObjectAsync(objectId).ConfigureAwait(false);
+                var args = new ObjectBumpEventArgs(avatar, vpObject, BumpPhase.Begin);
+                _objectBump.OnNext(args);
+            }
+            catch (ObjectNotFoundException)
+            {
+                // ignored
+            }
         }
-        catch (ObjectNotFoundException)
+        catch (Exception exception)
         {
-            // ignored
+            Logger.LogError(exception, "Failed to process object bump begin event");
         }
     }
 
     private async void OnJoinNativeEvent(nint sender)
     {
-        int requestId;
-        int userId;
-        string name;
-
-        lock (Lock)
+        try
         {
-            requestId = vp_int(NativeInstanceHandle, IntegerAttribute.JoinId);
-            userId = vp_int(NativeInstanceHandle, IntegerAttribute.UserId);
-            name = vp_string(NativeInstanceHandle, StringAttribute.JoinName);
-        }
+            int requestId;
+            int userId;
+            string name;
 
-        VirtualParadiseUser user = (await GetUserAsync(userId).ConfigureAwait(false))!;
-        var joinRequest = new JoinRequest(this, requestId, name, user);
-        _joinRequestReceived.OnNext(joinRequest);
+            lock (Lock)
+            {
+                requestId = vp_int(NativeInstanceHandle, IntegerAttribute.JoinId);
+                userId = vp_int(NativeInstanceHandle, IntegerAttribute.UserId);
+                name = vp_string(NativeInstanceHandle, StringAttribute.JoinName);
+            }
+
+            VirtualParadiseUser user = (await GetUserAsync(userId).ConfigureAwait(false))!;
+            var joinRequest = new JoinRequest(this, requestId, name, user);
+            _joinRequestReceived.OnNext(joinRequest);
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Failed to process join event");
+        }
     }
 
     private async void OnInviteNativeEvent(nint sender)
     {
-        Vector3d position;
-        Rotation rotation;
-        int requestId;
-        int userId;
-        string worldName;
-        string avatarName;
-
-        lock (Lock)
+        try
         {
-            requestId = vp_int(sender, IntegerAttribute.InviteId);
-            userId = vp_int(sender, IntegerAttribute.InviteUserId);
-            avatarName = vp_string(sender, StringAttribute.InviteName);
+            Vector3d position;
+            Rotation rotation;
+            int requestId;
+            int userId;
+            string worldName;
+            string avatarName;
 
-            double x = vp_double(sender, FloatAttribute.InviteX);
-            double y = vp_double(sender, FloatAttribute.InviteY);
-            double z = vp_double(sender, FloatAttribute.InviteZ);
+            lock (Lock)
+            {
+                requestId = vp_int(sender, IntegerAttribute.InviteId);
+                userId = vp_int(sender, IntegerAttribute.InviteUserId);
+                avatarName = vp_string(sender, StringAttribute.InviteName);
 
-            var yaw = (float)vp_double(sender, FloatAttribute.InviteYaw);
-            var pitch = (float)vp_double(sender, FloatAttribute.InvitePitch);
+                double x = vp_double(sender, FloatAttribute.InviteX);
+                double y = vp_double(sender, FloatAttribute.InviteY);
+                double z = vp_double(sender, FloatAttribute.InviteZ);
 
-            position = new Vector3d(x, y, z);
-            rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
+                var yaw = (float)vp_double(sender, FloatAttribute.InviteYaw);
+                var pitch = (float)vp_double(sender, FloatAttribute.InvitePitch);
 
-            worldName = vp_string(sender, StringAttribute.InviteWorld);
+                position = new Vector3d(x, y, z);
+                rotation = Rotation.CreateFromTiltYawRoll(pitch, yaw, 0);
+
+                worldName = vp_string(sender, StringAttribute.InviteWorld);
+            }
+
+            VirtualParadiseWorld world = (await GetWorldAsync(worldName).ConfigureAwait(false))!;
+            VirtualParadiseUser user = (await GetUserAsync(userId).ConfigureAwait(false))!;
+
+            var location = new Location(world, position, rotation);
+            var request = new InviteRequest(this, requestId, avatarName, user, location);
+            _inviteRequestReceived.OnNext(request);
         }
-
-        VirtualParadiseWorld world = (await GetWorldAsync(worldName).ConfigureAwait(false))!;
-        VirtualParadiseUser user = (await GetUserAsync(userId).ConfigureAwait(false))!;
-
-        var location = new Location(world, position, rotation);
-        var request = new InviteRequest(this, requestId, avatarName, user, location);
-        _inviteRequestReceived.OnNext(request);
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Failed to process invite event");
+        }
     }
 }

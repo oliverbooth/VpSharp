@@ -1,4 +1,6 @@
-﻿namespace VpSharp;
+﻿using Microsoft.Extensions.Logging;
+
+namespace VpSharp;
 
 /// <summary>
 ///     Represents configuration for <see cref="VirtualParadiseClient" />.
@@ -31,46 +33,53 @@ public sealed class VirtualParadiseConfiguration
 
         AutoQuery = configuration.AutoQuery;
         BotName = new string(configuration.BotName);
+        LoggerFactory = configuration.LoggerFactory;
+        Services = configuration.Services;
         Password = new string(configuration.Password);
         Username = new string(configuration.Username);
     }
 
     /// <summary>
-    ///     Gets or sets the application.
+    ///     Sets the application.
     /// </summary>
     /// <value>The application.</value>
-    public Application? Application { get; set; }
+    public Application? Application { internal get; set; }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether or not the client should automatically query and cache the whole world
-    ///     upon entry.
+    ///     Sets a value indicating whether or not the client should automatically query and cache the whole world upon entry.
     /// </summary>
     /// <value>
     ///     <see langword="true" /> if the client should query the world on entry; otherwise, <see langword="false" />.
     /// </value>
-    public bool AutoQuery { get; set; }
+    public bool AutoQuery { internal get; set; }
 
     /// <summary>
-    ///     Gets or sets the bot name.
+    ///     Sets the bot name.
     /// </summary>
     /// <value>The bot name.</value>
-    public string BotName { get; set; } = string.Empty;
+    public string BotName { internal get; set; } = string.Empty;
 
     /// <summary>
-    ///     Gets or sets the login password.
+    ///     Sets the logger implementation to be used by the client.
+    /// </summary>
+    /// <value>The logger factory.</value>
+    public ILoggerFactory? LoggerFactory { internal get; set; }
+
+    /// <summary>
+    ///     Sets the login password.
     /// </summary>
     /// <value>The login password.</value>
-    public string Password { get; set; } = string.Empty;
-    
-    /// <summary>
-    ///     Gets or sets the service provider.
-    /// </summary>
-    /// <value>The service provider.</value>
-    public IServiceProvider? Services { get; set; }
+    public string Password { internal get; set; } = string.Empty;
 
     /// <summary>
-    ///     Gets or sets the login username.
+    ///     Sets the service provider.
+    /// </summary>
+    /// <value>The service provider.</value>
+    public IServiceProvider? Services { internal get; set; }
+
+    /// <summary>
+    ///     Sets the login username.
     /// </summary>
     /// <value>The login username.</value>
-    public string Username { get; set; } = string.Empty;
+    public string Username { internal get; set; } = string.Empty;
 }
