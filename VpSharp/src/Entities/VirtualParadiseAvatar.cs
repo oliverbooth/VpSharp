@@ -102,12 +102,12 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     ///     -or-
     ///     <para>An attempt was made to click an avatar outside of a world.</para>
     /// </exception>
-    public Task ClickAsync(Vector3d? clickPoint = null)
+    public void Click(Vector3d? clickPoint = null)
     {
         // ReSharper disable once InconsistentlySynchronizedField
         if (this == _client.CurrentAvatar)
         {
-            return Task.FromException(ThrowHelper.CannotUseSelfException());
+            ThrowHelper.ThrowCannotUseSelfException();
         }
 
         clickPoint ??= Location.Position;
@@ -124,11 +124,9 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             var reason = (ReasonCode)vp_avatar_click(handle, Session);
             if (reason == ReasonCode.NotInWorld)
             {
-                return Task.FromException(ThrowHelper.NotInWorldException());
+                ThrowHelper.ThrowNotInWorldException();
             }
         }
-
-        return Task.CompletedTask;
     }
 
     /// <summary>
