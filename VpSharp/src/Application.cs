@@ -1,4 +1,4 @@
-﻿namespace VpSharp;
+namespace VpSharp;
 
 /// <summary>
 ///     Represents an application.

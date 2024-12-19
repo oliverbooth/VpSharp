@@ -148,7 +148,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        reason = await _connectCompletionSource.Task.ConfigureAwait(false);
+        reason = await _connectCompletionSource.Task;
 
         NoSuccess:
         switch (reason)
@@ -227,8 +227,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position)
     {
-        await EnterAsync(worldName).ConfigureAwait(false);
-        await CurrentAvatar!.TeleportAsync(position, Rotation.None).ConfigureAwait(false);
+        await EnterAsync(worldName);
+        await CurrentAvatar!.TeleportAsync(position, Rotation.None);
         return CurrentWorld!;
     }
 
@@ -247,8 +247,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task<VirtualParadiseWorld> EnterAsync(string worldName, Vector3d position, Rotation rotation)
     {
-        await EnterAsync(worldName).ConfigureAwait(false);
-        await CurrentAvatar!.TeleportAsync(position, rotation).ConfigureAwait(false);
+        await EnterAsync(worldName);
+        await CurrentAvatar!.TeleportAsync(position, rotation);
         return CurrentWorld!;
     }
 
@@ -266,8 +266,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position)
     {
-        await EnterAsync(world).ConfigureAwait(false);
-        await CurrentAvatar!.TeleportAsync(position, Rotation.None).ConfigureAwait(false);
+        await EnterAsync(world);
+        await CurrentAvatar!.TeleportAsync(position, Rotation.None);
     }
 
     /// <summary>
@@ -285,8 +285,8 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="TimeoutException">Connection to the world server timed out.</exception>
     public async Task EnterAsync(VirtualParadiseWorld world, Vector3d position, Rotation rotation)
     {
-        await EnterAsync(world).ConfigureAwait(false);
-        await CurrentAvatar!.TeleportAsync(position, rotation).ConfigureAwait(false);
+        await EnterAsync(world);
+        await CurrentAvatar!.TeleportAsync(position, rotation);
     }
 
     /// <summary>
@@ -307,7 +307,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             throw new ArgumentNullException(nameof(world));
         }
 
-        await EnterAsync(world.Name).ConfigureAwait(false);
+        await EnterAsync(world.Name);
     }
 
     /// <summary>
@@ -352,7 +352,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        reason = await _enterCompletionSource.Task.ConfigureAwait(false);
+        reason = await _enterCompletionSource.Task;
 
         NoSuccess:
         switch (reason)
@@ -387,9 +387,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
             size = vp_int(NativeInstanceHandle, IntegerAttribute.WorldSize);
         }
 
-        await _worldSettingsCompletionSource.Task.ConfigureAwait(false);
+        await _worldSettingsCompletionSource.Task;
 
-        VirtualParadiseWorld? world = await GetWorldAsync(worldName).ConfigureAwait(false);
+        VirtualParadiseWorld? world = await GetWorldAsync(worldName);
         if (world is null)
         {
             // we entered the world but it wasn't listed. unlisted world. we'll try our best to create details for it
@@ -442,20 +442,19 @@ public sealed partial class VirtualParadiseClient : IDisposable
     /// <exception cref="InvalidOperationException">
     ///     An attempt was made to leave a world when the client was not present in one.
     /// </exception>
-    public Task LeaveAsync()
+    public void Leave()
     {
         lock (Lock)
         {
             var reason = (ReasonCode)vp_leave(NativeInstanceHandle);
             if (reason == ReasonCode.NotInWorld)
             {
-                return Task.FromException(ThrowHelper.NotInWorldException());
+                ThrowHelper.ThrowNotInWorldException();
             }
         }
 
         _avatars.Clear();
         _objects.Clear();
-        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -522,7 +521,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             }
         }
 
-        reason = await _loginCompletionSource.Task.ConfigureAwait(false);
+        reason = await _loginCompletionSource.Task;
         NoSuccess:
         switch (reason)
         {
@@ -546,7 +545,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
             userId = vp_int(NativeInstanceHandle, IntegerAttribute.MyUserId);
         }
 
-        CurrentUser = await GetUserAsync(userId).ConfigureAwait(false);
+        CurrentUser = await GetUserAsync(userId);
         _ = vp_friends_get(NativeInstanceHandle);
     }
 
@@ -564,7 +563,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string message)
+    public VirtualParadiseMessage SendMessage(string message)
     {
         if (message is null)
         {
@@ -593,14 +592,14 @@ public sealed partial class VirtualParadiseClient : IDisposable
         }
 
         VirtualParadiseAvatar? avatar = CurrentAvatar;
-        return Task.FromResult(new VirtualParadiseMessage(
+        return new VirtualParadiseMessage(
             MessageType.ChatMessage,
             avatar!.Name,
             message,
             avatar,
             FontStyle.Regular,
             Color.Black
-        ));
+        );
     }
 
     /// <summary>
@@ -619,9 +618,9 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    public VirtualParadiseMessage SendMessage(string message, FontStyle fontStyle, Color color)
     {
-        return SendMessageAsync(null, message, fontStyle, color);
+        return SendMessage(null, message, fontStyle, color);
     }
 
     /// <summary>
@@ -641,7 +640,7 @@ public sealed partial class VirtualParadiseClient : IDisposable
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    public VirtualParadiseMessage SendMessage(string? name, string message, FontStyle fontStyle, Color color)
     {
         if (message is null)
         {
@@ -680,14 +679,14 @@ public sealed partial class VirtualParadiseClient : IDisposable
         }
 
         VirtualParadiseAvatar avatar = CurrentAvatar!;
-        return Task.FromResult(new VirtualParadiseMessage(
+        return new VirtualParadiseMessage(
             MessageType.ConsoleMessage,
             name,
             message,
             avatar,
             fontStyle,
             color
-        ));
+        );
     }
 
     internal TaskCompletionSource<ReasonCode> AddJoinCompletionSource(int reference)

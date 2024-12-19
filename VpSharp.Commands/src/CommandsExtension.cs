@@ -38,13 +38,8 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             throw new ArgumentNullException(nameof(client));
         }
 
-        if (configuration is null)
-        {
-            throw new ArgumentNullException(nameof(configuration));
-        }
 
-
-        _configuration = configuration;
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _configuration.Services ??= client.Services;
     }
 
@@ -227,7 +222,7 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
                 }
             }
 
-            object?[] arguments = {context};
+            object?[] arguments = [context];
             arguments = ParseArguments(rawArguments, arguments, command);
 
             ParameterInfo[] parameters = commandMethod.GetParameters();
@@ -362,21 +357,17 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             module
         );
 
-        if (_commandMap.ContainsKey(command.Name))
+        if (!_commandMap.TryAdd(command.Name, command))
         {
             throw new InvalidOperationException($"Duplicate command name registered ({command.Name})");
         }
 
-        _commandMap[command.Name] = command;
-
         foreach (string alias in command.Aliases)
         {
-            if (_commandMap.ContainsKey(alias))
+            if (!_commandMap.TryAdd(alias, command))
             {
                 throw new InvalidOperationException($"Duplicate command name registered ({alias})");
             }
-
-            _commandMap[alias] = command;
         }
     }
 }

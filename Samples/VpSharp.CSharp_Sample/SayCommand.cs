@@ -1,4 +1,4 @@
-﻿using VpSharp.Commands;
+using VpSharp.Commands;
 using VpSharp.Commands.Attributes;
 
 namespace VpSharp.CSharp_Sample;
@@ -6,8 +6,9 @@ namespace VpSharp.CSharp_Sample;
 public class SayCommand : CommandModule
 {
     [Command("say")]
-    public async Task SayAsync(CommandContext context, [Remainder] string message)
+    public Task SayAsync(CommandContext context, [Remainder] string message)
     {
-        await context.RespondAsync(message);
+        context.Respond(message);
+        return Task.CompletedTask;
     }
 }

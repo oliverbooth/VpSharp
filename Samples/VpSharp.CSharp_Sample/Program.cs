@@ -1,4 +1,4 @@
-﻿using VpSharp.Commands;
+using VpSharp.Commands;
 using VpSharp.Extensions;
 
 namespace VpSharp.CSharp_Sample;
@@ -18,10 +18,10 @@ internal static class Program
         };
 
         s_client = new VirtualParadiseClient(configuration);
-        var commands = s_client.UseCommands(new CommandsExtensionConfiguration {Prefixes = new[] {"/"}});
+        var commands = s_client.UseCommands(new CommandsExtensionConfiguration { Prefixes = ["/"] });
         commands.RegisterCommands<SayCommand>();
 
-        s_client.AvatarJoined.SubscribeAsync(async avatar => await s_client.SendMessageAsync($"Hello, {avatar.Name}!"));
+        s_client.AvatarJoined.Subscribe(avatar => s_client.SendMessage($"Hello, {avatar.Name}!"));
 
         await s_client.ConnectAsync();
         await s_client.LoginAsync();

@@ -83,7 +83,7 @@ public sealed partial class VirtualParadiseClient
             tasks.Add(task);
         }
 
-        await Task.WhenAll(tasks).ConfigureAwait(false);
+        await Task.WhenAll(tasks);
 
         foreach (VirtualParadiseObject current in objects)
         {
@@ -128,7 +128,7 @@ public sealed partial class VirtualParadiseClient
             }
         }
 
-        (reason, virtualParadiseObject) = await taskCompletionSource.Task.ConfigureAwait(false);
+        (reason, virtualParadiseObject) = await taskCompletionSource.Task;
         _objectCompletionSources.TryRemove(id, out _);
 
         if (virtualParadiseObject is not null)
@@ -225,7 +225,9 @@ public sealed partial class VirtualParadiseClient
         var location = new Location(CurrentWorld!, position, rotation);
         virtualParadiseObject.Location = location;
         virtualParadiseObject.ModificationTimestamp = DateTimeOffset.FromUnixTimeSeconds(time);
-        virtualParadiseObject.Owner = await GetUserAsync(owner).ConfigureAwait(false);
+
+        var ctx = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+        virtualParadiseObject.Owner = (await GetUserAsync(owner, ctx.Token).ConfigureAwait(false))!;
 
         return virtualParadiseObject;
     }

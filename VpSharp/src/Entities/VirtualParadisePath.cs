@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Entities;
+namespace VpSharp.Entities;
 
 /// <summary>
 ///     Represents a path contained by a <see cref="VirtualParadisePathObject" />.

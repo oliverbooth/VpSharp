@@ -32,7 +32,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <value><see langword="true" /> if this avatar is a bot; otherwise, <see langword="false" />.</value>
     public bool IsBot
     {
-        get => Name is {Length: > 1} name && name[0] == '[' && name[^1] == ']';
+        get => Name is { Length: > 1 } name && name[0] == '[' && name[^1] == ']';
     }
 
     /// <summary>
@@ -185,10 +185,10 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     ///     -or-
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string message, FontStyle fontStyle, Color color)
+    public VirtualParadiseMessage SendMessage(string message, FontStyle fontStyle, Color color)
     {
         // ReSharper disable once InconsistentlySynchronizedField
-        return SendMessageAsync(null, message, fontStyle, color);
+        return SendMessage(null, message, fontStyle, color);
     }
 
     /// <summary>
@@ -211,7 +211,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     ///     <para><paramref name="message" /> is too long to send.</para>
     /// </exception>
     /// <remarks>Passing <see langword="null" /> to <paramref name="name" /> will hide the name from the recipient.</remarks>
-    public Task<VirtualParadiseMessage> SendMessageAsync(string? name, string message, FontStyle fontStyle, Color color)
+    public VirtualParadiseMessage SendMessage(string? name, string message, FontStyle fontStyle, Color color)
     {
         if (message is null)
         {
@@ -256,14 +256,14 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
             avatar = _client.CurrentAvatar!;
         }
 
-        return Task.FromResult(new VirtualParadiseMessage(
+        return new VirtualParadiseMessage(
             MessageType.ConsoleMessage,
             name,
             message,
             avatar,
             fontStyle,
             color
-        ));
+        );
     }
 
     /// <summary>
@@ -273,7 +273,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="target">The URL target. See <see cref="UriTarget" /> for more information.</param>
     /// <exception cref="InvalidOperationException">The action cannot be performed on the client's current avatar.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="uri" /> is <see langword="null" />.</exception>
-    public Task SendUriAsync(Uri uri, UriTarget target = UriTarget.Browser)
+    public void SendUri(Uri uri, UriTarget target = UriTarget.Browser)
     {
         if (uri is null)
         {
@@ -283,15 +283,13 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
         // ReSharper disable once InconsistentlySynchronizedField
         if (this == _client.CurrentAvatar)
         {
-            return Task.FromException(ThrowHelper.CannotUseSelfException());
+            ThrowHelper.ThrowCannotUseSelfException();
         }
 
         lock (_client.Lock)
         {
             _ = vp_url_send(_client.NativeInstanceHandle, Session, uri.ToString(), target);
         }
-
-        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -300,7 +298,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="action">The builder which defines parameters to change.</param>
     /// <exception cref="ArgumentNullException"><paramref name="action" /> is <see langword="null" />.</exception>
     /// <exception cref="UnauthorizedAccessException">The client does not have permission to modify world settings.</exception>
-    public async Task SendWorldSettings(Action<WorldSettingsBuilder> action)
+    public void SendWorldSettings(Action<WorldSettingsBuilder> action)
     {
         if (action is null)
         {
@@ -309,8 +307,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 
         // ReSharper disable once InconsistentlySynchronizedField
         var builder = new WorldSettingsBuilder(_client, Session);
-        await Task.Run(() => action(builder)).ConfigureAwait(false);
-
+        action(builder);
         builder.SendChanges();
     }
 
@@ -386,7 +383,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 
         if (isSelf && isNewWorld)
         {
-            await _client.EnterAsync(world).ConfigureAwait(false);
+            await _client.EnterAsync(world);
         }
 
         nint handle = _client.NativeInstanceHandle;
@@ -395,7 +392,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
         {
             if (!string.IsNullOrWhiteSpace(world))
             {
-                await _client.EnterAsync(world).ConfigureAwait(false);
+                await _client.EnterAsync(world);
             }
 
             // state change self
@@ -444,7 +441,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="position">The position to which this avatar should be teleported.</param>
     public Task TeleportAsync(Vector3d position)
     {
-        return TeleportAsync(Location with {Position = position});
+        return TeleportAsync(Location with { Position = position });
     }
 
     /// <summary>
@@ -454,7 +451,7 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     /// <param name="rotation">The rotation to which this avatar should be teleported</param>
     public Task TeleportAsync(Vector3d position, Rotation rotation)
     {
-        return TeleportAsync(Location with {Position = position, Rotation = rotation});
+        return TeleportAsync(Location with { Position = position, Rotation = rotation });
     }
 
     /// <summary>

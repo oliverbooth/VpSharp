@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Commands.Attributes.ExecutionChecks;
+namespace VpSharp.Commands.Attributes.ExecutionChecks;
 
 /// <summary>
 ///     Represents the base class for all execution check attributes.

@@ -13,10 +13,11 @@ public sealed partial class VirtualParadiseClient
     ///     Gets a user by their ID.
     /// </summary>
     /// <param name="userId">The ID of the user to get.</param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>
     ///     The user whose ID is equal to <paramref name="userId" />, or <see langword="null" /> if no match was found.
     /// </returns>
-    public async Task<VirtualParadiseUser> GetUserAsync(int userId)
+    public async Task<VirtualParadiseUser?> GetUserAsync(int userId, CancellationToken cancellationToken = default)
     {
         if (_users.TryGetValue(userId, out VirtualParadiseUser? user))
         {
@@ -25,7 +26,18 @@ public sealed partial class VirtualParadiseClient
 
         if (_usersCompletionSources.TryGetValue(userId, out TaskCompletionSource<VirtualParadiseUser>? taskCompletionSource))
         {
-            return await taskCompletionSource.Task.ConfigureAwait(false);
+            try
+            {
+                await using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled()))
+                {
+                    return await taskCompletionSource.Task;
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                _usersCompletionSources.TryRemove(userId, out _);
+                return null;
+            }
         }
 
         taskCompletionSource = new TaskCompletionSource<VirtualParadiseUser>();
@@ -36,10 +48,21 @@ public sealed partial class VirtualParadiseClient
             _ = vp_user_attributes_by_id(NativeInstanceHandle, userId);
         }
 
-        user = await taskCompletionSource.Task.ConfigureAwait(false);
-        user = AddOrUpdateUser(user);
+        try
+        {
+            await using (cancellationToken.Register(() => taskCompletionSource.TrySetCanceled()))
+            {
+                user = await taskCompletionSource.Task;
+                user = AddOrUpdateUser(user);
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            _usersCompletionSources.TryRemove(userId, out _);
+            return null;
+        }
 
-        _usersCompletionSources.TryRemove(userId, out TaskCompletionSource<VirtualParadiseUser> _);
+        _usersCompletionSources.TryRemove(userId, out _);
         return user;
     }
 

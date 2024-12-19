@@ -20,12 +20,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <exception cref="ArgumentNullException"><paramref name="client" /> is <see langword="null" />.</exception>
     protected internal VirtualParadiseObject(VirtualParadiseClient client, int id)
     {
-        if (client is null)
-        {
-            throw new ArgumentNullException(nameof(client));
-        }
-
-        Client = client;
+        Client = client ?? throw new ArgumentNullException(nameof(client));
         Id = id;
     }
 
@@ -53,7 +48,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <value>The owner of this object.</value>
     public VirtualParadiseUser Owner { get; internal set; } = null!;
 
-    internal byte[] Data { get; set; } = Array.Empty<byte>();
+    internal byte[] Data { get; set; } = [];
 
     private protected VirtualParadiseClient Client { get; }
 
@@ -139,7 +134,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     ///     The target avatar which will receive the event, or <see langword="null" /> to broadcast to every avatar.
     /// </param>
     /// <exception cref="InvalidOperationException"><paramref name="target" /> is the client's current avatar.</exception>
-    public Task ClickAsync(Vector3d? position = null, VirtualParadiseAvatar? target = null)
+    public void Click(Vector3d? position = null, VirtualParadiseAvatar? target = null)
     {
         if (target == Client.CurrentAvatar)
         {
@@ -153,8 +148,6 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
 
             _ = vp_object_click(Client.NativeInstanceHandle, Id, session, x, y, z);
         }
-
-        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -162,7 +155,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// </summary>
     /// <exception cref="InvalidOperationException">The client is not connected to a world.</exception>
     /// <exception cref="ObjectNotFoundException">The object does not exist.</exception>
-    public Task DeleteAsync()
+    public void Delete()
     {
         lock (Client.Lock)
         {
@@ -171,14 +164,12 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
             switch (reason)
             {
                 case ReasonCode.NotInWorld:
-                    return Task.FromException(ThrowHelper.NotInWorldException());
+                    throw ThrowHelper.NotInWorldException();
 
                 case ReasonCode.ObjectNotFound:
-                    return Task.FromException(ThrowHelper.ObjectNotFoundException());
+                    throw ThrowHelper.ObjectNotFoundException();
             }
         }
-
-        return Task.CompletedTask;
     }
 
     /// <summary>
