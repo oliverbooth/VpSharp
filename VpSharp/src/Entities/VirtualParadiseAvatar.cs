@@ -388,43 +388,11 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
 
         if (this == _client.CurrentAvatar)
         {
-            if (!string.IsNullOrWhiteSpace(world))
-            {
-                await _client.EnterAsync(world);
-            }
-
-            // state change self
-            lock (_client.Lock)
-            {
-                (double x, double y, double z) = position;
-                (double pitch, double yaw, double _) = rotation;
-
-                _ = vp_double_set(handle, FloatAttribute.MyX, x);
-                _ = vp_double_set(handle, FloatAttribute.MyY, y);
-                _ = vp_double_set(handle, FloatAttribute.MyZ, z);
-                _ = vp_double_set(handle, FloatAttribute.MyPitch, pitch);
-                _ = vp_double_set(handle, FloatAttribute.MyYaw, yaw);
-
-                var reason = (ReasonCode)vp_state_change(handle);
-                if (reason == ReasonCode.NotInWorld)
-                {
-                    ThrowHelper.ThrowNotInWorldException();
-                }
-            }
+            await TeleportSelfAsync(handle, world, position, rotation);
         }
         else
         {
-            lock (_client.Lock)
-            {
-                (float x, float y, float z) = (Vector3)position;
-                (double pitch, double yaw, double _) = rotation;
-
-                var reason = (ReasonCode)vp_teleport_avatar(handle, Session, world, x, y, z, (float)yaw, (float)pitch);
-                if (reason == ReasonCode.NotInWorld)
-                {
-                    ThrowHelper.ThrowNotInWorldException();
-                }
-            }
+            TeleportUser(handle, world, position, rotation);
         }
 
         VirtualParadiseWorld? updatedWorld = isNewWorld ? await _client.GetWorldAsync(world) : Location.World;
@@ -465,5 +433,47 @@ public sealed class VirtualParadiseAvatar : IEquatable<VirtualParadiseAvatar>
     public override string ToString()
     {
         return $"Avatar #{Session}; {User.Name} ({Name})";
+    }
+
+    private void TeleportUser(nint handle, string world, Vector3d position, Rotation rotation)
+    {
+        lock (_client.Lock)
+        {
+            (float x, float y, float z) = (Vector3)position;
+            (double pitch, double yaw, double _) = rotation;
+
+            var reason = (ReasonCode)vp_teleport_avatar(handle, Session, world, x, y, z, (float)yaw, (float)pitch);
+            if (reason == ReasonCode.NotInWorld)
+            {
+                ThrowHelper.ThrowNotInWorldException();
+            }
+        }
+    }
+
+    private async Task TeleportSelfAsync(nint handle, string world, Vector3d position, Rotation rotation)
+    {
+        if (!string.IsNullOrWhiteSpace(world))
+        {
+            // ReSharper disable once InconsistentlySynchronizedField
+            await _client.EnterAsync(world);
+        }
+
+        lock (_client.Lock)
+        {
+            (double x, double y, double z) = position;
+            (double pitch, double yaw, double _) = rotation;
+
+            _ = vp_double_set(handle, FloatAttribute.MyX, x);
+            _ = vp_double_set(handle, FloatAttribute.MyY, y);
+            _ = vp_double_set(handle, FloatAttribute.MyZ, z);
+            _ = vp_double_set(handle, FloatAttribute.MyPitch, pitch);
+            _ = vp_double_set(handle, FloatAttribute.MyYaw, yaw);
+
+            var reason = (ReasonCode)vp_state_change(handle);
+            if (reason == ReasonCode.NotInWorld)
+            {
+                ThrowHelper.ThrowNotInWorldException();
+            }
+        }
     }
 }
