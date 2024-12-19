@@ -357,21 +357,17 @@ public sealed class CommandsExtension : VirtualParadiseClientExtension
             module
         );
 
-        if (_commandMap.ContainsKey(command.Name))
+        if (!_commandMap.TryAdd(command.Name, command))
         {
             throw new InvalidOperationException($"Duplicate command name registered ({command.Name})");
         }
 
-        _commandMap[command.Name] = command;
-
         foreach (string alias in command.Aliases)
         {
-            if (_commandMap.ContainsKey(alias))
+            if (!_commandMap.TryAdd(alias, command))
             {
                 throw new InvalidOperationException($"Duplicate command name registered ({alias})");
             }
-
-            _commandMap[alias] = command;
         }
     }
 }
