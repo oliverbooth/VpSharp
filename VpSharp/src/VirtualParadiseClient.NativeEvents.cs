@@ -15,7 +15,9 @@ namespace VpSharp;
 
 public sealed partial class VirtualParadiseClient
 {
-    private readonly ConcurrentDictionary<NativeEvent, NativeEventHandler> _nativeEventHandlers = new();
+    // we need to keep the NativeEventHandler alive otherwise GC will collect it and the event will not be triggered
+    [SuppressMessage("ReSharper", "CollectionNeverQueried.Local", Justification = "GC bypass")]
+    private readonly ConcurrentDictionary<NativeEvent, NativeEventHandler> _nativeEventHandlers = [];
 
     private void SetNativeEvents()
     {
