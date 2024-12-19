@@ -1,9 +1,11 @@
-﻿namespace VpSharp.Building.Commands;
+﻿using VpSharp.Building.Commands.Converters;
+
+namespace VpSharp.Building.Commands;
 
 /// <summary>
 ///     Represents the <c>solid</c> command.
 /// </summary>
-[Command("solid")]
+[Command("solid", ConverterType = typeof(SolidCommandConverter))]
 public sealed class SolidCommand : VirtualParadiseCommand
 {
     /// <summary>
