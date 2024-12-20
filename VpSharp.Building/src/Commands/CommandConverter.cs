@@ -6,7 +6,7 @@ namespace VpSharp.Building.Commands;
 /// <summary>
 ///     Represents a command converter.
 /// </summary>
-public abstract partial class CommandConverter
+public abstract class CommandConverter
 {
     /// <summary>
     ///     Returns a value indicating whether this converter can convert the specified type.
