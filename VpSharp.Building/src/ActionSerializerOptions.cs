@@ -16,21 +16,7 @@ public sealed class ActionSerializerOptions
     /// </summary>
     public static readonly ActionSerializerOptions Default = new()
     {
-        CommandTypes =
-        [
-            typeof(MoveCommand),
-            typeof(NameCommand),
-            typeof(SolidCommand),
-            typeof(VisibleCommand)
-        ],
-        TriggerTypes =
-        [
-            typeof(ActivateTrigger),
-            typeof(AdoneTrigger),
-            typeof(BumpTrigger),
-            typeof(BumpEndTrigger),
-            typeof(CreateTrigger)
-        ]
+        CommandTypes = GetBuiltInCommands(), TriggerTypes = GetBuiltInTriggers()
     };
 
     /// <summary>
@@ -85,5 +71,17 @@ public sealed class ActionSerializerOptions
                 throw new InvalidOperationException($"Type '{type.FullName}' is not a valid {typeof(T).Name}.");
             }
         }
+    }
+
+    private static Type[] GetBuiltInCommands()
+    {
+        Type[] types = typeof(VirtualParadiseCommand).Assembly.GetTypes();
+        return types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(VirtualParadiseCommand))).ToArray();
+    }
+
+    private static Type[] GetBuiltInTriggers()
+    {
+        Type[] types = typeof(VirtualParadiseCommand).Assembly.GetTypes();
+        return types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(VirtualParadiseTrigger))).ToArray();
     }
 }
