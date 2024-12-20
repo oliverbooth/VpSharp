@@ -11,7 +11,7 @@ public abstract class VirtualParadiseCommand
     ///     Gets the raw arguments passed to this command.
     /// </summary>
     /// <value>The raw arguments.</value>
-    public IReadOnlyList<string> RawArguments { get; internal set; } = [];
+    public IList<string> RawArguments { get; internal set; } = [];
 
     /// <summary>
     ///     Gets the raw argument string passed to this command.
