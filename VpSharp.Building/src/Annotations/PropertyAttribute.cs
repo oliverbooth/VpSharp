@@ -20,7 +20,7 @@ public sealed class PropertyAttribute : Attribute
     ///     Gets or sets a value indicating whether this property is optional.
     /// </summary>
     /// <value><see langword="true" /> if this property is optional; otherwise, <see langword="false" />.</value>
-    public bool IsOptional { get; init; }
+    public bool IsOptional { get; init; } = true;
 
     /// <summary>
     ///     Gets the property name.

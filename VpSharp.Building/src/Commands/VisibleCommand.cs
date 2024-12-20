@@ -25,6 +25,6 @@ public sealed class VisibleCommand : VirtualParadiseCommand
     ///     Gets or sets the radius value.
     /// </summary>
     /// <value>The radius value.</value>
-    [Property("radius", IsOptional = true)]
+    [Property("radius")]
     public double Radius { get; set; } = -1.0;
 }
