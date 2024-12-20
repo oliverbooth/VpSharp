@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Text;
 using Cysharp.Text;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
@@ -48,67 +49,24 @@ public static partial class ActionSerializer
         Type type,
         ActionSerializerOptions options)
     {
-        Span<char> rawArguments = stackalloc char[command.RawArguments.Sum(arg => arg.Length) + command.RawArguments.Count];
+        IList<string> rawArguments = command.RawArguments;
+
+        Span<char> arguments = stackalloc char[rawArguments.Sum(arg => arg.Length) + rawArguments.Count];
         int offset = 0;
-        foreach (ReadOnlySpan<char> argument in command.RawArguments)
+        foreach (ReadOnlySpan<char> argument in rawArguments)
         {
-            argument.CopyTo(rawArguments[offset..]);
+            argument.CopyTo(arguments[offset..]);
             offset += argument.Length;
-            rawArguments[offset++] = ' ';
+            arguments[offset++] = ' ';
         }
 
-        ReadOnlySpan<char> arguments = rawArguments;
-        int index = rawArguments.IndexOf('=');
-        int spaceIndex = 0;
-        if (index != -1)
-        {
-            spaceIndex = rawArguments[..index].LastIndexOf(' ');
-            arguments = rawArguments[..spaceIndex];
-        }
+        int byteCount = Encoding.UTF8.GetByteCount(arguments);
+        Span<byte> bytes = stackalloc byte[byteCount];
+        Encoding.UTF8.GetBytes(arguments, bytes);
 
-        var reader = new Utf16ValueStringReader(arguments);
+        var reader = new Utf8ActionReader(bytes);
         reader.SkipWhitespace();
         converter.Read(ref reader, type, command, options);
-
-        if (index == -1)
-        {
-            return;
-        }
-
-        reader = new Utf16ValueStringReader(rawArguments[(spaceIndex + 1)..]);
-        reader.SkipWhitespace();
-        ReadProperties(ref reader, command);
-    }
-
-    private static void ReadProperties(ref Utf16ValueStringReader reader, VirtualParadiseCommand command)
-    {
-        Span<char> propertyName = stackalloc char[50];
-        int propertyNameLength = 0;
-        using Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
-
-        int c;
-        while ((c = reader.Read()) != -1)
-        {
-            char character = (char)c;
-            switch (character)
-            {
-                case var _ when char.IsWhiteSpace(character):
-                    // populate property
-                    SetProperty(command, propertyName[..propertyNameLength], builder.AsSpan());
-                    builder.Clear();
-                    break;
-
-                case '=':
-                    builder.AsSpan().CopyTo(propertyName);
-                    propertyNameLength = builder.Length;
-                    builder.Clear();
-                    break;
-
-                default:
-                    builder.Append(character);
-                    break;
-            }
-        }
     }
 
     private static void HandleToken(VirtualParadiseAction action,
@@ -137,7 +95,7 @@ public static partial class ActionSerializer
 
                 break;
 
-            case LexingTokenType.String or LexingTokenType.Number or LexingTokenType.Property:
+            case LexingTokenType.Text or LexingTokenType.Number or LexingTokenType.Property:
                 currentCommand.RawArguments = [..currentCommand.RawArguments, token.Value];
                 break;
 
@@ -162,6 +120,7 @@ public static partial class ActionSerializer
         Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
         var tokens = new List<LexingToken>();
         bool isProperty = false;
+        bool isQuoted = false;
 
         while (reader.Peek() != -1)
         {
@@ -169,17 +128,21 @@ public static partial class ActionSerializer
 
             switch (character)
             {
-                case ',':
-                case ';':
+                case '"':
+                    isQuoted = !isQuoted;
+                    break;
+
+                case ',' when !isQuoted:
+                case ';' when !isQuoted:
                     AppendBuffer(ref builder, ref isProperty, tokens);
                     tokens.Add(new LexingToken(LexingTokenType.Operator, [character]));
                     break;
 
-                case var _ when char.IsWhiteSpace(character):
+                case var _ when !isQuoted && char.IsWhiteSpace(character):
                     AppendBuffer(ref builder, ref isProperty, tokens);
                     break;
 
-                case '=':
+                case '=' when !isQuoted:
                     isProperty = true;
                     goto default;
 

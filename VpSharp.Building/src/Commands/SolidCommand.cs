@@ -13,4 +13,10 @@ public sealed class SolidCommand : VirtualParadiseCommand
     /// </summary>
     /// <value>The solid flag value.</value>
     public bool IsSolid { get; set; } = true;
+
+    /// <summary>
+    ///     Gets or sets the target object name.
+    /// </summary>
+    /// <value>The target object name.</value>
+    public string? Target { get; set; }
 }

@@ -16,6 +16,11 @@ internal enum LexingTokenType
     String,
 
     /// <summary>
+    ///     Text token.
+    /// </summary>
+    Text,
+
+    /// <summary>
     ///     Number token.
     /// </summary>
     Number,

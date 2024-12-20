@@ -6,35 +6,45 @@ namespace VpSharp.Building.Commands.Converters;
 public sealed class VisibleCommandConverter : CommandConverter<VisibleCommand>
 {
     /// <inheritdoc />
-    public override void Read(ref Utf16ValueStringReader reader, VisibleCommand command, ActionSerializerOptions options)
+    public override void Read(ref Utf8ActionReader reader, VisibleCommand command, ActionSerializerOptions options)
     {
-        Span<char> token = stackalloc char[50];
-        int read = reader.ReadToken(token);
-        token = token[..read];
-
-        if (read == 0)
+        Token token = reader.Read();
+        if (token.Type == TokenType.None)
         {
             return;
         }
 
-        Span<char> target = stackalloc char[read];
-        token.CopyTo(target);
-        token.Clear();
+        ReadProperty(ref reader, command);
 
-        read = reader.ReadToken(token);
-        token = token[..read];
+        string potentialTarget = token.Value;
 
-        command.Target = read == 0 ? null : target.ToString();
-        command.IsVisible = (read == 0 ? target : token) switch
+        if (reader.TryGetBoolean(out bool value))
         {
-            "on" or "yes" or "1" => true,
-            "off" or "no" or "0" => false,
-            _ => command.IsVisible
-        };
+            command.IsVisible = value;
+        }
+
+        token = reader.Read();
+        if (token.Type == TokenType.None)
+        {
+            return;
+        }
+
+        ReadProperty(ref reader, command);
+
+        if (reader.TryGetBoolean(out value))
+        {
+            command.Target = potentialTarget;
+            command.IsVisible = value;
+        }
+
+        while (ReadProperty(ref reader, command))
+        {
+            // do nothing
+        }
     }
 
     /// <inheritdoc />
-    public override void Write(TextWriter writer, VisibleCommand? command, ActionSerializerOptions options)
+    public override void Write(Utf8ActionWriter writer, VisibleCommand? command, ActionSerializerOptions options)
     {
         if (command is null)
         {
@@ -44,9 +54,9 @@ public sealed class VisibleCommandConverter : CommandConverter<VisibleCommand>
         if (command.Target is not null)
         {
             writer.Write(command.Target);
-            writer.Write(' ');
         }
 
-        writer.Write(command.IsVisible ? "on" : "off");
+        writer.WriteBoolean(command.IsVisible);
+        WriteProperties(writer, command, options);
     }
 }

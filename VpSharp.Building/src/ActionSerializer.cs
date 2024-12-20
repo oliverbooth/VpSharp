@@ -127,7 +127,7 @@ public static partial class ActionSerializer
         }
         else
         {
-            tokenType = LexingTokenType.String;
+            tokenType = LexingTokenType.Text;
         }
 
         tokens.Add(new LexingToken(tokenType, span));

@@ -26,7 +26,7 @@ public abstract class CommandConverter
     /// <param name="options">
     ///     An <see cref="ActionSerializerOptions" /> object which can customize the deserialization behaviour.
     /// </param>
-    public abstract void Read(ref Utf16ValueStringReader reader, Type type, VirtualParadiseCommand command,
+    public abstract void Read(ref Utf8ActionReader reader, Type type, VirtualParadiseCommand command,
         ActionSerializerOptions options);
 
     /// <summary>
@@ -38,7 +38,8 @@ public abstract class CommandConverter
     /// <param name="options">
     ///     An <see cref="ActionSerializerOptions" /> object which can customize the serialization behaviour.
     /// </param>
-    public abstract void Write(TextWriter writer, Type type, VirtualParadiseCommand? command, ActionSerializerOptions options);
+    public abstract void Write(Utf8ActionWriter writer, Type type, VirtualParadiseCommand? command,
+        ActionSerializerOptions options);
 }
 
 /// <summary>
@@ -62,10 +63,10 @@ public abstract class CommandConverter<T> : CommandConverter
     ///     An <see cref="ActionSerializerOptions" /> object which can customize the deserialization behaviour.
     /// </param>
     /// <returns>The command that was read from <paramref name="reader" />.</returns>
-    public abstract void Read(ref Utf16ValueStringReader reader, T command, ActionSerializerOptions options);
+    public abstract void Read(ref Utf8ActionReader reader, T command, ActionSerializerOptions options);
 
     /// <inheritdoc />
-    public override void Read(ref Utf16ValueStringReader reader, Type type, VirtualParadiseCommand command,
+    public override void Read(ref Utf8ActionReader reader, Type type, VirtualParadiseCommand command,
         ActionSerializerOptions options)
     {
         if (!CanConvert(type))
@@ -84,10 +85,11 @@ public abstract class CommandConverter<T> : CommandConverter
     /// <param name="options">
     ///     An <see cref="ActionSerializerOptions" /> object which can customize the serialization behaviour.
     /// </param>
-    public abstract void Write(TextWriter writer, T? command, ActionSerializerOptions options);
+    public abstract void Write(Utf8ActionWriter writer, T? command, ActionSerializerOptions options);
 
     /// <inheritdoc />
-    public override void Write(TextWriter writer, Type type, VirtualParadiseCommand? command, ActionSerializerOptions options)
+    public override void Write(Utf8ActionWriter writer, Type type, VirtualParadiseCommand? command,
+        ActionSerializerOptions options)
     {
         if (command is null)
         {
@@ -103,6 +105,26 @@ public abstract class CommandConverter<T> : CommandConverter
     }
 
     /// <summary>
+    ///     Reads a property from the specified reader and sets it on the specified command.
+    /// </summary>
+    /// <param name="reader">The reader from which the property will be read.</param>
+    /// <param name="command">The command on which the property will be set.</param>
+    protected bool ReadProperty(ref Utf8ActionReader reader, VirtualParadiseCommand command)
+    {
+        if (reader.CurrentToken.Type != TokenType.PropertyName)
+        {
+            return false;
+        }
+
+        string propertyName = reader.CurrentToken.Value;
+        reader.Read();
+
+        ActionSerializer.SetProperty(command, propertyName, reader.CurrentToken.ValueSpan);
+
+        return reader.Read().Type != TokenType.None;
+    }
+
+    /// <summary>
     ///     Writes the properties of the command to the specified text writer.
     /// </summary>
     /// <param name="writer">The writer to which the properties will be written.</param>
@@ -111,8 +133,10 @@ public abstract class CommandConverter<T> : CommandConverter
     ///     An <see cref="ActionSerializerOptions" /> object which can customize the serialization behaviour.
     /// </param>
     /// <typeparam name="T">The type of the command.</typeparam>
-    protected void WriteProperties(TextWriter writer, T command, ActionSerializerOptions options)
+    protected void WriteProperties(Utf8ActionWriter writer, T command, ActionSerializerOptions options)
     {
+        T instance = Activator.CreateInstance<T>();
+
         PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
         foreach (var property in properties)
         {
@@ -127,7 +151,12 @@ public abstract class CommandConverter<T> : CommandConverter
                 continue;
             }
 
-            writer.Write($" {attribute.Name}={value}");
+            if (attribute.IsOptional && value == property.GetValue(instance))
+            {
+                continue;
+            }
+
+            writer.WriteProperty(attribute.Name, value.ToString()!);
         }
     }
 }

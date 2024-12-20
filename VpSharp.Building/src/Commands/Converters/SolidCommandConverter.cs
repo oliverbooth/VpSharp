@@ -6,56 +6,57 @@ namespace VpSharp.Building.Commands.Converters;
 public sealed class SolidCommandConverter : CommandConverter<SolidCommand>
 {
     /// <inheritdoc />
-    public override void Read(ref Utf16ValueStringReader reader, SolidCommand command, ActionSerializerOptions options)
+    public override void Read(ref Utf8ActionReader reader, SolidCommand command, ActionSerializerOptions options)
     {
-        Span<char> token = stackalloc char[50];
-        int read = reader.ReadToken(token);
-        token = token[..read];
-
-        if (read == 0)
+        Token token = reader.Read();
+        if (token.Type != TokenType.None)
         {
             return;
         }
 
-        command.ExecuteAs = token.ToString();
-        token.Clear();
-        read = reader.ReadToken(token);
-        token = token[..read];
+        ReadProperty(ref reader, command);
 
-        if (read == 0)
+        string potentialTarget = token.Value;
+
+        if (reader.TryGetBoolean(out bool value))
         {
-            switch (command.ExecuteAs)
-            {
-                case "on" or "yes" or "1":
-                    command.IsSolid = true;
-                    command.ExecuteAs = null;
-                    break;
-
-                case "off" or "no" or "0":
-                    command.IsSolid = false;
-                    command.ExecuteAs = null;
-                    break;
-            }
+            command.IsSolid = value;
         }
-        else
+
+        token = reader.Read();
+        if (token.Type == TokenType.None)
         {
-            command.IsSolid = token switch
-            {
-                "on" or "yes" or "1" => true,
-                "off" or "no" or "0" => false,
-                _ => command.IsSolid
-            };
+            return;
+        }
+
+        ReadProperty(ref reader, command);
+
+        if (reader.TryGetBoolean(out value))
+        {
+            command.Target = potentialTarget;
+            command.IsSolid = value;
+        }
+
+        while (ReadProperty(ref reader, command))
+        {
+            // do nothing
         }
     }
 
     /// <inheritdoc />
-    public override void Write(TextWriter writer, SolidCommand? command, ActionSerializerOptions options)
+    public override void Write(Utf8ActionWriter writer, SolidCommand? command, ActionSerializerOptions options)
     {
         if (command is null)
         {
             return;
         }
 
-        writer.Write(command.IsSolid ? "on" : "off");
+        if (command.Target is not null)
+        {
+            writer.Write(command.Target);
+        }
+
+        writer.WriteBoolean(command.IsSolid);
+        WriteProperties(writer, command, options);
     }
 }

@@ -142,7 +142,7 @@ public static partial class ActionSerializer
         }
     };
 
-    private static void SetProperty(VirtualParadiseCommand command, ReadOnlySpan<char> name, ReadOnlySpan<char> value)
+    internal static void SetProperty(VirtualParadiseCommand command, ReadOnlySpan<char> name, ReadOnlySpan<char> value)
     {
         PropertyInfo[] properties = command.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
         foreach (var property in properties)
