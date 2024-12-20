@@ -1,5 +1,3 @@
-using VpSharp.Building.Extensions;
-
 namespace VpSharp.Building.Commands.Converters;
 
 /// <summary>
@@ -8,15 +6,18 @@ namespace VpSharp.Building.Commands.Converters;
 public sealed class NameCommandConverter : CommandConverter<NameCommand>
 {
     /// <inheritdoc />
-    public override void Read(TextReader reader, NameCommand command, ActionSerializerOptions options)
+    public override void Read(ref Utf16ValueStringReader reader, NameCommand command, ActionSerializerOptions options)
     {
-        string? token = reader.ReadToken();
-        if (token is null)
+        Span<char> token = stackalloc char[50];
+        int read = reader.ReadToken(token);
+        token = token[..read];
+
+        if (read == 0)
         {
             return;
         }
 
-        command.Name = token;
+        command.Name = token.ToString();
     }
 
     /// <inheritdoc />

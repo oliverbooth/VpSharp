@@ -17,6 +17,12 @@ public sealed class PropertyAttribute : Attribute
     }
 
     /// <summary>
+    ///     Gets or sets a value indicating whether this property is optional.
+    /// </summary>
+    /// <value><see langword="true" /> if this property is optional; otherwise, <see langword="false" />.</value>
+    public bool IsOptional { get; init; }
+
+    /// <summary>
     ///     Gets the property name.
     /// </summary>
     /// <value>The property name.</value>

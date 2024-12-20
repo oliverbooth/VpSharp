@@ -13,14 +13,14 @@ internal sealed class SolidCommandTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(action.Triggers, Is.Not.Empty);
+            Assert.That(action.Triggers, Has.Count.EqualTo(1));
             Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
-            Assert.That(action.Create.Commands, Is.Not.Empty);
+            Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<SolidCommand>());
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.False);
-            Assert.That(command.TargetName, Is.Null);
+            Assert.That(command.ExecuteAs, Is.Null);
         });
     }
 
@@ -32,90 +32,90 @@ internal sealed class SolidCommandTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(action.Triggers, Is.Not.Empty);
+            Assert.That(action.Triggers, Has.Count.EqualTo(1));
             Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
-            Assert.That(action.Create.Commands, Is.Not.Empty);
+            Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<SolidCommand>());
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.True);
-            Assert.That(command.TargetName, Is.Null);
+            Assert.That(command.ExecuteAs, Is.Null);
         });
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateSolidOff_WithTargetNameAsArgument()
+    public void Deserialize_ShouldDeserialize_CreateSolidOff_WithNameArgument()
     {
         const string source = "create solid foo off";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
 
         Assert.Multiple(() =>
         {
-            Assert.That(action.Triggers, Is.Not.Empty);
+            Assert.That(action.Triggers, Has.Count.EqualTo(1));
             Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
-            Assert.That(action.Create.Commands, Is.Not.Empty);
+            Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<SolidCommand>());
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.False);
-            Assert.That(command.TargetName, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
         });
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateSolidOff_WithTargetNameAsProperty()
+    public void Deserialize_ShouldDeserialize_CreateSolidOff_WithNameProperty()
     {
         const string source = "create solid off name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
 
         Assert.Multiple(() =>
         {
-            Assert.That(action.Triggers, Is.Not.Empty);
+            Assert.That(action.Triggers, Has.Count.EqualTo(1));
             Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
-            Assert.That(action.Create.Commands, Is.Not.Empty);
+            Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<SolidCommand>());
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.False);
-            Assert.That(command.TargetName, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
         });
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateSolidOn_WithTargetNameAsArgument()
+    public void Deserialize_ShouldDeserialize_CreateSolidOn_WithNameArgument()
     {
         const string source = "create solid foo on";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
 
         Assert.Multiple(() =>
         {
-            Assert.That(action.Triggers, Is.Not.Empty);
+            Assert.That(action.Triggers, Has.Count.EqualTo(1));
             Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
-            Assert.That(action.Create.Commands, Is.Not.Empty);
+            Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<SolidCommand>());
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.True);
-            Assert.That(command.TargetName, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
         });
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateSolidOn_WithTargetNameAsProperty()
+    public void Deserialize_ShouldDeserialize_CreateSolidOn_WithNameProperty()
     {
         const string source = "create solid on name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
 
         Assert.Multiple(() =>
         {
-            Assert.That(action.Triggers, Is.Not.Empty);
+            Assert.That(action.Triggers, Has.Count.EqualTo(1));
             Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
-            Assert.That(action.Create.Commands, Is.Not.Empty);
+            Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<SolidCommand>());
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.True);
-            Assert.That(command.TargetName, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
         });
     }
 }

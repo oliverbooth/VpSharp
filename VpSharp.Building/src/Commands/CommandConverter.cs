@@ -1,5 +1,4 @@
 using System.Reflection;
-using Cysharp.Text;
 using VpSharp.Building.Annotations;
 
 namespace VpSharp.Building.Commands;
@@ -7,7 +6,7 @@ namespace VpSharp.Building.Commands;
 /// <summary>
 ///     Represents a command converter.
 /// </summary>
-public abstract class CommandConverter
+public abstract partial class CommandConverter
 {
     /// <summary>
     ///     Returns a value indicating whether this converter can convert the specified type.
@@ -27,7 +26,8 @@ public abstract class CommandConverter
     /// <param name="options">
     ///     An <see cref="ActionSerializerOptions" /> object which can customize the deserialization behaviour.
     /// </param>
-    public abstract void Read(TextReader reader, Type type, VirtualParadiseCommand command, ActionSerializerOptions options);
+    public abstract void Read(ref Utf16ValueStringReader reader, Type type, VirtualParadiseCommand command,
+        ActionSerializerOptions options);
 
     /// <summary>
     ///     Writes the command to the specified text writer.
@@ -39,55 +39,6 @@ public abstract class CommandConverter
     ///     An <see cref="ActionSerializerOptions" /> object which can customize the serialization behaviour.
     /// </param>
     public abstract void Write(TextWriter writer, Type type, VirtualParadiseCommand? command, ActionSerializerOptions options);
-
-
-    protected internal void ReadProperties(TextReader reader, VirtualParadiseCommand command, ActionSerializerOptions options)
-    {
-        PropertyInfo[] properties = command.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        foreach (var property in properties)
-        {
-            if (property.GetCustomAttribute<PropertyAttribute>() is not { } attribute)
-            {
-                continue;
-            }
-
-            int character;
-            using Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
-            while ((character = reader.Read()) != -1)
-            {
-                if (character == ' ')
-                {
-                    break;
-                }
-
-                builder.Append((char)character);
-            }
-
-            string token = builder.ToString();
-            if (!token.Contains('='))
-            {
-                continue;
-            }
-
-            int equalsIndex = token.IndexOf('=');
-            ReadOnlySpan<char> propertyKey = token.AsSpan()[..equalsIndex];
-            string propertyValue = token[(equalsIndex + 1)..];
-
-            if (!propertyKey.Equals(attribute.Name, StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            if (property.PropertyType == typeof(string))
-            {
-                property.SetValue(command, propertyValue);
-                continue;
-            }
-
-            object value = Convert.ChangeType(propertyValue, property.PropertyType);
-            property.SetValue(command, value);
-        }
-    }
 }
 
 /// <summary>
@@ -111,17 +62,18 @@ public abstract class CommandConverter<T> : CommandConverter
     ///     An <see cref="ActionSerializerOptions" /> object which can customize the deserialization behaviour.
     /// </param>
     /// <returns>The command that was read from <paramref name="reader" />.</returns>
-    public abstract void Read(TextReader reader, T command, ActionSerializerOptions options);
+    public abstract void Read(ref Utf16ValueStringReader reader, T command, ActionSerializerOptions options);
 
     /// <inheritdoc />
-    public override void Read(TextReader reader, Type type, VirtualParadiseCommand command, ActionSerializerOptions options)
+    public override void Read(ref Utf16ValueStringReader reader, Type type, VirtualParadiseCommand command,
+        ActionSerializerOptions options)
     {
         if (!CanConvert(type))
         {
             return;
         }
 
-        Read(reader, (T)command, options);
+        Read(ref reader, (T)command, options);
     }
 
     /// <summary>

@@ -26,6 +26,6 @@ public abstract class VirtualParadiseCommand
     ///     Gets the target name.
     /// </summary>
     /// <value>The target name.</value>
-    [Property("name")]
-    public string? TargetName { get; internal set; }
+    [Property("name", IsOptional = true)]
+    public string? ExecuteAs { get; internal set; }
 }

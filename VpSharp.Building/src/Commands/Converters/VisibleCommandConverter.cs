@@ -1,5 +1,3 @@
-using VpSharp.Building.Extensions;
-
 namespace VpSharp.Building.Commands.Converters;
 
 /// <summary>
@@ -8,41 +6,31 @@ namespace VpSharp.Building.Commands.Converters;
 public sealed class VisibleCommandConverter : CommandConverter<VisibleCommand>
 {
     /// <inheritdoc />
-    public override void Read(TextReader reader, VisibleCommand command, ActionSerializerOptions options)
+    public override void Read(ref Utf16ValueStringReader reader, VisibleCommand command, ActionSerializerOptions options)
     {
-        string? token = reader.ReadToken();
-        if (token is null)
+        Span<char> token = stackalloc char[50];
+        int read = reader.ReadToken(token);
+        token = token[..read];
+
+        if (read == 0)
         {
             return;
         }
 
-        command.TargetName = token;
-        token = reader.ReadToken();
+        Span<char> target = stackalloc char[read];
+        token.CopyTo(target);
+        token.Clear();
 
-        if (token is null)
-        {
-            switch (command.TargetName)
-            {
-                case "on" or "yes" or "1":
-                    command.IsVisible = true;
-                    command.TargetName = null;
-                    break;
+        read = reader.ReadToken(token);
+        token = token[..read];
 
-                case "off" or "no" or "0":
-                    command.IsVisible = false;
-                    command.TargetName = null;
-                    break;
-            }
-        }
-        else
+        command.Target = read == 0 ? null : target.ToString();
+        command.IsVisible = (read == 0 ? target : token) switch
         {
-            command.IsVisible = token switch
-            {
-                "on" or "yes" or "1" => true,
-                "off" or "no" or "0" => false,
-                _ => command.IsVisible
-            };
-        }
+            "on" or "yes" or "1" => true,
+            "off" or "no" or "0" => false,
+            _ => command.IsVisible
+        };
     }
 
     /// <inheritdoc />
@@ -51,6 +39,12 @@ public sealed class VisibleCommandConverter : CommandConverter<VisibleCommand>
         if (command is null)
         {
             return;
+        }
+
+        if (command.Target is not null)
+        {
+            writer.Write(command.Target);
+            writer.Write(' ');
         }
 
         writer.Write(command.IsVisible ? "on" : "off");

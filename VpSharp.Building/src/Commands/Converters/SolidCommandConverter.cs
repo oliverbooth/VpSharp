@@ -1,5 +1,3 @@
-using VpSharp.Building.Extensions;
-
 namespace VpSharp.Building.Commands.Converters;
 
 /// <summary>
@@ -8,29 +6,34 @@ namespace VpSharp.Building.Commands.Converters;
 public sealed class SolidCommandConverter : CommandConverter<SolidCommand>
 {
     /// <inheritdoc />
-    public override void Read(TextReader reader, SolidCommand command, ActionSerializerOptions options)
+    public override void Read(ref Utf16ValueStringReader reader, SolidCommand command, ActionSerializerOptions options)
     {
-        string? token = reader.ReadToken();
-        if (token is null)
+        Span<char> token = stackalloc char[50];
+        int read = reader.ReadToken(token);
+        token = token[..read];
+
+        if (read == 0)
         {
             return;
         }
 
-        command.TargetName = token;
-        token = reader.ReadToken();
+        command.ExecuteAs = token.ToString();
+        token.Clear();
+        read = reader.ReadToken(token);
+        token = token[..read];
 
-        if (token is null)
+        if (read == 0)
         {
-            switch (command.TargetName)
+            switch (command.ExecuteAs)
             {
                 case "on" or "yes" or "1":
                     command.IsSolid = true;
-                    command.TargetName = null;
+                    command.ExecuteAs = null;
                     break;
 
                 case "off" or "no" or "0":
                     command.IsSolid = false;
-                    command.TargetName = null;
+                    command.ExecuteAs = null;
                     break;
             }
         }
