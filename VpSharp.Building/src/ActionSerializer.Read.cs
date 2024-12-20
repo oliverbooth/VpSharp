@@ -8,13 +8,13 @@ namespace VpSharp.Building;
 
 public static partial class ActionSerializer
 {
-    private static VirtualParadiseAction Lex(ReadOnlyCollection<Token> tokens, ActionSerializerOptions options)
+    private static VirtualParadiseAction Lex(ReadOnlyCollection<LexingToken> tokens, ActionSerializerOptions options)
     {
         var action = new VirtualParadiseAction();
         VirtualParadiseTrigger? currentTrigger = null;
         VirtualParadiseCommand? currentCommand = null;
 
-        foreach (Token token in tokens)
+        foreach (LexingToken token in tokens)
         {
             HandleToken(action, token, ref currentTrigger, ref currentCommand, options);
         }
@@ -112,7 +112,7 @@ public static partial class ActionSerializer
     }
 
     private static void HandleToken(VirtualParadiseAction action,
-        Token token,
+        LexingToken token,
         ref VirtualParadiseTrigger? currentTrigger,
         ref VirtualParadiseCommand? currentCommand,
         ActionSerializerOptions options)
@@ -137,30 +137,30 @@ public static partial class ActionSerializer
 
                 break;
 
-            case TokenType.String or TokenType.Number or TokenType.Property:
+            case LexingTokenType.String or LexingTokenType.Number or LexingTokenType.Property:
                 currentCommand.RawArguments = [..currentCommand.RawArguments, token.Value];
                 break;
 
-            case TokenType.Operator when token.Value == ",":
+            case LexingTokenType.Operator when token.Value == ",":
                 currentCommand = null;
                 break;
 
-            case TokenType.Operator when token.Value == ";":
+            case LexingTokenType.Operator when token.Value == ";":
                 currentTrigger = null;
                 currentCommand = null;
                 break;
 
-            case TokenType.Eof:
+            case LexingTokenType.Eof:
                 currentTrigger = null;
                 currentCommand = null;
                 break;
         }
     }
 
-    private static ReadOnlyCollection<Token> Parse(TextReader reader)
+    private static ReadOnlyCollection<LexingToken> Parse(TextReader reader)
     {
         Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
-        var tokens = new List<Token>();
+        var tokens = new List<LexingToken>();
         bool isProperty = false;
 
         while (reader.Peek() != -1)
@@ -172,7 +172,7 @@ public static partial class ActionSerializer
                 case ',':
                 case ';':
                     AppendBuffer(ref builder, ref isProperty, tokens);
-                    tokens.Add(new Token(TokenType.Operator, [character]));
+                    tokens.Add(new LexingToken(LexingTokenType.Operator, [character]));
                     break;
 
                 case var _ when char.IsWhiteSpace(character):
@@ -190,16 +190,16 @@ public static partial class ActionSerializer
         }
 
         AppendBuffer(ref builder, ref isProperty, tokens);
-        tokens.Add(new Token(TokenType.Eof, ReadOnlySpan<char>.Empty));
+        tokens.Add(new LexingToken(LexingTokenType.Eof, ReadOnlySpan<char>.Empty));
 
         builder.Dispose();
         return tokens.AsReadOnly();
     }
 
-    private static ReadOnlyCollection<Token> Parse(ReadOnlySpan<char> source)
+    private static ReadOnlyCollection<LexingToken> Parse(ReadOnlySpan<char> source)
     {
         Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
-        var tokens = new List<Token>();
+        var tokens = new List<LexingToken>();
         bool isProperty = false;
 
         foreach (char character in source)
@@ -209,7 +209,7 @@ public static partial class ActionSerializer
                 case ',':
                 case ';':
                     AppendBuffer(ref builder, ref isProperty, tokens);
-                    tokens.Add(new Token(TokenType.Operator, [character]));
+                    tokens.Add(new LexingToken(LexingTokenType.Operator, [character]));
                     break;
 
                 case var _ when char.IsWhiteSpace(character):
@@ -227,7 +227,7 @@ public static partial class ActionSerializer
         }
 
         AppendBuffer(ref builder, ref isProperty, tokens);
-        tokens.Add(new Token(TokenType.Eof, ReadOnlySpan<char>.Empty));
+        tokens.Add(new LexingToken(LexingTokenType.Eof, ReadOnlySpan<char>.Empty));
 
         builder.Dispose();
         return tokens.AsReadOnly();

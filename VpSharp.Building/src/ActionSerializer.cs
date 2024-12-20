@@ -25,7 +25,7 @@ public static partial class ActionSerializer
         options ??= ActionSerializerOptions.Default;
         options.ValidateTypes();
 
-        ReadOnlyCollection<Token> tokens = Parse(source);
+        ReadOnlyCollection<LexingToken> tokens = Parse(source);
         return Lex(tokens, options);
     }
 
@@ -102,11 +102,11 @@ public static partial class ActionSerializer
         options ??= ActionSerializerOptions.Default;
         options.ValidateTypes();
 
-        ReadOnlyCollection<Token> tokens = Parse(reader);
+        ReadOnlyCollection<LexingToken> tokens = Parse(reader);
         return Lex(tokens, options);
     }
 
-    private static void AppendBuffer(ref Utf16ValueStringBuilder builder, ref bool isProperty, List<Token> tokens)
+    private static void AppendBuffer(ref Utf16ValueStringBuilder builder, ref bool isProperty, List<LexingToken> tokens)
     {
         if (builder.Length <= 0)
         {
@@ -115,22 +115,22 @@ public static partial class ActionSerializer
         }
 
         ReadOnlySpan<char> span = builder.AsSpan();
-        TokenType tokenType;
+        LexingTokenType tokenType;
 
         if (isProperty)
         {
-            tokenType = TokenType.Property;
+            tokenType = LexingTokenType.Property;
         }
         else if (double.TryParse(span, NumberFormatInfo.InvariantInfo, out _))
         {
-            tokenType = TokenType.Number;
+            tokenType = LexingTokenType.Number;
         }
         else
         {
-            tokenType = TokenType.String;
+            tokenType = LexingTokenType.String;
         }
 
-        tokens.Add(new Token(tokenType, span));
+        tokens.Add(new LexingToken(tokenType, span));
         builder.Clear();
         isProperty = false;
     }

@@ -1,9 +1,9 @@
 namespace VpSharp.Building;
 
 /// <summary>
-///     Represents a type of <see cref="Token" />.
+///     Represents a type of <see cref="LexingToken" />.
 /// </summary>
-internal enum TokenType
+internal enum LexingTokenType
 {
     /// <summary>
     ///     No token.

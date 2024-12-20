@@ -3,14 +3,14 @@ namespace VpSharp.Building;
 /// <summary>
 ///     Represents a token.
 /// </summary>
-internal struct Token
+internal struct LexingToken
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Token" /> structure.
+    ///     Initializes a new instance of the <see cref="LexingToken" /> structure.
     /// </summary>
     /// <param name="type">The token type.</param>
     /// <param name="value">The token value.</param>
-    public Token(TokenType type, ReadOnlySpan<char> value)
+    public LexingToken(LexingTokenType type, ReadOnlySpan<char> value)
     {
         Type = type;
         Value = value.ToString();
@@ -20,7 +20,7 @@ internal struct Token
     ///     Gets the token type.
     /// </summary>
     /// <value>The token type.</value>
-    public TokenType Type { get; }
+    public LexingTokenType Type { get; }
 
     /// <summary>
     ///     Gets the token value.
