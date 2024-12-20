@@ -20,7 +20,7 @@ internal sealed class NameCommandTests
 
             var command = (NameCommand)action.Create.Commands[0];
             Assert.That(command.Name, Is.EqualTo("foo"));
-            Assert.That(((VirtualParadiseCommand)command).ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.Null);
         });
     }
 
@@ -39,7 +39,7 @@ internal sealed class NameCommandTests
 
             var command = (NameCommand)action.Create.Commands[0];
             Assert.That(command.Name, Is.EqualTo("bar"));
-            Assert.That(((VirtualParadiseCommand)command).ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.Null);
         });
     }
 
@@ -58,7 +58,7 @@ internal sealed class NameCommandTests
 
             var command = (NameCommand)action.Create.Commands[0];
             Assert.That(command.Name, Is.EqualTo("foo"));
-            Assert.That(((VirtualParadiseCommand)command).ExecuteAs, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
         });
     }
 
@@ -77,7 +77,7 @@ internal sealed class NameCommandTests
 
             var command = (NameCommand)action.Create.Commands[0];
             Assert.That(command.Name, Is.EqualTo("bar"));
-            Assert.That(((VirtualParadiseCommand)command).ExecuteAs, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
         });
     }
 }
