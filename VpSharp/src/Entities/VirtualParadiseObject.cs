@@ -58,7 +58,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <param name="left">The first object to compare.</param>
     /// <param name="right">The second object to compare.</param>
     /// <returns><see langword="true" /> if the two objects are equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator ==(VirtualParadiseObject left, VirtualParadiseObject right)
+    public static bool operator ==(VirtualParadiseObject? left, VirtualParadiseObject? right)
     {
         return Equals(left, right);
     }
@@ -69,7 +69,7 @@ public abstract class VirtualParadiseObject : IEquatable<VirtualParadiseObject>
     /// <param name="left">The first object to compare.</param>
     /// <param name="right">The second object to compare.</param>
     /// <returns><see langword="true" /> if the two objects are not equal; otherwise, <see langword="false" />.</returns>
-    public static bool operator !=(VirtualParadiseObject left, VirtualParadiseObject right)
+    public static bool operator !=(VirtualParadiseObject? left, VirtualParadiseObject? right)
     {
         return !Equals(left, right);
     }
