@@ -9,7 +9,7 @@ namespace VpSharp.Building;
 
 public static partial class ActionSerializer
 {
-    private static VirtualParadiseAction Lex(ReadOnlyCollection<LexingToken> tokens, ActionSerializerOptions options)
+    private static VirtualParadiseAction Lex(IEnumerable<LexingToken> tokens, ActionSerializerOptions options)
     {
         var action = new VirtualParadiseAction();
         VirtualParadiseTrigger? currentTrigger = null;

@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
 using Cysharp.Text;
@@ -47,8 +47,7 @@ public static partial class ActionSerializer
         options ??= ActionSerializerOptions.Default;
         options.ValidateTypes();
 
-        using var reader = new StringReader(text);
-        return Deserialize(reader, options);
+        return Deserialize(text.AsSpan(), options);
     }
 
     /// <summary>
@@ -102,7 +101,21 @@ public static partial class ActionSerializer
         options ??= ActionSerializerOptions.Default;
         options.ValidateTypes();
 
-        ReadOnlyCollection<LexingToken> tokens = Parse(reader);
+        var tokens = new List<LexingToken>();
+        Span<char> buffer = stackalloc char[256];
+
+        while (reader.Peek() >= 0)
+        {
+            int read = reader.Read(buffer);
+            if (read <= 0)
+            {
+                break;
+            }
+
+            ReadOnlySpan<char> span = buffer[..read];
+            tokens.AddRange(Parse(span));
+        }
+
         return Lex(tokens, options);
     }
 
