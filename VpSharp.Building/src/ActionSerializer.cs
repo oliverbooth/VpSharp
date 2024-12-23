@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
 using Cysharp.Text;
@@ -148,7 +148,7 @@ public static partial class ActionSerializer
         isProperty = false;
     }
 
-    private static VirtualParadiseCommand? FindCommand(string tokenValue, IReadOnlyCollection<Type> commandTypes)
+    private static VirtualParadiseCommand? FindCommand(string tokenValue, IEnumerable<Type> commandTypes)
     {
         foreach (Type type in commandTypes)
         {
@@ -161,7 +161,7 @@ public static partial class ActionSerializer
         return null;
     }
 
-    private static VirtualParadiseTrigger? FindTrigger(string tokenValue, IReadOnlyCollection<Type> triggerTypes)
+    private static VirtualParadiseTrigger? FindTrigger(string tokenValue, IEnumerable<Type> triggerTypes)
     {
         foreach (Type type in triggerTypes)
         {
