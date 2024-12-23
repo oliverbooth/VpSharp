@@ -164,22 +164,27 @@ public static partial class ActionSerializer
         Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
         var tokens = new List<LexingToken>();
         bool isProperty = false;
+        bool isQuoted = false;
 
         foreach (char character in source)
         {
             switch (character)
             {
-                case ',':
-                case ';':
+                case '"':
+                    isQuoted = !isQuoted;
+                    break;
+
+                case ',' when !isQuoted:
+                case ';' when !isQuoted:
                     AppendBuffer(ref builder, ref isProperty, tokens);
                     tokens.Add(new LexingToken(LexingTokenType.Operator, [character]));
                     break;
 
-                case var _ when char.IsWhiteSpace(character):
+                case var _ when !isQuoted && char.IsWhiteSpace(character):
                     AppendBuffer(ref builder, ref isProperty, tokens);
                     break;
 
-                case '=':
+                case '=' when !isQuoted:
                     isProperty = true;
                     goto default;
 
