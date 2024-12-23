@@ -8,8 +8,9 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class UInt64ValueConverter : ValueConverter<ulong>
 {
     /// <inheritdoc />
-    public override ulong ReadValue(ref Utf16ValueStringReader reader, ActionSerializerOptions options)
+    public override ulong ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
-        return ulong.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out ulong value) ? value : 0UL;
+        success = ulong.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out ulong value);
+        return success ? value : 0UL;
     }
 }

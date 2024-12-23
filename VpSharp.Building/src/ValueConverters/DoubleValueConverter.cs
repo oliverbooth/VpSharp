@@ -8,8 +8,9 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class DoubleValueConverter : ValueConverter<double>
 {
     /// <inheritdoc />
-    public override double ReadValue(ref Utf16ValueStringReader reader, ActionSerializerOptions options)
+    public override double ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
-        return double.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out double value) ? value : 0.0;
+        success = double.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out double value);
+        return success ? value : 0.0;
     }
 }

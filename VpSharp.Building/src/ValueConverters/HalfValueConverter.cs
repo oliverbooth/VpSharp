@@ -8,8 +8,9 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class HalfValueConverter : ValueConverter<Half>
 {
     /// <inheritdoc />
-    public override Half ReadValue(ref Utf16ValueStringReader reader, ActionSerializerOptions options)
+    public override Half ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
-        return Half.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out Half value) ? value : (Half)0.0f;
+        success = Half.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out Half value);
+        return success ? value : (Half)0.0f;
     }
 }

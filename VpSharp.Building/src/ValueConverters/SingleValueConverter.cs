@@ -8,8 +8,9 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class SingleValueConverter : ValueConverter<float>
 {
     /// <inheritdoc />
-    public override float ReadValue(ref Utf16ValueStringReader reader, ActionSerializerOptions options)
+    public override float ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
-        return float.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out float value) ? value : 0.0f;
+        success = float.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out float value);
+        return success ? value : 0.0f;
     }
 }
