@@ -8,7 +8,7 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class UInt32ValueConverter : ValueConverter<uint>
 {
     /// <inheritdoc />
-    public override uint ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override uint Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
         success = uint.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out uint value);
         return success ? value : 0U;

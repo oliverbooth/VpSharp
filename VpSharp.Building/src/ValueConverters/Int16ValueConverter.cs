@@ -8,7 +8,7 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class Int16ValueConverter : ValueConverter<short>
 {
     /// <inheritdoc />
-    public override short ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override short Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
         success = short.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out short value);
         return success ? value : (short)0;

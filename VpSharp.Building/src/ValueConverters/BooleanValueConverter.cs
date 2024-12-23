@@ -6,7 +6,7 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class BooleanValueConverter : ValueConverter<bool>
 {
     /// <inheritdoc />
-    public override bool ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override bool Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
         if (reader.Peek() == -1)
         {

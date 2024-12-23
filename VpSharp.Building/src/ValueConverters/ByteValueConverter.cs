@@ -8,7 +8,7 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class ByteValueConverter : ValueConverter<byte>
 {
     /// <inheritdoc />
-    public override byte ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override byte Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
         success = byte.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out byte value);
         return success ? value : (byte)0;

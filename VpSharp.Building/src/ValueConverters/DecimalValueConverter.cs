@@ -8,7 +8,7 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class DecimalValueConverter : ValueConverter<decimal>
 {
     /// <inheritdoc />
-    public override decimal ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override decimal Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
         success = decimal.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out decimal value);
         return success ? value : 0.0m;

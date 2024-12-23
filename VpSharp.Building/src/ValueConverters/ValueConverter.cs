@@ -30,7 +30,7 @@ public abstract class ValueConverter
     /// </param>
     /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies deserialization behaviour.</param>
     /// <returns>The converted value.</returns>
-    public abstract object? ReadValue(ref Utf16ValueStringReader reader,
+    public abstract object? Read(ref Utf16ValueStringReader reader,
         Type typeToConvert,
         out bool success,
         ActionSerializerOptions options);
@@ -51,7 +51,7 @@ public abstract class ValueConverter<T> : ValueConverter
     }
 
     /// <inheritdoc />
-    public override object? ReadValue(ref Utf16ValueStringReader reader,
+    public override object? Read(ref Utf16ValueStringReader reader,
         Type typeToConvert,
         out bool success,
         ActionSerializerOptions options)
@@ -61,7 +61,7 @@ public abstract class ValueConverter<T> : ValueConverter
             throw new InvalidOperationException($"Cannot convert to type '{typeToConvert}'.");
         }
 
-        return ReadValue(ref reader, out success, options);
+        return Read(ref reader, out success, options);
     }
 
     /// <summary>
@@ -73,5 +73,5 @@ public abstract class ValueConverter<T> : ValueConverter
     /// </param>
     /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies deserialization behaviour.</param>
     /// <returns>The converted value.</returns>
-    public abstract T ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options);
+    public abstract T Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options);
 }

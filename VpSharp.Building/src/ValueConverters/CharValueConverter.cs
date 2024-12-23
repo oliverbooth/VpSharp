@@ -6,7 +6,7 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class CharValueConverter : ValueConverter<char>
 {
     /// <inheritdoc />
-    public override char ReadValue(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override char Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
     {
         int read = reader.Read();
         success = read != -1;
