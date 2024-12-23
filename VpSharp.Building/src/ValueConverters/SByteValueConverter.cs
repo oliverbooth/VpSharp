@@ -8,9 +8,16 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class SByteValueConverter : ValueConverter<sbyte>
 {
     /// <inheritdoc />
-    public override sbyte Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override sbyte Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
-        success = sbyte.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out sbyte value);
+        Token token = reader.Read();
+        if (token.Type is not TokenType.Number)
+        {
+            success = false;
+            return 0;
+        }
+
+        success = sbyte.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out sbyte value);
         return success ? value : (sbyte)0;
     }
 }

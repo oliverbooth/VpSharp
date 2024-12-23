@@ -6,10 +6,23 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class CharValueConverter : ValueConverter<char>
 {
     /// <inheritdoc />
-    public override char Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override char Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
-        int read = reader.Read();
-        success = read != -1;
-        return (char)read;
+        Token token = reader.Read();
+        if (token.Type is not (TokenType.String or TokenType.Text or TokenType.Number))
+        {
+            success = false;
+            return '\0';
+        }
+
+        ReadOnlySpan<char> span = token.ValueSpan;
+        if (span.Length == 1)
+        {
+            success = true;
+            return span[0];
+        }
+
+        success = false;
+        return '\0';
     }
 }

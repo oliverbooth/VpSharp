@@ -8,9 +8,16 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class UInt16ValueConverter : ValueConverter<ushort>
 {
     /// <inheritdoc />
-    public override ushort Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override ushort Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
-        success = ushort.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out ushort value);
+        Token token = reader.Read();
+        if (token.Type is not TokenType.Number)
+        {
+            success = false;
+            return 0;
+        }
+
+        success = ushort.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out ushort value);
         return success ? value : (ushort)0U;
     }
 }

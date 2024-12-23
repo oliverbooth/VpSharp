@@ -8,9 +8,16 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class Int64ValueConverter : ValueConverter<long>
 {
     /// <inheritdoc />
-    public override long Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override long Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
-        success = long.TryParse(reader.ReadToEnd(), CultureInfo.InvariantCulture, out long value);
+        Token token = reader.Read();
+        if (token.Type is not TokenType.Number)
+        {
+            success = false;
+            return 0;
+        }
+
+        success = long.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out long value);
         return success ? value : 0L;
     }
 }

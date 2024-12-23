@@ -6,9 +6,16 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class StringValueConverter : ValueConverter<string>
 {
     /// <inheritdoc />
-    public override string Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override string Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
-        success = reader.Peek() != -1;
-        return reader.ReadToEnd().ToString();
+        Token token = reader.Read();
+        if (token.Type is not (TokenType.String or TokenType.Text))
+        {
+            success = false;
+            return string.Empty;
+        }
+
+        success = true;
+        return token.Value;
     }
 }

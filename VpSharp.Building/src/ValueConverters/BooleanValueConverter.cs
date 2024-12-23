@@ -6,15 +6,17 @@ namespace VpSharp.Building.ValueConverters;
 public sealed class BooleanValueConverter : ValueConverter<bool>
 {
     /// <inheritdoc />
-    public override bool Read(ref Utf16ValueStringReader reader, out bool success, ActionSerializerOptions options)
+    public override bool Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
-        if (reader.Peek() == -1)
+        Token token = reader.Read();
+        if (token.Type is not (TokenType.Text or TokenType.Number))
         {
             success = false;
             return false;
         }
 
-        ReadOnlySpan<char> span = reader.ReadToEnd();
+        ReadOnlySpan<char> span = token.ValueSpan;
+
         if (span.Equals("on", StringComparison.OrdinalIgnoreCase) ||
             span.Equals("yes", StringComparison.OrdinalIgnoreCase) ||
             span.Equals("1", StringComparison.OrdinalIgnoreCase))
