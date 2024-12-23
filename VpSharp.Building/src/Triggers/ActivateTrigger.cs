@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Building.Triggers;
+namespace VpSharp.Building.Triggers;
 
 /// <summary>
 ///     Represents the <c>activate</c> trigger.

@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using VpSharp.Building.Commands.Converters;
 
 namespace VpSharp.Building.Commands;

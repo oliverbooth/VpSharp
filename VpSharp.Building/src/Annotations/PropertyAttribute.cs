@@ -1,4 +1,4 @@
-﻿namespace VpSharp.Building.Annotations;
+namespace VpSharp.Building.Annotations;
 
 /// <summary>
 ///     Specifies that this member is an action property in the form of <c>key=value</c>.
