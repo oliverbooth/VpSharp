@@ -24,6 +24,7 @@ internal sealed class AstartCommandTests
             Assert.That(command.ExecuteAs, Is.Null);
         });
     }
+
     [Test]
     public void ActivateAstart_ShouldDeserializeNameAndLooping_GivenNameAndLooping()
     {
