@@ -6,7 +6,7 @@ namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
 internal sealed class SpecularMapCommandTests
 {
     [Test]
-    public void CreateTexture_ShouldDeserialize_WithTextureStone1()
+    public void CreateSpecularMap_ShouldDeserialize_WithTextureStone1()
     {
         const string source = "create specularmap stone1";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -27,7 +27,7 @@ internal sealed class SpecularMapCommandTests
     }
 
     [Test]
-    public void CreateTexture_ShouldDeserialize_WithTextureStone1AndMaskAwb8m()
+    public void CreateSpecularMap_ShouldDeserialize_WithTextureStone1AndMaskAwb8m()
     {
         const string source = "create specularmap stone1 mask=awb8m";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -48,7 +48,7 @@ internal sealed class SpecularMapCommandTests
     }
 
     [Test]
-    public void CreateTexture_ShouldDeserialize_WithTextureStone1AndTag1()
+    public void CreateSpecularMap_ShouldDeserialize_WithTextureStone1AndTag1()
     {
         const string source = "create specularmap stone1 tag=1";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -69,7 +69,7 @@ internal sealed class SpecularMapCommandTests
     }
 
     [Test]
-    public void CreateTexture_ShouldDeserialize_WithTextureStone1AndMaskAwb8mAndTag1()
+    public void CreateSpecularMap_ShouldDeserialize_WithTextureStone1AndMaskAwb8mAndTag1()
     {
         const string source = "create specularmap stone1 tag=1 mask=awb8m";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);

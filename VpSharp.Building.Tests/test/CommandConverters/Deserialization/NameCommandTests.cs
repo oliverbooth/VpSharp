@@ -6,7 +6,7 @@ namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
 internal sealed class NameCommandTests
 {
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateNameFoo()
+    public void CreateName_ShouldDeserialize_GivenNameFoo()
     {
         const string source = "create name foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -25,7 +25,7 @@ internal sealed class NameCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateNameBar()
+    public void CreateName_ShouldDeserialize_GivenNameBar()
     {
         const string source = "create name bar";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -44,7 +44,7 @@ internal sealed class NameCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateNameFoo_WithNameProperty()
+    public void CreateName_ShouldDeserialize_GivenNameFooAndNameProperty()
     {
         const string source = "create name foo name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -63,7 +63,7 @@ internal sealed class NameCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateNameBar_WithNameProperty()
+    public void CreateName_ShouldDeserialize_GivenNameBarAndNameProperty()
     {
         const string source = "create name bar name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);

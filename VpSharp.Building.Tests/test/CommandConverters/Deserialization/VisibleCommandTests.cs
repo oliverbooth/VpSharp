@@ -6,7 +6,7 @@ namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
 internal sealed class VisibleCommandTests
 {
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateVisibleOff()
+    public void CreateVisible_ShouldDeserialize_CreateVisibleOff()
     {
         const string source = "create visible off";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -26,7 +26,7 @@ internal sealed class VisibleCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateVisibleOn()
+    public void CreateVisible_ShouldDeserialize_CreateVisibleOn()
     {
         const string source = "create visible on";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -46,7 +46,7 @@ internal sealed class VisibleCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateVisibleFooOff()
+    public void CreateVisible_ShouldDeserialize_CreateVisibleFooOff()
     {
         const string source = "create visible foo off";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -66,7 +66,7 @@ internal sealed class VisibleCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateVisibleOff_WithNameProperty()
+    public void CreateVisible_ShouldDeserialize_CreateVisibleOff_WithNameProperty()
     {
         const string source = "create visible off name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -86,7 +86,7 @@ internal sealed class VisibleCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateVisibleFooOn()
+    public void CreateVisible_ShouldDeserialize_CreateVisibleFooOn()
     {
         const string source = "create visible foo on";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -106,7 +106,7 @@ internal sealed class VisibleCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateVisibleOn_WithNameProperty()
+    public void CreateVisible_ShouldDeserialize_CreateVisibleOn_WithNameProperty()
     {
         const string source = "create visible on name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);

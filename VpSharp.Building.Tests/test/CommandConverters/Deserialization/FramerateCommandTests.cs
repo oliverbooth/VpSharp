@@ -6,7 +6,7 @@ namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
 internal sealed class FramerateCommandTests
 {
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateFramerate60()
+    public void CreateFramerateShouldDeserialize_CreateFramerate60()
     {
         const string source = "create framerate 60";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -25,7 +25,7 @@ internal sealed class FramerateCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateFramerate30()
+    public void CreateFramerateShouldDeserialize_CreateFramerate30()
     {
         const string source = "create framerate 30";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -44,7 +44,7 @@ internal sealed class FramerateCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateFramerate60_WithNameProperty()
+    public void CreateFramerateShouldDeserialize_CreateFramerate60_WithNameProperty()
     {
         const string source = "create framerate 60 name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -63,7 +63,7 @@ internal sealed class FramerateCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateFramerate30_WithNameProperty()
+    public void CreateFramerateShouldDeserialize_CreateFramerate30_WithNameProperty()
     {
         const string source = "create framerate 30 name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);

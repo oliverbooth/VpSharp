@@ -6,7 +6,7 @@ namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
 internal sealed class OpacityCommandTests
 {
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateOpacity80Percent()
+    public void CreateOpacity_ShouldDeserialize_CreateOpacity80Percent()
     {
         const string source = "create opacity 0.8";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -25,7 +25,7 @@ internal sealed class OpacityCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateOpacity20Percent()
+    public void CreateOpacity_ShouldDeserialize_CreateOpacity20Percent()
     {
         const string source = "create opacity 0.2";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -44,7 +44,7 @@ internal sealed class OpacityCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateOpacity80Percent_WithNameProperty()
+    public void CreateOpacity_ShouldDeserialize_CreateOpacity80Percent_WithNameProperty()
     {
         const string source = "create opacity 0.8 name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -63,7 +63,7 @@ internal sealed class OpacityCommandTests
     }
 
     [Test]
-    public void Deserialize_ShouldDeserialize_CreateOpacity20Percent_WithNameProperty()
+    public void CreateOpacity_ShouldDeserialize_CreateOpacity20Percent_WithNameProperty()
     {
         const string source = "create opacity 0.2 name=foo";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
