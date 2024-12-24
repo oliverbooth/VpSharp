@@ -275,6 +275,13 @@ public static partial class ActionSerializer
                     parameter.SetValue(command, value);
                 }
             }
+            else if (parameter.PropertyType.IsEnum)
+            {
+                if (Enum.TryParse(parameter.PropertyType, argument, true, out object? value))
+                {
+                    parameter.SetValue(command, value);
+                }
+            }
             else
             {
                 object value = Convert.ChangeType(argument, parameter.PropertyType);
@@ -316,6 +323,13 @@ public static partial class ActionSerializer
                 object? value = converter.Read(ref reader, property.PropertyType, out bool success, options);
 
                 if (success)
+                {
+                    property.SetValue(command, value);
+                }
+            }
+            else if (property.PropertyType.IsEnum)
+            {
+                if (Enum.TryParse(property.PropertyType, rawValue, true, out object? value))
                 {
                     property.SetValue(command, value);
                 }
