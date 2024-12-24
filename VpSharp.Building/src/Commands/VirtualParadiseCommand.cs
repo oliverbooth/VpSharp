@@ -11,13 +11,13 @@ public abstract class VirtualParadiseCommand
     ///     Gets the raw arguments passed to this command.
     /// </summary>
     /// <value>The raw arguments.</value>
-    public IList<string> RawArguments { get; internal set; } = [];
+    public IList<string> RawArguments { get; protected internal set; } = [];
 
     /// <summary>
     ///     Gets the raw arguments passed to this command.
     /// </summary>
     /// <value>The raw arguments.</value>
-    public IDictionary<string, string> RawProperties { get; internal set; } =
+    public IDictionary<string, string> RawProperties { get; protected internal set; } =
         new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
@@ -27,6 +27,7 @@ public abstract class VirtualParadiseCommand
     public string RawArgumentString
     {
         get => string.Join(' ', RawArguments);
+        protected internal set => RawArguments = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
     }
 
     /// <summary>

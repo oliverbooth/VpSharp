@@ -16,4 +16,8 @@
         <PackageReference Include="ZString" Version="2.6.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\VpSharp\VpSharp.csproj"/>
+    </ItemGroup>
+
 </Project>
