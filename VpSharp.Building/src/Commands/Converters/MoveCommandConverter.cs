@@ -38,18 +38,18 @@ public sealed class MoveCommandConverter : CommandConverter<MoveCommand>
         switch (command.Movement)
         {
             case { X: 0.0, Z: 0.0 }:
-                writer.Write(command.Movement.X);
+                writer.WriteNumber(command.Movement.X);
                 break;
 
             case { Z: 0.0 }:
-                writer.Write(command.Movement.X);
-                writer.Write(command.Movement.Y);
+                writer.WriteNumber(command.Movement.X);
+                writer.WriteNumber(command.Movement.Y);
                 break;
 
             default:
-                writer.Write(command.Movement.X);
-                writer.Write(command.Movement.Y);
-                writer.Write(command.Movement.Z);
+                writer.WriteNumber(command.Movement.X);
+                writer.WriteNumber(command.Movement.Y);
+                writer.WriteNumber(command.Movement.Z);
                 break;
         }
 

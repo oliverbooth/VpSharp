@@ -38,18 +38,18 @@ public sealed class RotateCommandConverter : CommandConverter<RotateCommand>
         switch (command.Rotation)
         {
             case { X: 0.0, Z: 0.0 }:
-                writer.Write(command.Rotation.Y);
+                writer.WriteNumber(command.Rotation.Y);
                 break;
 
             case { Z: 0.0 }:
-                writer.Write(command.Rotation.X);
-                writer.Write(command.Rotation.Y);
+                writer.WriteNumber(command.Rotation.X);
+                writer.WriteNumber(command.Rotation.Y);
                 break;
 
             default:
-                writer.Write(command.Rotation.X);
-                writer.Write(command.Rotation.Y);
-                writer.Write(command.Rotation.Z);
+                writer.WriteNumber(command.Rotation.X);
+                writer.WriteNumber(command.Rotation.Y);
+                writer.WriteNumber(command.Rotation.Z);
                 break;
         }
 
