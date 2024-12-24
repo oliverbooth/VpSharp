@@ -38,7 +38,8 @@ internal sealed class LockCommandTests
             Assert.That(action.Activate.Commands[0], Is.InstanceOf<LockCommand>());
 
             var command = (LockCommand)action.Activate.Commands[0];
-            Assert.That(command.Owners, Has.Count.EqualTo(1).And.Contains(11));
+            Assert.That(command.Owners, Has.Count.EqualTo(1));
+            Assert.That(command.Owners, Contains.Item(11));
             Assert.That(command.ExecuteAs, Is.Null);
         });
     }
@@ -57,7 +58,8 @@ internal sealed class LockCommandTests
             Assert.That(action.Activate.Commands[0], Is.InstanceOf<LockCommand>());
 
             var command = (LockCommand)action.Activate.Commands[0];
-            Assert.That(command.Owners, Has.Count.EqualTo(2).And.Contains(11).And.Contains(122));
+            Assert.That(command.Owners, Has.Count.EqualTo(2));
+            Assert.That(command.Owners, Contains.Item(11).And.Contains(122));
             Assert.That(command.ExecuteAs, Is.Null);
         });
     }
