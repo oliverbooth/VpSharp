@@ -7,9 +7,9 @@
 public sealed class TeleportCommand : VirtualParadiseCommand
 {
     /// <summary>
-    ///     Gets or sets the target object name.
+    ///     Gets or sets the target coordinates.
     /// </summary>
-    /// <value>The target object name.</value>
+    /// <value>The target coordinates.</value>
     public Coordinates Coordinates
     {
         get => Coordinates.Parse(RawArgumentString);
