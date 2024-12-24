@@ -12,6 +12,45 @@ public static partial class ActionSerializer
     /// <summary>
     ///     Deserializes an action from the specified span of UTF-8 encoded bytes.
     /// </summary>
+    /// <param name="utf8ActionStream">The stream containing UTF-8 encoded bytes to read.</param>
+    /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies deserialization behaviour.</param>
+    /// <returns>The deserialized action.</returns>
+    /// <exception cref="InvalidOperationException">An invalid command or trigger type was supplied.</exception>
+    public static VirtualParadiseAction Deserialize(Stream utf8ActionStream, ActionSerializerOptions? options = null)
+    {
+        if (utf8ActionStream is null)
+        {
+            throw new ArgumentNullException(nameof(utf8ActionStream));
+        }
+
+        options ??= ActionSerializerOptions.Default;
+        options.ValidateTypes();
+
+        try
+        {
+            if (utf8ActionStream.Length >= int.MaxValue)
+            {
+                throw new InvalidOperationException("The action is too large to be deserialized.");
+            }
+
+            int byteCount = (int)utf8ActionStream.Length;
+            Span<byte> utf8Action = stackalloc byte[byteCount];
+            utf8ActionStream.ReadExactly(utf8Action);
+
+            return Deserialize(utf8Action, options);
+        }
+        catch (NotSupportedException)
+        {
+            using var stream = new MemoryStream();
+            utf8ActionStream.CopyTo(stream);
+
+            return Deserialize(stream.ToArray(), options);
+        }
+    }
+
+    /// <summary>
+    ///     Deserializes an action from the specified span of UTF-8 encoded bytes.
+    /// </summary>
     /// <param name="utf8Action">The span of UTF-8 encoded bytes to read.</param>
     /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies deserialization behaviour.</param>
     /// <returns>The deserialized action.</returns>
