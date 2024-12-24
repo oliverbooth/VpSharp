@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Extensions;
@@ -10,6 +11,7 @@ namespace VpSharp.Building;
 /// </summary>
 public static partial class ActionSerializer
 {
+    private const BindingFlags PropertyBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
     private static readonly Encoding Encoding = Encoding.UTF8;
 
     private static VirtualParadiseCommand? FindCommand(ReadOnlySpan<char> tokenValue, IEnumerable<Type> commandTypes)

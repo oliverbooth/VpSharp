@@ -9,8 +9,6 @@ namespace VpSharp.Building;
 
 public static partial class ActionSerializer
 {
-    private const BindingFlags PropertyBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
     /// <summary>
     ///     Deserializes an action from the specified span of UTF-8 encoded bytes.
     /// </summary>
