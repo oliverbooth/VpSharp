@@ -1,4 +1,5 @@
 ﻿using VpSharp.Building.Annotations;
+using VpSharp.Building.ValueConverters;
 
 namespace VpSharp.Building.Commands;
 
@@ -26,11 +27,7 @@ public sealed class PictureCommand : VirtualParadiseCommand
     ///     Gets or sets the time after which the texture is updated.
     /// </summary>
     /// <value>The time after which the texture is updated.</value>
-    public TimeSpan Update
-    {
-        get => TimeSpan.FromSeconds(UpdateRaw);
-        set => UpdateRaw = value.TotalSeconds;
-    }
-
-    [Property("update")] private double UpdateRaw { get; set; }
+    [Property("update")]
+    [ValueConverter(typeof(TimeSpanToSecondsValueConverter))]
+    public TimeSpan Update { get; set; }
 }

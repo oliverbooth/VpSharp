@@ -1,5 +1,6 @@
 ﻿using VpSharp.Building.Annotations;
 using VpSharp.Building.Commands.Converters;
+using VpSharp.Building.ValueConverters;
 
 namespace VpSharp.Building.Commands;
 
@@ -40,11 +41,9 @@ public sealed class RotateCommand : VirtualParadiseCommand
     ///     Gets or sets the offset to apply to universe time when synchronizing.
     /// </summary>
     /// <value>The offset.</value>
-    public TimeSpan Offset
-    {
-        get => TimeSpan.FromSeconds(OffsetRaw);
-        set => OffsetRaw = value.TotalSeconds;
-    }
+    [Property("offset")]
+    [ValueConverter(typeof(TimeSpanToSecondsValueConverter))]
+    public TimeSpan Offset { get; set; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether this rotation resets after completing half a cycle.
@@ -64,25 +63,15 @@ public sealed class RotateCommand : VirtualParadiseCommand
     ///     Gets or sets the duration of half of a cycle.
     /// </summary>
     /// <value>The duration of half of a cycle.</value>
-    public TimeSpan Time
-    {
-        get => TimeSpan.FromSeconds(TimeRaw);
-        set => TimeRaw = value.TotalSeconds;
-    }
+    [Property("time")]
+    [ValueConverter(typeof(TimeSpanToSecondsValueConverter))]
+    public TimeSpan Time { get; set; } = TimeSpan.FromSeconds(1.0);
 
     /// <summary>
     ///     Gets or sets the time before continuing rotation after one half of a cycle.
     /// </summary>
     /// <value>The wait time.</value>
-    public TimeSpan Wait
-    {
-        get => TimeSpan.FromSeconds(WaitRaw);
-        set => WaitRaw = value.TotalSeconds;
-    }
-
-    [Property("offset")] private double OffsetRaw { get; set; }
-
-    [Property("time")] private double TimeRaw { get; set; } = 1.0;
-
-    [Property("wait")] private double WaitRaw { get; set; }
+    [Property("wait")]
+    [ValueConverter(typeof(TimeSpanToSecondsValueConverter))]
+    public TimeSpan Wait { get; set; }
 }
