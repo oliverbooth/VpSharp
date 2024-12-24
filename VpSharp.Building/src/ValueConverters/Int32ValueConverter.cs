@@ -20,4 +20,10 @@ public sealed class Int32ValueConverter : ValueConverter<int>
         success = int.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out int value);
         return success ? value : 0;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, int value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

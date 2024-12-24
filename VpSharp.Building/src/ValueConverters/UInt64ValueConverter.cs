@@ -20,4 +20,10 @@ public sealed class UInt64ValueConverter : ValueConverter<ulong>
         success = ulong.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out ulong value);
         return success ? value : 0UL;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, ulong value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

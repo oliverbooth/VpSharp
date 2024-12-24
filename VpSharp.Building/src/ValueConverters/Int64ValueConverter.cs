@@ -20,4 +20,10 @@ public sealed class Int64ValueConverter : ValueConverter<long>
         success = long.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out long value);
         return success ? value : 0L;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, long value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

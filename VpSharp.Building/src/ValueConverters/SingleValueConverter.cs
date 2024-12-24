@@ -20,4 +20,10 @@ public sealed class SingleValueConverter : ValueConverter<float>
         success = float.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out float value);
         return success ? value : 0.0f;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, float value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

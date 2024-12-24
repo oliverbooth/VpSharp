@@ -20,4 +20,10 @@ public sealed class Int16ValueConverter : ValueConverter<short>
         success = short.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out short value);
         return success ? value : (short)0;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, short value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

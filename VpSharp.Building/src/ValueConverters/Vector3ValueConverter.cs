@@ -44,4 +44,12 @@ public sealed class Vector3ValueConverter : ValueConverter<Vector3>
         success = float.TryParse(token.ValueSpan, NumberStyles.Float, CultureInfo.InvariantCulture, out float value);
         return success ? value : 0.0f;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, Vector3 value, ActionSerializerOptions options)
+    {
+        writer.Write(value.X);
+        writer.Write(value.Y);
+        writer.Write(value.Z);
+    }
 }

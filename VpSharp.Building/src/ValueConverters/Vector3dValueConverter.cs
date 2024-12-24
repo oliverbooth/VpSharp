@@ -44,4 +44,12 @@ public sealed class Vector3dValueConverter : ValueConverter<Vector3d>
         success = double.TryParse(token.ValueSpan, NumberStyles.Float, CultureInfo.InvariantCulture, out double value);
         return success ? value : 0.0;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, Vector3d value, ActionSerializerOptions options)
+    {
+        writer.Write(value.X);
+        writer.Write(value.Y);
+        writer.Write(value.Z);
+    }
 }

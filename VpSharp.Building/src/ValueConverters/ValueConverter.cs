@@ -34,6 +34,18 @@ public abstract class ValueConverter
         Type typeToConvert,
         out bool success,
         ActionSerializerOptions options);
+
+    /// <summary>
+    ///     Writes the specified value to the writer.
+    /// </summary>
+    /// <param name="writer">The writer to which the value will be written.</param>
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <param name="value">The value to write.</param>
+    /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies serialization behaviour.</param>
+    public abstract void Write(Utf8ActionWriter writer,
+        Type typeToConvert,
+        object? value,
+        ActionSerializerOptions options);
 }
 
 /// <summary>
@@ -64,6 +76,20 @@ public abstract class ValueConverter<T> : ValueConverter
         return Read(ref reader, out success, options);
     }
 
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer,
+        Type typeToConvert,
+        object? command,
+        ActionSerializerOptions options)
+    {
+        if (!CanConvert(typeToConvert) || command is not T actual)
+        {
+            throw new InvalidOperationException($"Cannot convert to type '{typeToConvert}'.");
+        }
+
+        Write(writer, actual, options);
+    }
+
     /// <summary>
     ///     Reads the specified value and converts it to the converter's type.
     /// </summary>
@@ -74,4 +100,12 @@ public abstract class ValueConverter<T> : ValueConverter
     /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies deserialization behaviour.</param>
     /// <returns>The converted value.</returns>
     public abstract T Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options);
+
+    /// <summary>
+    ///     Writes the specified value to the writer.
+    /// </summary>
+    /// <param name="writer">The writer to which the value will be written.</param>
+    /// <param name="value">The value to write.</param>
+    /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies serialization behaviour.</param>
+    public abstract void Write(Utf8ActionWriter writer, T value, ActionSerializerOptions options);
 }

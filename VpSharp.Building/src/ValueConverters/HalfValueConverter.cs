@@ -20,4 +20,10 @@ public sealed class HalfValueConverter : ValueConverter<Half>
         success = Half.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out Half value);
         return success ? value : (Half)0.0f;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, Half value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

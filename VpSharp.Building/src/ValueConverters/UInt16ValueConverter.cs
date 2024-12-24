@@ -20,4 +20,10 @@ public sealed class UInt16ValueConverter : ValueConverter<ushort>
         success = ushort.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out ushort value);
         return success ? value : (ushort)0U;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, ushort value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

@@ -25,4 +25,10 @@ public sealed class CharValueConverter : ValueConverter<char>
         success = false;
         return '\0';
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, char value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

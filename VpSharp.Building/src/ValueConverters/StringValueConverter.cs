@@ -18,4 +18,10 @@ public sealed class StringValueConverter : ValueConverter<string>
         success = true;
         return token.Value;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, string value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

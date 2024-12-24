@@ -20,4 +20,10 @@ public sealed class SByteValueConverter : ValueConverter<sbyte>
         success = sbyte.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out sbyte value);
         return success ? value : (sbyte)0;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, sbyte value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

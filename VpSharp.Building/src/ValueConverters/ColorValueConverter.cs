@@ -41,4 +41,10 @@ public sealed class ColorValueConverter : ValueConverter<Color>
         success = color != Color.Empty;
         return color;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, Color value, ActionSerializerOptions options)
+    {
+        writer.Write((value.ToArgb() & 0xFFFFFF).ToString("X6"));
+    }
 }

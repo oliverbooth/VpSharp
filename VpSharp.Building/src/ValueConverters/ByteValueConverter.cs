@@ -20,4 +20,10 @@ public sealed class ByteValueConverter : ValueConverter<byte>
         success = byte.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out byte value);
         return success ? value : (byte)0;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, byte value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

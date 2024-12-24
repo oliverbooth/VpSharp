@@ -36,4 +36,10 @@ public sealed class BooleanValueConverter : ValueConverter<bool>
         success = false;
         return false;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, bool value, ActionSerializerOptions options)
+    {
+        writer.Write(value ? "on" : "off");
+    }
 }

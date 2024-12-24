@@ -20,4 +20,10 @@ public sealed class UInt32ValueConverter : ValueConverter<uint>
         success = uint.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out uint value);
         return success ? value : 0U;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, uint value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }

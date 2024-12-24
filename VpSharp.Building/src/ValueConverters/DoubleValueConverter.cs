@@ -20,4 +20,10 @@ public sealed class DoubleValueConverter : ValueConverter<double>
         success = double.TryParse(token.ValueSpan, CultureInfo.InvariantCulture, out double value);
         return success ? value : 0.0;
     }
+
+    /// <inheritdoc />
+    public override void Write(Utf8ActionWriter writer, double value, ActionSerializerOptions options)
+    {
+        writer.Write(value);
+    }
 }
