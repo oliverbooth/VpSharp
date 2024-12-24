@@ -8,38 +8,21 @@ public sealed class VisibleCommandConverter : CommandConverter<VisibleCommand>
     /// <inheritdoc />
     public override void Read(ref Utf8ActionReader reader, VisibleCommand command, ActionSerializerOptions options)
     {
-        Token token = reader.Read();
-        if (token.Type == TokenType.None)
+        reader.Read();
+
+        if (command.RawArguments.Count > 1)
         {
-            return;
+            command.Target = reader.CurrentToken.Value;
+            reader.Read();
         }
 
-        ReadProperty(ref reader, command);
-
-        string potentialTarget = token.Value;
-
-        if (reader.TryGetBoolean(out bool value))
+        try
         {
-            command.IsVisible = value;
+            command.IsVisible = reader.GetBoolean();
         }
-
-        token = reader.Read();
-        if (token.Type == TokenType.None)
+        catch
         {
-            return;
-        }
-
-        ReadProperty(ref reader, command);
-
-        if (reader.TryGetBoolean(out value))
-        {
-            command.Target = potentialTarget;
-            command.IsVisible = value;
-        }
-
-        while (ReadProperty(ref reader, command))
-        {
-            // do nothing
+            // ignored
         }
     }
 

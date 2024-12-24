@@ -17,7 +17,8 @@ public abstract class VirtualParadiseCommand
     ///     Gets the raw arguments passed to this command.
     /// </summary>
     /// <value>The raw arguments.</value>
-    public IDictionary<string, string> RawProperties { get; internal set; } = new Dictionary<string, string>();
+    public IDictionary<string, string> RawProperties { get; internal set; } =
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>
     ///     Gets the raw argument string passed to this command.

@@ -20,6 +20,7 @@ internal sealed class SolidCommandTests
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.False);
+            Assert.That(command.Target, Is.Null);
             Assert.That(command.ExecuteAs, Is.Null);
         });
     }
@@ -39,6 +40,7 @@ internal sealed class SolidCommandTests
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.True);
+            Assert.That(command.Target, Is.Null);
             Assert.That(command.ExecuteAs, Is.Null);
         });
     }
@@ -58,7 +60,8 @@ internal sealed class SolidCommandTests
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.False);
-            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
+            Assert.That(command.Target, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.Null);
         });
     }
 
@@ -77,6 +80,7 @@ internal sealed class SolidCommandTests
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.False);
+            Assert.That(command.Target, Is.Null);
             Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
         });
     }
@@ -96,7 +100,8 @@ internal sealed class SolidCommandTests
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.True);
-            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
+            Assert.That(command.Target, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.Null);
         });
     }
 
@@ -115,6 +120,7 @@ internal sealed class SolidCommandTests
 
             var command = (SolidCommand)action.Create.Commands[0];
             Assert.That(command.IsSolid, Is.True);
+            Assert.That(command.Target, Is.Null);
             Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
         });
     }

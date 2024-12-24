@@ -11,7 +11,7 @@ public sealed class ByteValueConverter : ValueConverter<byte>
     public override byte Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
         Token token = reader.Read();
-        if (token.Type is not TokenType.Number)
+        if (token.Type == TokenType.None)
         {
             success = false;
             return 0;

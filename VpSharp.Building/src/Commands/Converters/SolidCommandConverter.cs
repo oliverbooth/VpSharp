@@ -8,38 +8,21 @@ public sealed class SolidCommandConverter : CommandConverter<SolidCommand>
     /// <inheritdoc />
     public override void Read(ref Utf8ActionReader reader, SolidCommand command, ActionSerializerOptions options)
     {
-        Token token = reader.Read();
-        if (token.Type != TokenType.None)
+        reader.Read();
+
+        if (command.RawArguments.Count > 1)
         {
-            return;
+            command.Target = reader.CurrentToken.Value;
+            reader.Read();
         }
 
-        ReadProperty(ref reader, command);
-
-        string potentialTarget = token.Value;
-
-        if (reader.TryGetBoolean(out bool value))
+        try
         {
-            command.IsSolid = value;
+            command.IsSolid = reader.GetBoolean();
         }
-
-        token = reader.Read();
-        if (token.Type == TokenType.None)
+        catch
         {
-            return;
-        }
-
-        ReadProperty(ref reader, command);
-
-        if (reader.TryGetBoolean(out value))
-        {
-            command.Target = potentialTarget;
-            command.IsSolid = value;
-        }
-
-        while (ReadProperty(ref reader, command))
-        {
-            // do nothing
+            // ignored
         }
     }
 

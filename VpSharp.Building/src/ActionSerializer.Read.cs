@@ -1,203 +1,387 @@
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reflection;
-using System.Text;
 using Cysharp.Text;
+using VpSharp.Building.Annotations;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
+using VpSharp.Building.ValueConverters;
 
 namespace VpSharp.Building;
 
 public static partial class ActionSerializer
 {
-    private static VirtualParadiseAction Lex(IEnumerable<LexingToken> tokens, ActionSerializerOptions options)
+    private const BindingFlags PropertyBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+    /// <summary>
+    ///     Deserializes an action from the specified span of UTF-8 encoded bytes.
+    /// </summary>
+    /// <param name="utf8Action">The span of UTF-8 encoded bytes to read.</param>
+    /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies deserialization behaviour.</param>
+    /// <returns>The deserialized action.</returns>
+    /// <exception cref="InvalidOperationException">An invalid command or trigger type was supplied.</exception>
+    public static VirtualParadiseAction Deserialize(ReadOnlySpan<byte> utf8Action, ActionSerializerOptions? options = null)
     {
-        var action = new VirtualParadiseAction();
-        VirtualParadiseTrigger? currentTrigger = null;
-        VirtualParadiseCommand? currentCommand = null;
+        options ??= ActionSerializerOptions.Default;
+        options.ValidateTypes();
 
-        foreach (LexingToken token in tokens)
-        {
-            HandleToken(action, token, ref currentTrigger, ref currentCommand, options);
-        }
+        int charCount = Encoding.GetCharCount(utf8Action);
+        Span<char> action = stackalloc char[charCount];
+        Encoding.GetChars(utf8Action, action);
 
-        ConvertCommand(action, options);
-        return action;
+        return Deserialize(action, options);
     }
 
-    private static void ConvertCommand(VirtualParadiseAction action, ActionSerializerOptions options)
+    /// <summary>
+    ///     Deserializes an action from the specified span of characters.
+    /// </summary>
+    /// <param name="source">The span of characters to read.</param>
+    /// <param name="options">An <see cref="ActionSerializerOptions" /> object that specifies deserialization behaviour.</param>
+    /// <returns>The deserialized action.</returns>
+    /// <exception cref="InvalidOperationException">An invalid command or trigger type was supplied.</exception>
+    public static VirtualParadiseAction Deserialize(ReadOnlySpan<char> source, ActionSerializerOptions? options = null)
     {
-        foreach (VirtualParadiseCommand command in action.Triggers.SelectMany(t => t.Commands))
+        options ??= ActionSerializerOptions.Default;
+        options.ValidateTypes();
+
+        using Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
+        var triggers = new List<VirtualParadiseTrigger>();
+        bool isQuoted = false;
+
+        for (var index = 0; index < source.Length; index++)
         {
-            var type = command.GetType();
-            var attribute = type.GetCustomAttribute<CommandAttribute>();
-            if (attribute?.ConverterType is not { } converterType)
+            char current = source[index];
+            switch (current)
             {
-                continue;
+                case '"':
+                    isQuoted = !isQuoted;
+                    break;
+
+                case var _ when index == source.Length - 1:
+                    builder.Append(current);
+                    HandleBuffer();
+                    break;
+
+                case ';' when !isQuoted:
+                    HandleBuffer();
+                    break;
+
+                default:
+                    builder.Append(current);
+                    break;
+            }
+        }
+
+        return new VirtualParadiseAction { Triggers = triggers };
+
+        void HandleBuffer()
+        {
+            VirtualParadiseTrigger? trigger = DeserializeTrigger(builder.AsSpan(), options);
+            if (trigger is not null)
+            {
+                triggers.Add(trigger);
             }
 
-            if (Activator.CreateInstance(converterType) is not CommandConverter converter || !converter.CanConvert(type))
-            {
-                continue;
-            }
-
-            ConvertCommand(command, converter, type, options);
+            builder.Clear();
         }
     }
 
-    private static void ConvertCommand(VirtualParadiseCommand command,
-        CommandConverter converter,
-        Type type,
+    private static VirtualParadiseTrigger? DeserializeTrigger(ReadOnlySpan<char> source, ActionSerializerOptions options)
+    {
+        using Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
+        var commands = new List<VirtualParadiseCommand>();
+        bool isQuoted = false;
+        bool isTriggerName = true;
+        VirtualParadiseTrigger? trigger = null;
+
+        for (var index = 0; index < source.Length; index++)
+        {
+            char current = source[index];
+            switch (current)
+            {
+                case ' ' when isTriggerName:
+                    isTriggerName = false;
+                    trigger = FindTrigger(builder.AsSpan(), options.TriggerTypes);
+                    builder.Clear();
+                    break;
+
+                case '"':
+                    isQuoted = !isQuoted;
+                    break;
+
+                case var _ when index == source.Length - 1:
+                    builder.Append(current);
+                    HandleBuffer();
+                    break;
+
+                case ',' when !isQuoted:
+                    HandleBuffer();
+                    break;
+
+                default:
+                    builder.Append(current);
+                    break;
+            }
+        }
+
+        if (trigger is not null)
+        {
+            trigger.Commands = commands.AsReadOnly();
+        }
+
+        return trigger;
+
+        void HandleBuffer()
+        {
+            VirtualParadiseCommand? command = DeserializeCommand(builder.AsSpan(), options);
+            if (command is not null)
+            {
+                commands.Add(command);
+            }
+
+            builder.Clear();
+        }
+    }
+
+    private static VirtualParadiseCommand? DeserializeCommand(ReadOnlySpan<char> source, ActionSerializerOptions options)
+    {
+        Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
+        VirtualParadiseCommand? command = ParseCommand(source, options, ref builder);
+        builder.Dispose();
+
+        if (command is null)
+        {
+            return null;
+        }
+
+        if (command.GetType().GetCustomAttribute<CommandAttribute>()?.ConverterType is { } converterType)
+        {
+            DeserializeWithCommandConverter(command, converterType, options);
+        }
+        else
+        {
+            ExtractArguments(command, options);
+        }
+
+        ExtractProperties(command, options);
+        return command;
+    }
+
+    private static void DeserializeWithCommandConverter(VirtualParadiseCommand command,
+        Type converterType,
         ActionSerializerOptions options)
     {
-        IList<string> rawArguments = command.RawArguments;
+        IList<string> arguments = command.RawArguments;
+        IDictionary<string, string> properties = command.RawProperties;
+        CommandConverter converter = (CommandConverter)Activator.CreateInstance(converterType)!;
+        Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
 
-        Span<char> arguments = stackalloc char[rawArguments.Sum(arg => arg.Length) + rawArguments.Count];
-        int offset = 0;
-        foreach (ReadOnlySpan<char> argument in rawArguments)
+        foreach (string argument in arguments)
         {
-            argument.CopyTo(arguments[offset..]);
-            offset += argument.Length;
-            arguments[offset++] = ' ';
+            builder.Append(argument);
+            builder.Append(' ');
         }
 
-        int byteCount = Encoding.UTF8.GetByteCount(arguments);
+        foreach (KeyValuePair<string, string> property in properties)
+        {
+            builder.Append(property.Key);
+            builder.Append('=');
+            builder.Append(property.Value);
+            builder.Append(' ');
+        }
+
+        ReadOnlySpan<char> chars = builder.AsSpan().TrimEnd();
+        int byteCount = Encoding.GetByteCount(chars);
         Span<byte> bytes = stackalloc byte[byteCount];
-        Encoding.UTF8.GetBytes(arguments, bytes);
+        Encoding.GetBytes(chars, bytes);
 
         var reader = new Utf8ActionReader(bytes);
-        reader.SkipWhitespace();
-        converter.Read(ref reader, type, command, options);
+        converter.Read(ref reader, command.GetType(), command, options);
     }
 
-    private static void HandleToken(VirtualParadiseAction action,
-        LexingToken token,
-        ref VirtualParadiseTrigger? currentTrigger,
-        ref VirtualParadiseCommand? currentCommand,
-        ActionSerializerOptions options)
+    private static void ExtractArguments(VirtualParadiseCommand command, ActionSerializerOptions options)
     {
-        switch (token.Type)
+        if (command.RawArguments.Count == 0)
         {
-            case var _ when currentTrigger is null:
-                currentTrigger = FindTrigger(token.Value, options.TriggerTypes);
-                if (currentTrigger is not null)
+            return;
+        }
+
+        PropertyInfo[] members = command.GetType().GetProperties(PropertyBindingFlags);
+        PropertyInfo[] parameters = members.Where(m => m.GetCustomAttribute<ParameterAttribute>() is not null)
+            .OrderBy(m => m.GetCustomAttribute<ParameterAttribute>()!.Order)
+            .ToArray();
+
+        int maxBytes = command.RawArguments.Max(a => Encoding.GetByteCount(a));
+        Span<byte> buffer = stackalloc byte[maxBytes];
+
+        for (var index = 0; index < parameters.Length; index++)
+        {
+            PropertyInfo parameter = parameters[index];
+            string? argument = index < command.RawArguments.Count ? command.RawArguments[index] : null;
+            if (argument is null)
+            {
+                continue;
+            }
+
+            int byteCount = Encoding.GetByteCount(argument);
+            Span<byte> bytes = buffer[..byteCount];
+            Encoding.GetBytes(argument, bytes);
+
+            var reader = new Utf8ActionReader(bytes);
+            if (GetValueConverterType(parameter) is { } type)
+            {
+                ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
+                object? value = converter.Read(ref reader, parameter.PropertyType, out bool success, options);
+
+                if (success)
                 {
-                    action.Triggers = [..action.Triggers, currentTrigger];
+                    parameter.SetValue(command, value);
                 }
-
-                break;
-
-            case var _ when currentCommand is null:
-                currentCommand = FindCommand(token.Value, options.CommandTypes);
-                if (currentCommand is not null)
-                {
-                    currentTrigger.Commands = [..currentTrigger.Commands, currentCommand];
-                }
-
-                break;
-
-            case LexingTokenType.Text or LexingTokenType.Number or LexingTokenType.Property:
-                currentCommand.RawArguments = [..currentCommand.RawArguments, token.Value];
-                break;
-
-            case LexingTokenType.Operator when token.Value == ",":
-                currentCommand = null;
-                break;
-
-            case LexingTokenType.Operator when token.Value == ";":
-                currentTrigger = null;
-                currentCommand = null;
-                break;
-
-            case LexingTokenType.Eof:
-                currentTrigger = null;
-                currentCommand = null;
-                break;
+            }
+            else
+            {
+                object value = Convert.ChangeType(argument, parameter.PropertyType);
+                parameter.SetValue(command, value);
+            }
         }
     }
 
-    private static ReadOnlyCollection<LexingToken> Parse(TextReader reader)
+    private static void ExtractProperties(VirtualParadiseCommand command, ActionSerializerOptions options)
     {
-        Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
-        var tokens = new List<LexingToken>();
-        bool isProperty = false;
-        bool isQuoted = false;
-
-        while (reader.Peek() != -1)
+        if (command.RawProperties.Count == 0)
         {
-            var character = (char)reader.Read();
+            return;
+        }
 
-            switch (character)
+        PropertyInfo[] members = command.GetType().GetProperties(PropertyBindingFlags);
+        PropertyInfo[] properties = members.Where(m => m.GetCustomAttribute<PropertyAttribute>() is not null).ToArray();
+
+        int maxBytes = command.RawProperties.Max(a => Encoding.GetByteCount(a.Value));
+        Span<byte> buffer = stackalloc byte[maxBytes];
+
+        for (var index = 0; index < properties.Length; index++)
+        {
+            PropertyInfo property = properties[index];
+            PropertyAttribute attribute = property.GetCustomAttribute<PropertyAttribute>()!;
+            if (!command.RawProperties.TryGetValue(attribute.Name, out string? rawValue))
+            {
+                continue;
+            }
+
+            int byteCount = Encoding.GetByteCount(rawValue);
+            Span<byte> bytes = buffer[..byteCount];
+            Encoding.GetBytes(rawValue, bytes);
+
+            var reader = new Utf8ActionReader(bytes);
+            if (GetValueConverterType(property) is { } type)
+            {
+                ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
+                object? value = converter.Read(ref reader, property.PropertyType, out bool success, options);
+
+                if (success)
+                {
+                    property.SetValue(command, value);
+                }
+            }
+            else
+            {
+                object value = Convert.ChangeType(rawValue, property.PropertyType);
+                property.SetValue(command, value);
+            }
+        }
+    }
+
+    private static Type? GetValueConverterType(PropertyInfo member)
+    {
+        if (member.GetCustomAttribute<ValueConverterAttribute>() is { } attribute)
+        {
+            return attribute.ConverterType;
+        }
+
+        return typeof(ValueConverter<>).Assembly.GetTypes().FirstOrDefault(t =>
+            !t.IsAbstract && t.IsSubclassOf(typeof(ValueConverter<>).MakeGenericType(member.PropertyType)));
+    }
+
+    private static VirtualParadiseCommand? ParseCommand(ReadOnlySpan<char> source,
+        ActionSerializerOptions options,
+        ref Utf16ValueStringBuilder builder)
+    {
+        VirtualParadiseCommand? command = null;
+        bool isQuoted = false;
+        bool isCommandName = true;
+
+        for (var index = 0; index < source.Length; index++)
+        {
+            char current = source[index];
+            switch (current)
+            {
+                case ' ' when isCommandName:
+                    isCommandName = false;
+                    command = FindCommand(builder.AsSpan(), options.CommandTypes);
+                    builder.Clear();
+                    break;
+
+                case '"':
+                    isQuoted = !isQuoted;
+                    break;
+
+                case var _ when index == source.Length - 1:
+                    builder.Append(current);
+                    HandleCommandBuffer(command, ref builder);
+                    break;
+
+                case ' ' when !isQuoted:
+                    HandleCommandBuffer(command, ref builder);
+                    break;
+
+                default:
+                    builder.Append(current);
+                    break;
+            }
+        }
+
+        return command;
+    }
+
+    private static void HandleCommandBuffer(VirtualParadiseCommand? command, ref Utf16ValueStringBuilder builder)
+    {
+        if (command is null)
+        {
+            return;
+        }
+
+        ReadOnlySpan<char> span = builder.AsSpan();
+        bool isQuoted = false;
+        bool isProperty = false;
+        int equalsIndex = -1;
+
+        for (var index = 0; index < span.Length; index++)
+        {
+            var current = span[index];
+            switch (current)
             {
                 case '"':
                     isQuoted = !isQuoted;
                     break;
 
-                case ',' when !isQuoted:
-                case ';' when !isQuoted:
-                    AppendBuffer(ref builder, ref isProperty, tokens);
-                    tokens.Add(new LexingToken(LexingTokenType.Operator, [character]));
-                    break;
-
-                case var _ when !isQuoted && char.IsWhiteSpace(character):
-                    AppendBuffer(ref builder, ref isProperty, tokens);
-                    break;
-
                 case '=' when !isQuoted:
                     isProperty = true;
-                    goto default;
-
-                default:
-                    builder.Append(character);
+                    equalsIndex = index;
                     break;
             }
         }
 
-        AppendBuffer(ref builder, ref isProperty, tokens);
-        tokens.Add(new LexingToken(LexingTokenType.Eof, ReadOnlySpan<char>.Empty));
-
-        builder.Dispose();
-        return tokens.AsReadOnly();
-    }
-
-    private static ReadOnlyCollection<LexingToken> Parse(ReadOnlySpan<char> source)
-    {
-        Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
-        var tokens = new List<LexingToken>();
-        bool isProperty = false;
-        bool isQuoted = false;
-
-        foreach (char character in source)
+        if (isProperty)
         {
-            switch (character)
-            {
-                case '"':
-                    isQuoted = !isQuoted;
-                    break;
+            ReadOnlySpan<char> name = span[..equalsIndex];
+            ReadOnlySpan<char> value = span[(equalsIndex + 1)..];
 
-                case ',' when !isQuoted:
-                case ';' when !isQuoted:
-                    AppendBuffer(ref builder, ref isProperty, tokens);
-                    tokens.Add(new LexingToken(LexingTokenType.Operator, [character]));
-                    break;
-
-                case var _ when !isQuoted && char.IsWhiteSpace(character):
-                    AppendBuffer(ref builder, ref isProperty, tokens);
-                    break;
-
-                case '=' when !isQuoted:
-                    isProperty = true;
-                    goto default;
-
-                default:
-                    builder.Append(character);
-                    break;
-            }
+            command.RawProperties[name.ToString()] = value.ToString();
+        }
+        else
+        {
+            command.RawArguments.Add(span.ToString());
         }
 
-        AppendBuffer(ref builder, ref isProperty, tokens);
-        tokens.Add(new LexingToken(LexingTokenType.Eof, ReadOnlySpan<char>.Empty));
-
-        builder.Dispose();
-        return tokens.AsReadOnly();
+        builder.Clear();
     }
 }

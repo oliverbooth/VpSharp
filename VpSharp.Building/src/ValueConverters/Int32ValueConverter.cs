@@ -11,7 +11,7 @@ public sealed class Int32ValueConverter : ValueConverter<int>
     public override int Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
         Token token = reader.Read();
-        if (token.Type is not TokenType.Number)
+        if (token.Type == TokenType.None)
         {
             success = false;
             return 0;

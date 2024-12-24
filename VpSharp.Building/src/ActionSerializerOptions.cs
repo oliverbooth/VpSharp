@@ -1,5 +1,6 @@
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
+using VpSharp.Building.ValueConverters;
 
 namespace VpSharp.Building;
 
@@ -10,13 +11,16 @@ public sealed class ActionSerializerOptions
 {
     private readonly List<Type> _commandTypes = [];
     private readonly List<Type> _triggerTypes = [];
+    private readonly List<Type> _valueConverterTypes = [];
 
     /// <summary>
     ///     Default action serializer options.
     /// </summary>
     public static readonly ActionSerializerOptions Default = new()
     {
-        CommandTypes = GetBuiltInCommands(), TriggerTypes = GetBuiltInTriggers()
+        CommandTypes = GetBuiltInCommands(),
+        TriggerTypes = GetBuiltInTriggers(),
+        ValueConverterTypes = GetBuiltInValueConverters()
     };
 
     /// <summary>
@@ -40,6 +44,16 @@ public sealed class ActionSerializerOptions
     }
 
     /// <summary>
+    ///     Gets the registered value converter types.
+    /// </summary>
+    /// <value>The registered value converter types.</value>
+    public IReadOnlyCollection<Type> ValueConverterTypes
+    {
+        get => _valueConverterTypes.AsReadOnly();
+        init => _valueConverterTypes = [..value];
+    }
+
+    /// <summary>
     ///     Gets or initializes a value indicating whether the action should be written with indentation.
     /// </summary>
     /// <value><see langword="true" /> to write indented; otherwise, <see langword="false" />.</value>
@@ -55,6 +69,11 @@ public sealed class ActionSerializerOptions
         foreach (Type? type in _triggerTypes)
         {
             ValidateType<VirtualParadiseTrigger>(type);
+        }
+
+        foreach (Type? type in _valueConverterTypes)
+        {
+            ValidateType<ValueConverter>(type);
         }
 
         return;
@@ -83,5 +102,11 @@ public sealed class ActionSerializerOptions
     {
         Type[] types = typeof(VirtualParadiseCommand).Assembly.GetTypes();
         return types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(VirtualParadiseTrigger))).ToArray();
+    }
+
+    private static Type[] GetBuiltInValueConverters()
+    {
+        Type[] types = typeof(ValueConverter).Assembly.GetTypes();
+        return types.Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(ValueConverter))).ToArray();
     }
 }

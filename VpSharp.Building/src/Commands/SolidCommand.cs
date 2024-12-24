@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Commands.Converters;
+﻿using VpSharp.Building.Annotations;
+using VpSharp.Building.Commands.Converters;
 
 namespace VpSharp.Building.Commands;
 
@@ -12,11 +13,13 @@ public sealed class SolidCommand : VirtualParadiseCommand
     ///     Gets or sets the solid flag value.
     /// </summary>
     /// <value>The solid flag value.</value>
+    [Parameter(1)]
     public bool IsSolid { get; set; } = true;
 
     /// <summary>
     ///     Gets or sets the target object name.
     /// </summary>
     /// <value>The target object name.</value>
+    [Parameter(0, IsOptional = true)]
     public string? Target { get; set; }
 }

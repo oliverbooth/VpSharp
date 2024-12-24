@@ -9,7 +9,7 @@ public sealed class CharValueConverter : ValueConverter<char>
     public override char Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
         Token token = reader.Read();
-        if (token.Type is not (TokenType.String or TokenType.Text or TokenType.Number))
+        if (token.Type == TokenType.None)
         {
             success = false;
             return '\0';

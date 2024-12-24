@@ -13,12 +13,14 @@ public sealed class VisibleCommand : VirtualParadiseCommand
     ///     Gets or sets the visible flag value.
     /// </summary>
     /// <value>The visible flag value.</value>
+    [Parameter(1)]
     public bool IsVisible { get; set; } = true;
 
     /// <summary>
     ///     Gets or sets the target object name.
     /// </summary>
     /// <value>The target object name.</value>
+    [Parameter(0, IsOptional = true)]
     public string? Target { get; set; }
 
     /// <summary>

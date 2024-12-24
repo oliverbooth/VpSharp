@@ -13,7 +13,7 @@ public sealed class VirtualParadiseAction
     /// <value>The <see cref="ActivateTrigger" /> in this action.</value>
     public ActivateTrigger Activate
     {
-        get => Triggers.OfType<ActivateTrigger>().FirstOrDefault() ?? new ActivateTrigger();
+        get => new() { Commands = Triggers.OfType<ActivateTrigger>().SelectMany(t => t.Commands).ToArray() };
     }
 
     /// <summary>
@@ -22,7 +22,7 @@ public sealed class VirtualParadiseAction
     /// <value>The <see cref="AdoneTrigger" /> in this action.</value>
     public AdoneTrigger Adone
     {
-        get => Triggers.OfType<AdoneTrigger>().FirstOrDefault() ?? new AdoneTrigger();
+        get => new() { Commands = Triggers.OfType<AdoneTrigger>().SelectMany(t => t.Commands).ToArray() };
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public sealed class VirtualParadiseAction
     /// <value>The <see cref="BumpTrigger" /> in this action.</value>
     public BumpTrigger Bump
     {
-        get => Triggers.OfType<BumpTrigger>().FirstOrDefault() ?? new BumpTrigger();
+        get => new() { Commands = Triggers.OfType<BumpTrigger>().SelectMany(t => t.Commands).ToArray() };
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public sealed class VirtualParadiseAction
     /// <value>The <see cref="BumpEndTrigger" /> in this action.</value>
     public BumpEndTrigger BumpEnd
     {
-        get => Triggers.OfType<BumpEndTrigger>().FirstOrDefault() ?? new BumpEndTrigger();
+        get => new() { Commands = Triggers.OfType<BumpEndTrigger>().SelectMany(t => t.Commands).ToArray() };
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public sealed class VirtualParadiseAction
     /// <value>The <see cref="CreateTrigger" /> in this action.</value>
     public CreateTrigger Create
     {
-        get => Triggers.OfType<CreateTrigger>().FirstOrDefault() ?? new CreateTrigger();
+        get => new() { Commands = Triggers.OfType<CreateTrigger>().SelectMany(t => t.Commands).ToArray() };
     }
 
     /// <summary>
