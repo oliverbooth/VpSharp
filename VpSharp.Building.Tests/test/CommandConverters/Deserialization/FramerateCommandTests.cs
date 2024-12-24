@@ -14,7 +14,7 @@ internal sealed class FramerateCommandTests
         Assert.Multiple(() =>
         {
             Assert.That(action.Triggers, Has.Count.EqualTo(1));
-            Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
+            Assert.That(action.Triggers[0], Is.InstanceOf<CreateTrigger>());
             Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<FramerateCommand>());
 
@@ -33,7 +33,7 @@ internal sealed class FramerateCommandTests
         Assert.Multiple(() =>
         {
             Assert.That(action.Triggers, Has.Count.EqualTo(1));
-            Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
+            Assert.That(action.Triggers[0], Is.InstanceOf<CreateTrigger>());
             Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<FramerateCommand>());
 
@@ -52,7 +52,7 @@ internal sealed class FramerateCommandTests
         Assert.Multiple(() =>
         {
             Assert.That(action.Triggers, Has.Count.EqualTo(1));
-            Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
+            Assert.That(action.Triggers[0], Is.InstanceOf<CreateTrigger>());
             Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<FramerateCommand>());
 
@@ -71,7 +71,7 @@ internal sealed class FramerateCommandTests
         Assert.Multiple(() =>
         {
             Assert.That(action.Triggers, Has.Count.EqualTo(1));
-            Assert.That(action.Triggers.OfType<CreateTrigger>(), Is.Not.Null);
+            Assert.That(action.Triggers[0], Is.InstanceOf<CreateTrigger>());
             Assert.That(action.Create.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Create.Commands[0], Is.InstanceOf<FramerateCommand>());
 

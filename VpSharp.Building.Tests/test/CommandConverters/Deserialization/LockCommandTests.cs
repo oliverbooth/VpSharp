@@ -14,7 +14,7 @@ internal sealed class LockCommandTests
         Assert.Multiple(() =>
         {
             Assert.That(action.Triggers, Has.Count.EqualTo(1));
-            Assert.That(action.Triggers.OfType<ActivateTrigger>(), Is.Not.Null);
+            Assert.That(action.Triggers[0], Is.InstanceOf<ActivateTrigger>());
             Assert.That(action.Activate.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Activate.Commands[0], Is.InstanceOf<LockCommand>());
 
@@ -33,7 +33,7 @@ internal sealed class LockCommandTests
         Assert.Multiple(() =>
         {
             Assert.That(action.Triggers, Has.Count.EqualTo(1));
-            Assert.That(action.Triggers.OfType<ActivateTrigger>(), Is.Not.Null);
+            Assert.That(action.Triggers[0], Is.InstanceOf<ActivateTrigger>());
             Assert.That(action.Activate.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Activate.Commands[0], Is.InstanceOf<LockCommand>());
 
@@ -52,7 +52,7 @@ internal sealed class LockCommandTests
         Assert.Multiple(() =>
         {
             Assert.That(action.Triggers, Has.Count.EqualTo(1));
-            Assert.That(action.Triggers.OfType<ActivateTrigger>(), Is.Not.Null);
+            Assert.That(action.Triggers[0], Is.InstanceOf<ActivateTrigger>());
             Assert.That(action.Activate.Commands, Has.Count.EqualTo(1));
             Assert.That(action.Activate.Commands[0], Is.InstanceOf<LockCommand>());
 
