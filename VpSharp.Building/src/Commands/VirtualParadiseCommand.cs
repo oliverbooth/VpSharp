@@ -8,6 +8,13 @@ namespace VpSharp.Building.Commands;
 public abstract class VirtualParadiseCommand
 {
     /// <summary>
+    ///     Gets or sets a value indicating whether the command is globally applied.
+    /// </summary>
+    /// <value><see langword="true" /> if the command is globally applied; otherwise, <see langword="false" />.</value>
+    [Flag("global")]
+    public bool IsGlobal { get; set; }
+
+    /// <summary>
     ///     Gets the raw arguments passed to this command.
     /// </summary>
     /// <value>The raw arguments.</value>
