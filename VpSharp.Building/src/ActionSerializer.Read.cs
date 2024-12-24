@@ -323,6 +323,13 @@ public static partial class ActionSerializer
                     isQuoted = !isQuoted;
                     break;
 
+                case var _ when isCommandName && index == source.Length - 1:
+                    builder.Append(current);
+                    isCommandName = false;
+                    command = FindCommand(builder.AsSpan(), options.CommandTypes);
+                    HandleCommandBuffer(command, ref builder);
+                    break;
+
                 case var _ when index == source.Length - 1:
                     builder.Append(current);
                     HandleCommandBuffer(command, ref builder);
