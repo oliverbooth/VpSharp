@@ -162,7 +162,33 @@ public static partial class ActionSerializer
         }
 
         ExtractProperties(command, options);
+        ExtractFlags(command);
         return command;
+    }
+
+    private static void ExtractFlags(VirtualParadiseCommand command)
+    {
+        if (command.RawArguments.Count == 0)
+        {
+            return;
+        }
+
+        PropertyInfo[] members = command.GetType().GetProperties(PropertyBindingFlags);
+        PropertyInfo[] flags = members.Where(m => m.GetCustomAttribute<FlagAttribute>() is not null).ToArray();
+
+        foreach (PropertyInfo flag in flags)
+        {
+            if (flag.PropertyType != typeof(bool))
+            {
+                continue;
+            }
+
+            FlagAttribute attribute = flag.GetCustomAttribute<FlagAttribute>()!;
+            if (command.RawArguments.Contains(attribute.Name, StringComparer.OrdinalIgnoreCase))
+            {
+                flag.SetValue(command, true);
+            }
+        }
     }
 
     private static void DeserializeWithCommandConverter(VirtualParadiseCommand command,
