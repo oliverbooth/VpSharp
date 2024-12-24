@@ -53,12 +53,7 @@ public static partial class ActionSerializer
             {
                 case '"':
                     isQuoted = !isQuoted;
-                    break;
-
-                case var _ when index == source.Length - 1:
-                    builder.Append(current);
-                    HandleBuffer();
-                    break;
+                    goto default;
 
                 case ';' when !isQuoted:
                     HandleBuffer();
@@ -67,6 +62,11 @@ public static partial class ActionSerializer
                 default:
                     builder.Append(current);
                     break;
+            }
+
+            if (index == source.Length - 1)
+            {
+                HandleBuffer();
             }
         }
 
@@ -86,7 +86,7 @@ public static partial class ActionSerializer
 
     private static VirtualParadiseTrigger? DeserializeTrigger(ReadOnlySpan<char> source, ActionSerializerOptions options)
     {
-        using Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
+        Utf16ValueStringBuilder builder = ZString.CreateStringBuilder();
         var commands = new List<VirtualParadiseCommand>();
         bool isQuoted = false;
         bool isTriggerName = true;
@@ -105,20 +105,31 @@ public static partial class ActionSerializer
 
                 case '"':
                     isQuoted = !isQuoted;
-                    break;
-
-                case var _ when index == source.Length - 1:
-                    builder.Append(current);
-                    HandleBuffer();
-                    break;
+                    goto default;
 
                 case ',' when !isQuoted:
-                    HandleBuffer();
+                    HandleTriggerBuffer(ref builder, options, commands);
                     break;
 
                 default:
                     builder.Append(current);
                     break;
+            }
+
+            if (index != source.Length - 1)
+            {
+                continue;
+            }
+
+            if (isTriggerName)
+            {
+                isTriggerName = false;
+                trigger = FindTrigger(builder.AsSpan(), options.TriggerTypes);
+                builder.Clear();
+            }
+            else
+            {
+                HandleTriggerBuffer(ref builder, options, commands);
             }
         }
 
@@ -127,18 +138,20 @@ public static partial class ActionSerializer
             trigger.Commands = commands.AsReadOnly();
         }
 
+        builder.Dispose();
         return trigger;
+    }
 
-        void HandleBuffer()
+    private static void HandleTriggerBuffer(ref Utf16ValueStringBuilder builder, ActionSerializerOptions options,
+        List<VirtualParadiseCommand> commands)
+    {
+        VirtualParadiseCommand? command = DeserializeCommand(builder.AsSpan(), options);
+        if (command is not null)
         {
-            VirtualParadiseCommand? command = DeserializeCommand(builder.AsSpan(), options);
-            if (command is not null)
-            {
-                commands.Add(command);
-            }
-
-            builder.Clear();
+            commands.Add(command);
         }
+
+        builder.Clear();
     }
 
     private static VirtualParadiseCommand? DeserializeCommand(ReadOnlySpan<char> source, ActionSerializerOptions options)
@@ -347,19 +360,7 @@ public static partial class ActionSerializer
 
                 case '"':
                     isQuoted = !isQuoted;
-                    break;
-
-                case var _ when isCommandName && index == source.Length - 1:
-                    builder.Append(current);
-                    isCommandName = false;
-                    command = FindCommand(builder.AsSpan(), options.CommandTypes);
-                    HandleCommandBuffer(command, ref builder);
-                    break;
-
-                case var _ when index == source.Length - 1:
-                    builder.Append(current);
-                    HandleCommandBuffer(command, ref builder);
-                    break;
+                    goto default;
 
                 case ' ' when !isQuoted:
                     HandleCommandBuffer(command, ref builder);
@@ -368,6 +369,22 @@ public static partial class ActionSerializer
                 default:
                     builder.Append(current);
                     break;
+            }
+
+            if (index != source.Length - 1)
+            {
+                continue;
+            }
+
+            if (isCommandName)
+            {
+                isCommandName = false;
+                command = FindCommand(builder.AsSpan(), options.CommandTypes);
+                builder.Clear();
+            }
+            else
+            {
+                HandleCommandBuffer(command, ref builder);
             }
         }
 
