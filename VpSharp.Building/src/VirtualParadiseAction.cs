@@ -1,4 +1,4 @@
-﻿using VpSharp.Building.Triggers;
+using VpSharp.Building.Triggers;
 
 namespace VpSharp.Building;
 

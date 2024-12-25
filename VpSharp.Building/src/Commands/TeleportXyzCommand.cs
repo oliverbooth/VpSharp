@@ -1,4 +1,4 @@
-﻿using VpSharp.Building.Annotations;
+using VpSharp.Building.Annotations;
 
 namespace VpSharp.Building.Commands;
 

@@ -1,4 +1,4 @@
-﻿using Optional;
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
