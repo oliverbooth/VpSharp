@@ -1,6 +1,5 @@
 using System.Reflection;
 using Cysharp.Text;
-using Optional;
 using VpSharp.Building.Annotations;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
@@ -130,10 +129,32 @@ public static partial class ActionSerializer
         bool isTriggerName = true;
         VirtualParadiseTrigger? trigger = null;
 
-        for (var index = 0; index < source.Length; index++)
+        foreach (char current in source)
         {
-            char current = source[index];
-            switch (current)
+            HandleCharacter(current);
+        }
+
+        if (isTriggerName)
+        {
+            trigger = FindTrigger(builder.AsSpan(), options.TriggerTypes);
+            builder.Clear();
+        }
+        else
+        {
+            HandleTriggerBuffer(ref builder, options, commands);
+        }
+
+        if (trigger is not null)
+        {
+            trigger.Commands = commands.AsReadOnly();
+        }
+
+        builder.Dispose();
+        return trigger;
+
+        void HandleCharacter(char character)
+        {
+            switch (character)
             {
                 case ' ' when isTriggerName:
                     isTriggerName = false;
@@ -150,34 +171,10 @@ public static partial class ActionSerializer
                     break;
 
                 default:
-                    builder.Append(current);
+                    builder.Append(character);
                     break;
             }
-
-            if (index != source.Length - 1)
-            {
-                continue;
-            }
-
-            if (isTriggerName)
-            {
-                isTriggerName = false;
-                trigger = FindTrigger(builder.AsSpan(), options.TriggerTypes);
-                builder.Clear();
-            }
-            else
-            {
-                HandleTriggerBuffer(ref builder, options, commands);
-            }
         }
-
-        if (trigger is not null)
-        {
-            trigger.Commands = commands.AsReadOnly();
-        }
-
-        builder.Dispose();
-        return trigger;
     }
 
     private static void HandleTriggerBuffer(ref Utf16ValueStringBuilder builder, ActionSerializerOptions options,
@@ -235,17 +232,12 @@ public static partial class ActionSerializer
             }
 
             FlagAttribute attribute = flag.GetCustomAttribute<FlagAttribute>()!;
-            if (command.RawArguments.Contains(attribute.Name, StringComparer.OrdinalIgnoreCase))
+            if (!command.RawArguments.Contains(attribute.Name, StringComparer.OrdinalIgnoreCase))
             {
-                if (flag.PropertyType.IsGenericType && flag.PropertyType.GetGenericTypeDefinition() == typeof(Option<>))
-                {
-                    flag.SetValue(command, Option.Some(true));
-                }
-                else
-                {
-                    flag.SetValue(command, true);
-                }
+                continue;
             }
+
+            flag.SetValue(command, OverlayValue(flag, true));
         }
     }
 
@@ -310,30 +302,39 @@ public static partial class ActionSerializer
             Encoding.GetBytes(argument, bytes);
 
             var reader = new Utf8ActionReader(bytes);
-            Type underlyingType = GetUnderlyingType(parameter);
+            SetParameterValue(command, parameter, ref reader, argument, options);
+        }
+    }
 
-            if (GetValueConverterType(parameter) is { } type)
-            {
-                ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
-                object? value = converter.Read(ref reader, underlyingType, out bool success, options);
+    private static void SetParameterValue(VirtualParadiseCommand command,
+        PropertyInfo parameter,
+        ref Utf8ActionReader reader,
+        string argument,
+        ActionSerializerOptions options)
+    {
+        Type underlyingType = GetUnderlyingType(parameter);
 
-                if (success)
-                {
-                    parameter.SetValue(command, OverlayValue(parameter, value));
-                }
-            }
-            else if (underlyingType.IsEnum)
+        if (GetValueConverterType(parameter) is { } type)
+        {
+            ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
+            object? value = converter.Read(ref reader, underlyingType, out bool success, options);
+
+            if (success)
             {
-                if (Enum.TryParse(underlyingType, argument, true, out object? value))
-                {
-                    parameter.SetValue(command, OverlayValue(parameter, value));
-                }
-            }
-            else
-            {
-                object value = Convert.ChangeType(argument, underlyingType);
                 parameter.SetValue(command, OverlayValue(parameter, value));
             }
+        }
+        else if (underlyingType.IsEnum)
+        {
+            if (Enum.TryParse(underlyingType, argument, true, out object? value))
+            {
+                parameter.SetValue(command, OverlayValue(parameter, value));
+            }
+        }
+        else
+        {
+            object value = Convert.ChangeType(argument, underlyingType);
+            parameter.SetValue(command, OverlayValue(parameter, value));
         }
     }
 
@@ -350,9 +351,8 @@ public static partial class ActionSerializer
         int maxBytes = command.RawProperties.Max(a => Encoding.GetByteCount(a.Value));
         Span<byte> buffer = stackalloc byte[maxBytes];
 
-        for (var index = 0; index < properties.Length; index++)
+        foreach (PropertyInfo property in properties)
         {
-            PropertyInfo property = properties[index];
             PropertyAttribute attribute = property.GetCustomAttribute<PropertyAttribute>()!;
             if (!command.RawProperties.TryGetValue(attribute.Name, out string? rawValue))
             {
@@ -364,30 +364,39 @@ public static partial class ActionSerializer
             Encoding.GetBytes(rawValue, bytes);
 
             var reader = new Utf8ActionReader(bytes);
-            Type underlyingType = GetUnderlyingType(property);
 
-            if (GetValueConverterType(property) is { } type)
-            {
-                ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
-                object? value = converter.Read(ref reader, underlyingType, out bool success, options);
+            SetPropertyValue(command, property, ref reader, rawValue, options);
+        }
+    }
 
-                if (success)
-                {
-                    property.SetValue(command, OverlayValue(property, value));
-                }
-            }
-            else if (underlyingType.IsEnum)
+    private static void SetPropertyValue(VirtualParadiseCommand command,
+        PropertyInfo property,
+        ref Utf8ActionReader reader,
+        string rawValue,
+        ActionSerializerOptions options)
+    {
+        Type underlyingType = GetUnderlyingType(property);
+        if (GetValueConverterType(property) is { } type)
+        {
+            ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
+            object? value = converter.Read(ref reader, underlyingType, out bool success, options);
+
+            if (success)
             {
-                if (Enum.TryParse(underlyingType, rawValue, true, out object? value))
-                {
-                    property.SetValue(command, OverlayValue(property, value));
-                }
-            }
-            else
-            {
-                object value = Convert.ChangeType(rawValue, underlyingType);
                 property.SetValue(command, OverlayValue(property, value));
             }
+        }
+        else if (underlyingType.IsEnum)
+        {
+            if (Enum.TryParse(underlyingType, rawValue, true, out object? value))
+            {
+                property.SetValue(command, OverlayValue(property, value));
+            }
+        }
+        else
+        {
+            object value = Convert.ChangeType(rawValue, underlyingType);
+            property.SetValue(command, OverlayValue(property, value));
         }
     }
 
@@ -412,27 +421,7 @@ public static partial class ActionSerializer
 
         for (var index = 0; index < source.Length; index++)
         {
-            char current = source[index];
-            switch (current)
-            {
-                case ' ' when isCommandName:
-                    isCommandName = false;
-                    command = FindCommand(builder.AsSpan(), options.CommandTypes);
-                    builder.Clear();
-                    break;
-
-                case '"':
-                    isQuoted = !isQuoted;
-                    goto default;
-
-                case ' ' when !isQuoted:
-                    HandleCommandBuffer(command, ref builder);
-                    break;
-
-                default:
-                    builder.Append(current);
-                    break;
-            }
+            HandleCharacter(source[index], ref builder);
 
             if (index != source.Length - 1)
             {
@@ -452,6 +441,30 @@ public static partial class ActionSerializer
         }
 
         return command;
+
+        void HandleCharacter(char character, ref Utf16ValueStringBuilder builder)
+        {
+            switch (character)
+            {
+                case ' ' when isCommandName:
+                    isCommandName = false;
+                    command = FindCommand(builder.AsSpan(), options.CommandTypes);
+                    builder.Clear();
+                    break;
+
+                case '"':
+                    isQuoted = !isQuoted;
+                    goto default;
+
+                case ' ' when !isQuoted:
+                    HandleCommandBuffer(command, ref builder);
+                    break;
+
+                default:
+                    builder.Append(character);
+                    break;
+            }
+        }
     }
 
     private static void HandleCommandBuffer(VirtualParadiseCommand? command, ref Utf16ValueStringBuilder builder)
