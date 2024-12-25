@@ -40,6 +40,5 @@ public sealed class SolidCommandConverter : CommandConverter<SolidCommand>
         }
 
         writer.WriteBoolean(command.IsSolid);
-        WriteProperties(writer, command, options);
     }
 }

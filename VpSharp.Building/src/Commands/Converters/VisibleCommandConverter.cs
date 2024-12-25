@@ -40,6 +40,5 @@ public sealed class VisibleCommandConverter : CommandConverter<VisibleCommand>
         }
 
         writer.WriteBoolean(command.IsVisible);
-        WriteProperties(writer, command, options);
     }
 }

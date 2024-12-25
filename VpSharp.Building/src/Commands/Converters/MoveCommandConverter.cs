@@ -52,7 +52,5 @@ public sealed class MoveCommandConverter : CommandConverter<MoveCommand>
                 writer.WriteNumber(command.Movement.Z);
                 break;
         }
-
-        WriteProperties(writer, command, options);
     }
 }

@@ -45,8 +45,8 @@ public sealed class Utf8ActionWriter
 
         WriteLeadingSpace();
 
-        Span<byte> nameBytes = stackalloc byte[name.Length];
-        Span<byte> valueBytes = stackalloc byte[value.Length];
+        Span<byte> nameBytes = stackalloc byte[Encoding.UTF8.GetByteCount(name)];
+        Span<byte> valueBytes = stackalloc byte[Encoding.UTF8.GetByteCount(value)];
 
         Encoding.UTF8.GetBytes(name, nameBytes);
         Encoding.UTF8.GetBytes(value, valueBytes);
@@ -54,6 +54,8 @@ public sealed class Utf8ActionWriter
         _stream.Write(nameBytes);
         _stream.WriteByte((byte)'=');
         _stream.Write(valueBytes);
+
+        _spaceNeeded = true;
     }
 
     /// <summary>
@@ -69,6 +71,8 @@ public sealed class Utf8ActionWriter
         valueBytes[^1] = (byte)'"';
 
         Encoding.UTF8.GetBytes(value, valueBytes[1..^2]);
+
+        _spaceNeeded = true;
     }
 
     /// <summary>
@@ -91,6 +95,8 @@ public sealed class Utf8ActionWriter
         int bytesWritten = Encoding.UTF8.GetBytes(valueString, bytes);
 
         _stream.Write(bytes[..bytesWritten]);
+
+        _spaceNeeded = true;
     }
 
     /// <summary>
@@ -104,6 +110,8 @@ public sealed class Utf8ActionWriter
         Span<byte> bytes = stackalloc byte[value ? 2 : 3];
         int bytesWritten = Encoding.UTF8.GetBytes(value ? "on" : "off", bytes);
         _stream.Write(bytes[..bytesWritten]);
+
+        _spaceNeeded = true;
     }
 
     /// <summary>
@@ -130,6 +138,8 @@ public sealed class Utf8ActionWriter
         int bytesWritten = Encoding.UTF8.GetBytes(valueString, bytes);
 
         _stream.Write(bytes[..bytesWritten]);
+
+        _spaceNeeded = true;
     }
 
     private void WriteLeadingSpace()

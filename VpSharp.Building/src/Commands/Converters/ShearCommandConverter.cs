@@ -59,7 +59,5 @@ public sealed class ShearCommandConverter : CommandConverter<ShearCommand>
             writer.WriteNumber(command.NegativeShear.Z);
             writer.WriteNumber(command.NegativeShear.X);
         }
-
-        WriteProperties(writer, command, options);
     }
 }

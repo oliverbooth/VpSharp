@@ -52,7 +52,5 @@ public sealed class RotateCommandConverter : CommandConverter<RotateCommand>
                 writer.WriteNumber(command.Rotation.Z);
                 break;
         }
-
-        WriteProperties(writer, command, options);
     }
 }
