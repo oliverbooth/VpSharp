@@ -1,4 +1,4 @@
-﻿using VpSharp.Building.Commands.Converters;
+using VpSharp.Building.Serialization.CommandConverters;
 
 namespace VpSharp.Building.Commands;
 

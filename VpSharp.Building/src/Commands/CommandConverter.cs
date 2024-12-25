@@ -1,5 +1,6 @@
 using System.Reflection;
 using VpSharp.Building.Annotations;
+using VpSharp.Building.Serialization;
 
 namespace VpSharp.Building.Commands;
 

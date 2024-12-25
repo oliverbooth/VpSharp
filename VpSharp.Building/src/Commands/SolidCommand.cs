@@ -1,5 +1,5 @@
-﻿using VpSharp.Building.Annotations;
-using VpSharp.Building.Commands.Converters;
+using VpSharp.Building.Annotations;
+using VpSharp.Building.Serialization.CommandConverters;
 
 namespace VpSharp.Building.Commands;
 

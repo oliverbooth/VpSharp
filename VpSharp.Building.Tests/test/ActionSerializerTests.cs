@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using VpSharp.Building.Commands;
+using VpSharp.Building.Serialization;
 using VpSharp.Building.Triggers;
 
 namespace VpSharp.Building.Tests;

@@ -1,7 +1,7 @@
 using Optional;
 using VpSharp.Building.Annotations;
-using VpSharp.Building.Commands.Converters;
-using VpSharp.Building.ValueConverters;
+using VpSharp.Building.Serialization.CommandConverters;
+using VpSharp.Building.Serialization.ValueConverters;
 
 namespace VpSharp.Building.Commands;
 

@@ -1,4 +1,5 @@
 using System.Text;
+using VpSharp.Building.Serialization;
 
 namespace VpSharp.Building.Tests;
 
