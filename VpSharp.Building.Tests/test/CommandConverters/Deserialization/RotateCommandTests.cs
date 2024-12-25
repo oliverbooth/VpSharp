@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -28,7 +29,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -55,7 +56,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -82,7 +83,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -109,7 +110,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -136,7 +137,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -163,7 +164,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -190,7 +191,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -217,7 +218,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.True);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -244,7 +245,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(10)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -271,7 +272,7 @@ internal sealed class RotateCommandTests
             Assert.That(command.ShouldSync, Is.False);
             Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
             Assert.That(command.Wait, Is.EqualTo(TimeSpan.FromSeconds(10)));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

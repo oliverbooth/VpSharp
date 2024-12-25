@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -20,7 +21,7 @@ internal sealed class ScaleCommandTests
 
             var command = (ScaleCommand)action.Create.Commands[0];
             Assert.That(command.Scale, Is.EqualTo(new Vector3d(5, 10, 15)));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -39,7 +40,7 @@ internal sealed class ScaleCommandTests
 
             var command = (ScaleCommand)action.Create.Commands[0];
             Assert.That(command.Scale, Is.EqualTo(new Vector3d(5, 10, 1)));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -58,7 +59,7 @@ internal sealed class ScaleCommandTests
 
             var command = (ScaleCommand)action.Create.Commands[0];
             Assert.That(command.Scale, Is.EqualTo(new Vector3d(5, 1, 1)));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -77,7 +78,7 @@ internal sealed class ScaleCommandTests
 
             var command = (ScaleCommand)action.Create.Commands[0];
             Assert.That(command.Scale, Is.EqualTo(Vector3d.One));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

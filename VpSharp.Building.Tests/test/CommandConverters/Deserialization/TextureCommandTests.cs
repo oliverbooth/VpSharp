@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -20,9 +21,9 @@ internal sealed class TextureCommandTests
 
             var command = (TextureCommand)action.Create.Commands[0];
             Assert.That(command.Texture, Is.EqualTo("stone1"));
-            Assert.That(command.Mask, Is.Null);
-            Assert.That(command.Tag, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Mask, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.Tag, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -41,9 +42,9 @@ internal sealed class TextureCommandTests
 
             var command = (TextureCommand)action.Create.Commands[0];
             Assert.That(command.Texture, Is.EqualTo("stone1"));
-            Assert.That(command.Mask, Is.EqualTo("awb8m"));
-            Assert.That(command.Tag, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Mask, Is.EqualTo(Option.Some("awb8m")));
+            Assert.That(command.Tag, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -62,9 +63,9 @@ internal sealed class TextureCommandTests
 
             var command = (TextureCommand)action.Create.Commands[0];
             Assert.That(command.Texture, Is.EqualTo("stone1"));
-            Assert.That(command.Mask, Is.Null);
-            Assert.That(command.Tag, Is.EqualTo("1"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Mask, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.Tag, Is.EqualTo(Option.Some("1")));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -83,9 +84,9 @@ internal sealed class TextureCommandTests
 
             var command = (TextureCommand)action.Create.Commands[0];
             Assert.That(command.Texture, Is.EqualTo("stone1"));
-            Assert.That(command.Mask, Is.EqualTo("awb8m"));
-            Assert.That(command.Tag, Is.EqualTo("1"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Mask, Is.EqualTo(Option.Some("awb8m")));
+            Assert.That(command.Tag, Is.EqualTo(Option.Some("1")));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

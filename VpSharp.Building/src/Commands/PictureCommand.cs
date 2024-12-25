@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Annotations;
+﻿using Optional;
+using VpSharp.Building.Annotations;
 using VpSharp.Building.ValueConverters;
 
 namespace VpSharp.Building.Commands;
@@ -21,7 +22,7 @@ public sealed class PictureCommand : VirtualParadiseCommand
     /// </summary>
     /// <value>The tag to which the texture is applied.</value>
     [Property("tag")]
-    public string? Tag { get; set; }
+    public Option<string> Tag { get; set; }
 
     /// <summary>
     ///     Gets or sets the time after which the texture is updated.
@@ -29,5 +30,5 @@ public sealed class PictureCommand : VirtualParadiseCommand
     /// <value>The time after which the texture is updated.</value>
     [Property("update")]
     [ValueConverter(typeof(TimeSpanToSecondsValueConverter))]
-    public TimeSpan Update { get; set; }
+    public Option<TimeSpan> Update { get; set; }
 }

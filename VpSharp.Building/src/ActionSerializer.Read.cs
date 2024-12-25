@@ -1,5 +1,6 @@
 using System.Reflection;
 using Cysharp.Text;
+using Optional;
 using VpSharp.Building.Annotations;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
@@ -236,7 +237,14 @@ public static partial class ActionSerializer
             FlagAttribute attribute = flag.GetCustomAttribute<FlagAttribute>()!;
             if (command.RawArguments.Contains(attribute.Name, StringComparer.OrdinalIgnoreCase))
             {
-                flag.SetValue(command, true);
+                if (flag.PropertyType.IsGenericType && flag.PropertyType.GetGenericTypeDefinition() == typeof(Option<>))
+                {
+                    flag.SetValue(command, Option.Some(true));
+                }
+                else
+                {
+                    flag.SetValue(command, true);
+                }
             }
         }
     }
@@ -305,11 +313,11 @@ public static partial class ActionSerializer
             if (GetValueConverterType(parameter) is { } type)
             {
                 ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
-                object? value = converter.Read(ref reader, parameter.PropertyType, out bool success, options);
+                object? value = converter.Read(ref reader, GetUnderlyingPropertyType(parameter), out bool success, options);
 
                 if (success)
                 {
-                    parameter.SetValue(command, value);
+                    SetPropertyValue(parameter, command, value);
                 }
             }
             else if (parameter.PropertyType.IsEnum)
@@ -357,11 +365,11 @@ public static partial class ActionSerializer
             if (GetValueConverterType(property) is { } type)
             {
                 ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
-                object? value = converter.Read(ref reader, property.PropertyType, out bool success, options);
+                object? value = converter.Read(ref reader, GetUnderlyingPropertyType(property), out bool success, options);
 
                 if (success)
                 {
-                    property.SetValue(command, value);
+                    SetPropertyValue(property, command, value);
                 }
             }
             else if (property.PropertyType.IsEnum)
@@ -379,6 +387,16 @@ public static partial class ActionSerializer
         }
     }
 
+    private static Type GetUnderlyingPropertyType(PropertyInfo property)
+    {
+        if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Option<>))
+        {
+            return property.PropertyType.GetGenericArguments()[0];
+        }
+
+        return property.PropertyType;
+    }
+
     private static Type? GetValueConverterType(PropertyInfo member)
     {
         if (member.GetCustomAttribute<ValueConverterAttribute>() is { } attribute)
@@ -387,7 +405,30 @@ public static partial class ActionSerializer
         }
 
         return typeof(ValueConverter<>).Assembly.GetTypes().FirstOrDefault(t =>
-            !t.IsAbstract && t.IsSubclassOf(typeof(ValueConverter<>).MakeGenericType(member.PropertyType)));
+            !t.IsAbstract && t.IsSubclassOf(typeof(ValueConverter<>).MakeGenericType(GetUnderlyingPropertyType(member))));
+    }
+
+    private static void SetPropertyValue(PropertyInfo property, VirtualParadiseCommand command, object? value)
+    {
+        Type propertyType = property.PropertyType;
+
+        if (value is null)
+        {
+            if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Option<>))
+            {
+                value = Activator.CreateInstance(propertyType, PropertyBindingFlags, null, [Activator.CreateInstance(GetUnderlyingPropertyType(property)), false], null);
+                property.SetValue(command, value);
+            }
+
+            return;
+        }
+
+        if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Option<>))
+        {
+            value = Activator.CreateInstance(propertyType, PropertyBindingFlags, null, [value, true], null);
+        }
+
+        property.SetValue(command, value);
     }
 
     private static VirtualParadiseCommand? ParseCommand(ReadOnlySpan<char> source,

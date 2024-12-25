@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Commands;
+﻿using Optional;
+using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
 namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
@@ -21,7 +22,7 @@ internal sealed class CameraCommandTests
             var command = (CameraCommand)action.Create.Commands[0];
             Assert.That(command.Target, Is.EqualTo("foo"));
             Assert.That(command.Location, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -41,7 +42,7 @@ internal sealed class CameraCommandTests
             var command = (CameraCommand)action.Create.Commands[0];
             Assert.That(command.Target, Is.Null);
             Assert.That(command.Location, Is.EqualTo("bar"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -61,7 +62,7 @@ internal sealed class CameraCommandTests
             var command = (CameraCommand)action.Create.Commands[0];
             Assert.That(command.Target, Is.EqualTo("foo"));
             Assert.That(command.Location, Is.EqualTo("bar"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

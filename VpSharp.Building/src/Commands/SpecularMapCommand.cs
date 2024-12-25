@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Annotations;
+﻿using Optional;
+using VpSharp.Building.Annotations;
 
 namespace VpSharp.Building.Commands;
 
@@ -13,14 +14,14 @@ public sealed class SpecularMapCommand : VirtualParadiseCommand
     /// </summary>
     /// <value>The specular map texture mask.</value>
     [Property("mask")]
-    public string? Mask { get; set; }
+    public Option<string> Mask { get; set; }
 
     /// <summary>
     ///     Gets or sets the tag to which the specular map texture is applied.
     /// </summary>
     /// <value>The tag to which the specular map texture is applied.</value>
     [Property("tag")]
-    public string? Tag { get; set; }
+    public Option<string> Tag { get; set; }
 
     /// <summary>
     ///     Gets or sets the specular map texture name.

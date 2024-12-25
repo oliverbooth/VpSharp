@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -20,9 +21,9 @@ internal sealed class PictureCommandTests
 
             var command = (PictureCommand)action.Create.Commands[0];
             Assert.That(command.Picture, Is.EqualTo("vmist.net/ptv/tv.php"));
-            Assert.That(command.Update, Is.EqualTo(TimeSpan.Zero));
-            Assert.That(command.Tag, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Update, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Tag, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -41,9 +42,9 @@ internal sealed class PictureCommandTests
 
             var command = (PictureCommand)action.Create.Commands[0];
             Assert.That(command.Picture, Is.EqualTo("vmist.net/ptv/tv.php"));
-            Assert.That(command.Update, Is.EqualTo(TimeSpan.FromSeconds(10)));
-            Assert.That(command.Tag, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Update, Is.EqualTo(Option.Some(TimeSpan.FromSeconds(10))));
+            Assert.That(command.Tag, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -62,9 +63,9 @@ internal sealed class PictureCommandTests
 
             var command = (PictureCommand)action.Create.Commands[0];
             Assert.That(command.Picture, Is.EqualTo("vmist.net/ptv/tv.php"));
-            Assert.That(command.Update, Is.EqualTo(TimeSpan.FromSeconds(10)));
-            Assert.That(command.Tag, Is.EqualTo("foo"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Update, Is.EqualTo(Option.Some(TimeSpan.FromSeconds(10))));
+            Assert.That(command.Tag, Is.EqualTo(Option.Some("foo")));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

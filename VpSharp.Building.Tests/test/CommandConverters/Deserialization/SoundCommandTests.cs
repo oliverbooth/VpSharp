@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -25,7 +26,7 @@ internal sealed class SoundCommandTests
             Assert.That(command.Radius, Is.EqualTo(50.0));
             Assert.That(command.RightSpeaker, Is.Null);
             Assert.That(command.Volume, Is.EqualTo(1.0));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -49,7 +50,7 @@ internal sealed class SoundCommandTests
             Assert.That(command.Radius, Is.EqualTo(50.0));
             Assert.That(command.RightSpeaker, Is.Null);
             Assert.That(command.Volume, Is.EqualTo(1.0));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -73,7 +74,7 @@ internal sealed class SoundCommandTests
             Assert.That(command.Radius, Is.EqualTo(50.0));
             Assert.That(command.RightSpeaker, Is.Null);
             Assert.That(command.Volume, Is.EqualTo(1.0));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -97,7 +98,7 @@ internal sealed class SoundCommandTests
             Assert.That(command.Radius, Is.EqualTo(50.0));
             Assert.That(command.RightSpeaker, Is.EqualTo("foo"));
             Assert.That(command.Volume, Is.EqualTo(1.0));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -121,7 +122,7 @@ internal sealed class SoundCommandTests
             Assert.That(command.Radius, Is.EqualTo(5.0));
             Assert.That(command.RightSpeaker, Is.Null);
             Assert.That(command.Volume, Is.EqualTo(1.0));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -145,7 +146,7 @@ internal sealed class SoundCommandTests
             Assert.That(command.Radius, Is.EqualTo(50.0));
             Assert.That(command.RightSpeaker, Is.Null);
             Assert.That(command.Volume, Is.EqualTo(0.5));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

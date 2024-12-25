@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Commands;
+﻿using Optional;
+using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
 namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
@@ -20,7 +21,7 @@ internal sealed class FramerateCommandTests
 
             var command = (FramerateCommand)action.Create.Commands[0];
             Assert.That(command.Framerate, Is.EqualTo(60));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -39,7 +40,7 @@ internal sealed class FramerateCommandTests
 
             var command = (FramerateCommand)action.Create.Commands[0];
             Assert.That(command.Framerate, Is.EqualTo(30));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -58,7 +59,7 @@ internal sealed class FramerateCommandTests
 
             var command = (FramerateCommand)action.Create.Commands[0];
             Assert.That(command.Framerate, Is.EqualTo(60));
-            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.Some("foo")));
         });
     }
 
@@ -77,7 +78,7 @@ internal sealed class FramerateCommandTests
 
             var command = (FramerateCommand)action.Create.Commands[0];
             Assert.That(command.Framerate, Is.EqualTo(30));
-            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.Some("foo")));
         });
     }
 }

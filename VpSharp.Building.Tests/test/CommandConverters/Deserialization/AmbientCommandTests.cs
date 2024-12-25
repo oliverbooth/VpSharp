@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Commands;
+﻿using Optional;
+using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
 namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
@@ -20,8 +21,8 @@ internal sealed class AmbientCommandTests
 
             var command = (AmbientCommand)action.Create.Commands[0];
             Assert.That(command.Intensity, Is.EqualTo(0.5));
-            Assert.That(command.Tag, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Tag, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -40,8 +41,8 @@ internal sealed class AmbientCommandTests
 
             var command = (AmbientCommand)action.Create.Commands[0];
             Assert.That(command.Intensity, Is.EqualTo(0.2));
-            Assert.That(command.Tag, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Tag, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -60,8 +61,8 @@ internal sealed class AmbientCommandTests
 
             var command = (AmbientCommand)action.Create.Commands[0];
             Assert.That(command.Intensity, Is.EqualTo(0.5));
-            Assert.That(command.Tag, Is.EqualTo("foo"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Tag, Is.EqualTo(Option.Some("foo")));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -80,8 +81,8 @@ internal sealed class AmbientCommandTests
 
             var command = (AmbientCommand)action.Create.Commands[0];
             Assert.That(command.Intensity, Is.EqualTo(0.2));
-            Assert.That(command.Tag, Is.EqualTo("foo"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.Tag, Is.EqualTo(Option.Some("foo")));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

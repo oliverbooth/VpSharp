@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -21,7 +22,7 @@ internal sealed class TeleportXyzCommandTests
             var command = (TeleportXyzCommand)action.Activate.Commands[0];
             Assert.That(command.Destination, Is.EqualTo(new Vector3d(0, 12, 0)));
             Assert.That(command.Yaw, Is.EqualTo(0));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -41,7 +42,7 @@ internal sealed class TeleportXyzCommandTests
             var command = (TeleportXyzCommand)action.Activate.Commands[0];
             Assert.That(command.Destination, Is.EqualTo(new Vector3d(0, 12, 0)));
             Assert.That(command.Yaw, Is.EqualTo(90));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

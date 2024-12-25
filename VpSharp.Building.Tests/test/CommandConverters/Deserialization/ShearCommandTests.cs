@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -21,7 +22,7 @@ internal sealed class ShearCommandTests
             var command = (ShearCommand)action.Create.Commands[0];
             Assert.That(command.PositiveShear, Is.EqualTo(Vector3d.UnitZ));
             Assert.That(command.NegativeShear, Is.EqualTo(Vector3d.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -41,7 +42,7 @@ internal sealed class ShearCommandTests
             var command = (ShearCommand)action.Create.Commands[0];
             Assert.That(command.PositiveShear, Is.EqualTo(Vector3d.UnitX + Vector3d.UnitZ));
             Assert.That(command.NegativeShear, Is.EqualTo(Vector3d.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -61,7 +62,7 @@ internal sealed class ShearCommandTests
             var command = (ShearCommand)action.Create.Commands[0];
             Assert.That(command.PositiveShear, Is.EqualTo(Vector3d.One));
             Assert.That(command.NegativeShear, Is.EqualTo(Vector3d.Zero));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -81,7 +82,7 @@ internal sealed class ShearCommandTests
             var command = (ShearCommand)action.Create.Commands[0];
             Assert.That(command.PositiveShear, Is.EqualTo(Vector3d.One));
             Assert.That(command.NegativeShear, Is.EqualTo(Vector3d.UnitY));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -101,7 +102,7 @@ internal sealed class ShearCommandTests
             var command = (ShearCommand)action.Create.Commands[0];
             Assert.That(command.PositiveShear, Is.EqualTo(Vector3d.One));
             Assert.That(command.NegativeShear, Is.EqualTo(Vector3d.UnitY + Vector3d.UnitZ));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -121,7 +122,7 @@ internal sealed class ShearCommandTests
             var command = (ShearCommand)action.Create.Commands[0];
             Assert.That(command.PositiveShear, Is.EqualTo(Vector3d.One));
             Assert.That(command.NegativeShear, Is.EqualTo(Vector3d.One));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -21,7 +22,7 @@ internal sealed class AstartCommandTests
             var command = (AstartCommand)action.Activate.Commands[0];
             Assert.That(command.Name, Is.EqualTo("foo"));
             Assert.That(command.IsLooping, Is.False);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -41,7 +42,7 @@ internal sealed class AstartCommandTests
             var command = (AstartCommand)action.Activate.Commands[0];
             Assert.That(command.Name, Is.EqualTo("foo"));
             Assert.That(command.IsLooping, Is.True);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

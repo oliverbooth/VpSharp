@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Annotations;
 
 namespace VpSharp.Building.Commands;
@@ -20,5 +21,5 @@ public sealed class DiffuseCommand : VirtualParadiseCommand
     /// </summary>
     /// <value>The tag to which the diffuse intensity is applied.</value>
     [Property("tag")]
-    public string? Tag { get; set; }
+    public Option<string> Tag { get; set; }
 }

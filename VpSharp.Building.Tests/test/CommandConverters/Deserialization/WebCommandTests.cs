@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -23,7 +24,7 @@ internal sealed class WebCommandTests
             Assert.That(command.FrameHeight, Is.EqualTo(512.0));
             Assert.That(command.Keys, Is.False);
             Assert.That(command.Url, Is.EqualTo("https://www.virtualparadise.org"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -45,7 +46,7 @@ internal sealed class WebCommandTests
             Assert.That(command.FrameHeight, Is.EqualTo(1024.0));
             Assert.That(command.Keys, Is.False);
             Assert.That(command.Url, Is.EqualTo("https://www.virtualparadise.org"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -67,7 +68,7 @@ internal sealed class WebCommandTests
             Assert.That(command.FrameHeight, Is.EqualTo(512.0));
             Assert.That(command.Keys, Is.False);
             Assert.That(command.Url, Is.EqualTo("https://www.virtualparadise.org"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -89,7 +90,7 @@ internal sealed class WebCommandTests
             Assert.That(command.FrameHeight, Is.EqualTo(1024.0));
             Assert.That(command.Keys, Is.False);
             Assert.That(command.Url, Is.EqualTo("https://www.virtualparadise.org"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -111,7 +112,7 @@ internal sealed class WebCommandTests
             Assert.That(command.FrameHeight, Is.EqualTo(512.0));
             Assert.That(command.Keys, Is.False);
             Assert.That(command.Url, Is.EqualTo("https://www.virtualparadise.org"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -133,7 +134,7 @@ internal sealed class WebCommandTests
             Assert.That(command.FrameHeight, Is.EqualTo(512.0));
             Assert.That(command.Keys, Is.True);
             Assert.That(command.Url, Is.EqualTo("https://www.virtualparadise.org"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

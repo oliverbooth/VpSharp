@@ -1,4 +1,5 @@
 using System.Drawing;
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -28,7 +29,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.False);
             Assert.That(command.Text, Is.Empty);
             Assert.That(command.VerticalMargin, Is.Zero);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -54,7 +55,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.False);
             Assert.That(command.Text, Is.EqualTo("Hello World"));
             Assert.That(command.VerticalMargin, Is.Zero);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -80,7 +81,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.False);
             Assert.That(command.Text, Is.EqualTo("Hello World"));
             Assert.That(command.VerticalMargin, Is.Zero);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -106,7 +107,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.False);
             Assert.That(command.Text, Is.EqualTo("Hello World"));
             Assert.That(command.VerticalMargin, Is.Zero);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -132,7 +133,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.False);
             Assert.That(command.Text, Is.EqualTo("Hello World"));
             Assert.That(command.VerticalMargin, Is.Zero);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -158,7 +159,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.False);
             Assert.That(command.Text, Is.EqualTo("Hello World"));
             Assert.That(command.VerticalMargin, Is.Zero);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -184,7 +185,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.False);
             Assert.That(command.Text, Is.EqualTo("Hello World"));
             Assert.That(command.VerticalMargin, Is.Zero);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -210,7 +211,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.True);
             Assert.That(command.Text, Is.EqualTo("Hello World"));
             Assert.That(command.VerticalMargin, Is.Zero);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -236,7 +237,7 @@ internal sealed class SignCommandTests
             Assert.That(command.Shadow, Is.False);
             Assert.That(command.Text, Is.EqualTo("Hello World"));
             Assert.That(command.VerticalMargin, Is.EqualTo(2));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

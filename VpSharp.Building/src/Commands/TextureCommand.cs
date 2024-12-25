@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Annotations;
+﻿using Optional;
+using VpSharp.Building.Annotations;
 
 namespace VpSharp.Building.Commands;
 
@@ -13,14 +14,14 @@ public sealed class TextureCommand : VirtualParadiseCommand
     /// </summary>
     /// <value>The texture mask.</value>
     [Property("mask")]
-    public string? Mask { get; set; }
+    public Option<string> Mask { get; set; }
 
     /// <summary>
     ///     Gets or sets the tag to which the texture is applied.
     /// </summary>
     /// <value>The tag to which the texture is applied.</value>
     [Property("tag")]
-    public string? Tag { get; set; }
+    public Option<string> Tag { get; set; }
 
     /// <summary>
     ///     Gets or sets the texture name.

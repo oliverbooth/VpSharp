@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -20,7 +21,7 @@ internal sealed class AstopCommandTests
 
             var command = (AstopCommand)action.Activate.Commands[0];
             Assert.That(command.Name, Is.EqualTo("foo"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Annotations;
+﻿using Optional;
+using VpSharp.Building.Annotations;
 
 namespace VpSharp.Building.Commands;
 
@@ -42,5 +43,5 @@ public abstract class VirtualParadiseCommand
     /// </summary>
     /// <value>The target name.</value>
     [Property("name")]
-    public string? ExecuteAs { get; internal set; }
+    public Option<string> ExecuteAs { get; internal set; }
 }

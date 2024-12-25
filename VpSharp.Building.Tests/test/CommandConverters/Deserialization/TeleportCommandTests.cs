@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
@@ -24,7 +25,7 @@ internal sealed class TeleportCommandTests
             Assert.That(command.Coordinates.Z, Is.EqualTo(0));
             Assert.That(command.Coordinates.Yaw, Is.EqualTo(0));
             Assert.That(command.Coordinates.ToString(), Is.EqualTo("0.00n 0.00w 0.00a 0.00"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -48,7 +49,7 @@ internal sealed class TeleportCommandTests
             Assert.That(command.Coordinates.Z, Is.EqualTo(120));
             Assert.That(command.Coordinates.Yaw, Is.EqualTo(90));
             Assert.That(command.Coordinates.ToString(), Is.EqualTo("120.00n 150.00e 5.00a 90.00"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 }

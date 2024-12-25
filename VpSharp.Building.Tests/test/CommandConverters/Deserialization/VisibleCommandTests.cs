@@ -1,4 +1,5 @@
-﻿using VpSharp.Building.Commands;
+﻿using Optional;
+using VpSharp.Building.Commands;
 using VpSharp.Building.Triggers;
 
 namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
@@ -21,7 +22,7 @@ internal sealed class VisibleCommandTests
             var command = (VisibleCommand)action.Create.Commands[0];
             Assert.That(command.IsVisible, Is.False);
             Assert.That(command.Target, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -41,7 +42,7 @@ internal sealed class VisibleCommandTests
             var command = (VisibleCommand)action.Create.Commands[0];
             Assert.That(command.IsVisible, Is.True);
             Assert.That(command.Target, Is.Null);
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -61,7 +62,7 @@ internal sealed class VisibleCommandTests
             var command = (VisibleCommand)action.Create.Commands[0];
             Assert.That(command.IsVisible, Is.False);
             Assert.That(command.Target, Is.EqualTo("foo"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -81,7 +82,7 @@ internal sealed class VisibleCommandTests
             var command = (VisibleCommand)action.Create.Commands[0];
             Assert.That(command.IsVisible, Is.False);
             Assert.That(command.Target, Is.Null);
-            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.Some("foo")));
         });
     }
 
@@ -101,7 +102,7 @@ internal sealed class VisibleCommandTests
             var command = (VisibleCommand)action.Create.Commands[0];
             Assert.That(command.IsVisible, Is.True);
             Assert.That(command.Target, Is.EqualTo("foo"));
-            Assert.That(command.ExecuteAs, Is.Null);
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
 
@@ -121,7 +122,7 @@ internal sealed class VisibleCommandTests
             var command = (VisibleCommand)action.Create.Commands[0];
             Assert.That(command.IsVisible, Is.True);
             Assert.That(command.Target, Is.Null);
-            Assert.That(command.ExecuteAs, Is.EqualTo("foo"));
+            Assert.That(command.ExecuteAs, Is.EqualTo(Option.Some("foo")));
         });
     }
 }
