@@ -310,27 +310,29 @@ public static partial class ActionSerializer
             Encoding.GetBytes(argument, bytes);
 
             var reader = new Utf8ActionReader(bytes);
+            Type underlyingType = GetUnderlyingType(parameter);
+
             if (GetValueConverterType(parameter) is { } type)
             {
                 ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
-                object? value = converter.Read(ref reader, GetUnderlyingPropertyType(parameter), out bool success, options);
+                object? value = converter.Read(ref reader, underlyingType, out bool success, options);
 
                 if (success)
                 {
-                    SetPropertyValue(parameter, command, value);
+                    parameter.SetValue(command, OverlayValue(parameter, value));
                 }
             }
-            else if (parameter.PropertyType.IsEnum)
+            else if (underlyingType.IsEnum)
             {
-                if (Enum.TryParse(parameter.PropertyType, argument, true, out object? value))
+                if (Enum.TryParse(underlyingType, argument, true, out object? value))
                 {
-                    parameter.SetValue(command, value);
+                    parameter.SetValue(command, OverlayValue(parameter, value));
                 }
             }
             else
             {
-                object value = Convert.ChangeType(argument, parameter.PropertyType);
-                parameter.SetValue(command, value);
+                object value = Convert.ChangeType(argument, underlyingType);
+                parameter.SetValue(command, OverlayValue(parameter, value));
             }
         }
     }
@@ -362,39 +364,31 @@ public static partial class ActionSerializer
             Encoding.GetBytes(rawValue, bytes);
 
             var reader = new Utf8ActionReader(bytes);
+            Type underlyingType = GetUnderlyingType(property);
+
             if (GetValueConverterType(property) is { } type)
             {
                 ValueConverter converter = (ValueConverter)Activator.CreateInstance(type)!;
-                object? value = converter.Read(ref reader, GetUnderlyingPropertyType(property), out bool success, options);
+                object? value = converter.Read(ref reader, underlyingType, out bool success, options);
 
                 if (success)
                 {
-                    SetPropertyValue(property, command, value);
+                    property.SetValue(command, OverlayValue(property, value));
                 }
             }
-            else if (property.PropertyType.IsEnum)
+            else if (underlyingType.IsEnum)
             {
-                if (Enum.TryParse(property.PropertyType, rawValue, true, out object? value))
+                if (Enum.TryParse(underlyingType, rawValue, true, out object? value))
                 {
-                    property.SetValue(command, value);
+                    property.SetValue(command, OverlayValue(property, value));
                 }
             }
             else
             {
-                object value = Convert.ChangeType(rawValue, property.PropertyType);
-                property.SetValue(command, value);
+                object value = Convert.ChangeType(rawValue, underlyingType);
+                property.SetValue(command, OverlayValue(property, value));
             }
         }
-    }
-
-    private static Type GetUnderlyingPropertyType(PropertyInfo property)
-    {
-        if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Option<>))
-        {
-            return property.PropertyType.GetGenericArguments()[0];
-        }
-
-        return property.PropertyType;
     }
 
     private static Type? GetValueConverterType(PropertyInfo member)
@@ -405,30 +399,7 @@ public static partial class ActionSerializer
         }
 
         return typeof(ValueConverter<>).Assembly.GetTypes().FirstOrDefault(t =>
-            !t.IsAbstract && t.IsSubclassOf(typeof(ValueConverter<>).MakeGenericType(GetUnderlyingPropertyType(member))));
-    }
-
-    private static void SetPropertyValue(PropertyInfo property, VirtualParadiseCommand command, object? value)
-    {
-        Type propertyType = property.PropertyType;
-
-        if (value is null)
-        {
-            if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Option<>))
-            {
-                value = Activator.CreateInstance(propertyType, PropertyBindingFlags, null, [Activator.CreateInstance(GetUnderlyingPropertyType(property)), false], null);
-                property.SetValue(command, value);
-            }
-
-            return;
-        }
-
-        if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Option<>))
-        {
-            value = Activator.CreateInstance(propertyType, PropertyBindingFlags, null, [value, true], null);
-        }
-
-        property.SetValue(command, value);
+            !t.IsAbstract && t.IsSubclassOf(typeof(ValueConverter<>).MakeGenericType(GetUnderlyingType(member))));
     }
 
     private static VirtualParadiseCommand? ParseCommand(ReadOnlySpan<char> source,
