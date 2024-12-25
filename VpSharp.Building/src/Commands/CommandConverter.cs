@@ -105,26 +105,6 @@ public abstract class CommandConverter<T> : CommandConverter
     }
 
     /// <summary>
-    ///     Reads a property from the specified reader and sets it on the specified command.
-    /// </summary>
-    /// <param name="reader">The reader from which the property will be read.</param>
-    /// <param name="command">The command on which the property will be set.</param>
-    protected bool ReadProperty(ref Utf8ActionReader reader, VirtualParadiseCommand command)
-    {
-        if (reader.CurrentToken.Type != TokenType.PropertyName)
-        {
-            return false;
-        }
-
-        string propertyName = reader.CurrentToken.Value;
-        reader.Read();
-
-        ActionSerializer.SetProperty(command, propertyName, reader.CurrentToken.ValueSpan);
-
-        return reader.Read().Type != TokenType.None;
-    }
-
-    /// <summary>
     ///     Writes the properties of the command to the specified text writer.
     /// </summary>
     /// <param name="writer">The writer to which the properties will be written.</param>
