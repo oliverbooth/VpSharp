@@ -156,7 +156,7 @@ public static partial class ActionSerializer
         {
             switch (character)
             {
-                case ' ' when isTriggerName:
+                case ' ' when isTriggerName && builder.Length > 0:
                     isTriggerName = false;
                     trigger = FindTrigger(builder.AsSpan(), options.TriggerTypes);
                     builder.Clear();
@@ -446,7 +446,7 @@ public static partial class ActionSerializer
         {
             switch (character)
             {
-                case ' ' when isCommandName:
+                case ' ' when isCommandName && builder.Length > 0:
                     isCommandName = false;
                     command = FindCommand(builder.AsSpan(), options.CommandTypes);
                     builder.Clear();

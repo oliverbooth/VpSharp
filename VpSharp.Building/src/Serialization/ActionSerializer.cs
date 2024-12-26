@@ -17,9 +17,10 @@ public static partial class ActionSerializer
 
     private static VirtualParadiseCommand? FindCommand(ReadOnlySpan<char> tokenValue, IEnumerable<Type> commandTypes)
     {
+        tokenValue = tokenValue.Trim();
         foreach (Type type in commandTypes)
         {
-            if (type.GetCommandName().AsSpan().Equals(tokenValue, StringComparison.OrdinalIgnoreCase))
+            if (type.GetCommandName().AsSpan().Trim().Equals(tokenValue, StringComparison.OrdinalIgnoreCase))
             {
                 return Activator.CreateInstance(type) as VirtualParadiseCommand;
             }
@@ -30,9 +31,10 @@ public static partial class ActionSerializer
 
     private static VirtualParadiseTrigger? FindTrigger(ReadOnlySpan<char> tokenValue, IEnumerable<Type> triggerTypes)
     {
+        tokenValue = tokenValue.Trim();
         foreach (Type type in triggerTypes)
         {
-            if (type.GetTriggerName().AsSpan().Equals(tokenValue, StringComparison.OrdinalIgnoreCase))
+            if (type.GetTriggerName().AsSpan().Trim().Equals(tokenValue, StringComparison.OrdinalIgnoreCase))
             {
                 return Activator.CreateInstance(type) as VirtualParadiseTrigger;
             }
