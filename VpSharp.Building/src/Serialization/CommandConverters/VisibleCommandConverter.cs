@@ -12,19 +12,29 @@ public sealed class VisibleCommandConverter : CommandConverter<VisibleCommand>
     {
         reader.Read();
 
-        if (command.RawArguments.Count > 1)
-        {
-            command.Target = reader.CurrentToken.Value;
-            reader.Read();
-        }
-
         try
         {
             command.IsVisible = reader.GetBoolean();
         }
         catch
         {
-            // ignored
+            command.Target = reader.CurrentToken.Value;
+            reader.Read();
+
+            try
+            {
+                command.IsVisible = reader.GetBoolean();
+            }
+            catch
+            {
+                // ignored
+            }
+        }
+
+        Token token = reader.Read();
+        if (token.ValueSpan.Equals("global", StringComparison.OrdinalIgnoreCase))
+        {
+            command.IsGlobal = true;
         }
     }
 
