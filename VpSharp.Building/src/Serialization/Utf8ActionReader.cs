@@ -61,15 +61,18 @@ public ref struct Utf8ActionReader
     /// <exception cref="InvalidOperationException">The current token is parseable to a boolean value.</exception>
     public bool GetBoolean()
     {
+        Span<char> lowercase = stackalloc char[CurrentToken.Value.Length];
+        CurrentToken.ValueSpan.ToLowerInvariant(lowercase);
+
         switch (CurrentToken.Type)
         {
             case TokenType.Number:
-                return CurrentToken.ValueSpan is "1";
+                return lowercase is "1";
 
-            case TokenType.Text when CurrentToken.ValueSpan is "on" or "yes" or "1":
+            case TokenType.Text when lowercase is "on" or "yes" or "1":
                 return true;
 
-            case TokenType.Text when CurrentToken.ValueSpan is "off" or "no" or "0":
+            case TokenType.Text when lowercase is "off" or "no" or "0":
                 return false;
 
             default:
