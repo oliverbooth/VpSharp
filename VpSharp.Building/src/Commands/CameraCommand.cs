@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Annotations;
 
 namespace VpSharp.Building.Commands;
@@ -13,12 +14,12 @@ public sealed class CameraCommand : VirtualParadiseCommand
     /// </summary>
     /// <value>The location value.</value>
     [Property("location")]
-    public string? Location { get; set; }
+    public Option<string> Location { get; set; }
 
     /// <summary>
     ///     Gets or sets the target value.
     /// </summary>
     /// <value>The target value.</value>
     [Property("target")]
-    public string? Target { get; set; }
+    public Option<string> Target { get; set; }
 }

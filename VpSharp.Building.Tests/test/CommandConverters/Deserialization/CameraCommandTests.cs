@@ -21,8 +21,8 @@ internal sealed class CameraCommandTests
             Assert.That(action.Create.Commands[0], Is.InstanceOf<CameraCommand>());
 
             var command = (CameraCommand)action.Create.Commands[0];
-            Assert.That(command.Target, Is.EqualTo("foo"));
-            Assert.That(command.Location, Is.Null);
+            Assert.That(command.Target, Is.EqualTo(Option.Some("foo")));
+            Assert.That(command.Location, Is.EqualTo(Option.None<string>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -41,8 +41,8 @@ internal sealed class CameraCommandTests
             Assert.That(action.Create.Commands[0], Is.InstanceOf<CameraCommand>());
 
             var command = (CameraCommand)action.Create.Commands[0];
-            Assert.That(command.Target, Is.Null);
-            Assert.That(command.Location, Is.EqualTo("bar"));
+            Assert.That(command.Target, Is.EqualTo(Option.None<string>()));
+            Assert.That(command.Location, Is.EqualTo(Option.Some("bar")));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -61,8 +61,8 @@ internal sealed class CameraCommandTests
             Assert.That(action.Create.Commands[0], Is.InstanceOf<CameraCommand>());
 
             var command = (CameraCommand)action.Create.Commands[0];
-            Assert.That(command.Target, Is.EqualTo("foo"));
-            Assert.That(command.Location, Is.EqualTo("bar"));
+            Assert.That(command.Target, Is.EqualTo(Option.Some("foo")));
+            Assert.That(command.Location, Is.EqualTo(Option.Some("bar")));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
