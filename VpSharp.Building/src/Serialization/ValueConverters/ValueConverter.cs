@@ -79,12 +79,12 @@ public abstract class ValueConverter<T> : ValueConverter
     /// <inheritdoc />
     public override void Write(Utf8ActionWriter writer,
         Type typeToConvert,
-        object? command,
+        object? value,
         ActionSerializerOptions options)
     {
-        if (!CanConvert(typeToConvert) || command is not T actual)
+        if (!CanConvert(typeToConvert) || value is not T actual)
         {
-            throw new InvalidOperationException($"Cannot convert to type '{typeToConvert}'.");
+            throw new InvalidOperationException($"Cannot convert from type '{typeToConvert}'.");
         }
 
         Write(writer, actual, options);
