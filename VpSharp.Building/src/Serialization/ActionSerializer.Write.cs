@@ -161,7 +161,10 @@ public partial class ActionSerializer
             }
             else if (member.GetCustomAttribute<FlagAttribute>() is not null)
             {
-                flags.Add(member);
+                if (!writer.SkipFlags)
+                {
+                    flags.Add(member);
+                }
             }
             else if (member.GetCustomAttribute<PropertyAttribute>() is not null)
             {

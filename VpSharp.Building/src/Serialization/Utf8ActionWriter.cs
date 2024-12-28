@@ -22,6 +22,12 @@ public sealed class Utf8ActionWriter
     }
 
     /// <summary>
+    ///     Gets or sets a value indicating whether to skip flags when writing properties.
+    /// </summary>
+    /// <value><see langword="true" /> to skip flags; otherwise, <see langword="false" />.</value>
+    public bool SkipFlags { get; set; }
+
+    /// <summary>
     ///     Writes a property with the specified name and value to the stream.
     /// </summary>
     /// <param name="name">The name of the property.</param>

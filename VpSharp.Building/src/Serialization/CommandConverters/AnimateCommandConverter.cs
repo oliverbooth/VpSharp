@@ -62,5 +62,7 @@ public sealed class AnimateCommandConverter : CommandConverter<AnimateCommand>
         {
             writer.Write(frame);
         }
+
+        writer.SkipFlags = true;
     }
 }
