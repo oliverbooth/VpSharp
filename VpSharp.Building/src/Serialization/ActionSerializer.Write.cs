@@ -1,4 +1,5 @@
 using System.Reflection;
+using Optional;
 using VpSharp.Building.Annotations;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Extensions;
@@ -142,7 +143,8 @@ public partial class ActionSerializer
         }
     }
 
-    private static void SerializeCommand(Utf8ActionWriter writer, VirtualParadiseCommand command, ActionSerializerOptions options, bool skipParameters = false)
+    private static void SerializeCommand(Utf8ActionWriter writer, VirtualParadiseCommand command, ActionSerializerOptions options,
+        bool skipParameters = false)
     {
         Type commandType = command.GetType();
         PropertyInfo[] members = commandType.GetProperties(PropertyBindingFlags);
@@ -260,6 +262,19 @@ public partial class ActionSerializer
         ActionSerializerOptions options)
     {
         ValueConverter? valueConverter;
+        Type underlyingType = GetUnderlyingType(parameter);
+        object? value = parameter.GetValue(command);
+        object? defaultValue = CreateDefaultInstance(parameter);
+        if ((value is null || Equals(value, defaultValue)) &&
+            parameter.GetCustomAttribute<ParameterAttribute>()?.IsOptional != true)
+        {
+            return;
+        }
+
+        if (IsOptional(parameter) || IsNullableValueType(parameter))
+        {
+            value = value!.GetType().GetProperty("Value", PropertyBindingFlags)!.GetValue(value);
+        }
 
         if (parameter.GetCustomAttribute<ValueConverterAttribute>() is { } valueConverterAttribute)
         {
@@ -267,7 +282,7 @@ public partial class ActionSerializer
 
             if (valueConverter is not null)
             {
-                valueConverter.Write(writer, GetUnderlyingType(parameter), parameter.GetValue(command), options);
+                valueConverter.Write(writer, underlyingType, value, options);
                 return;
             }
         }
@@ -281,12 +296,14 @@ public partial class ActionSerializer
                 continue;
             }
 
-            if (valueConverter.CanConvert(parameter.PropertyType))
+            if (valueConverter.CanConvert(underlyingType))
             {
-                valueConverter.Write(writer, GetUnderlyingType(parameter), parameter.GetValue(command), options);
-                break;
+                valueConverter.Write(writer, underlyingType, value, options);
+                return;
             }
         }
+
+        writer.Write(value!.ToString());
     }
 
     private static string GetConvertedValue(PropertyInfo property,
