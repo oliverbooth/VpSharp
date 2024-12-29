@@ -31,6 +31,6 @@ public sealed class TeleportXyzCommand : VirtualParadiseCommand
     }
 
     [Parameter(0)] private double X { get; set; } = 1.0;
-    [Parameter(1, IsOptional = true)] private double Y { get; set; } = 1.0;
-    [Parameter(2, IsOptional = true)] private double Z { get; set; } = 1.0;
+    [Parameter(1)] private double Y { get; set; } = 1.0;
+    [Parameter(2)] private double Z { get; set; } = 1.0;
 }
