@@ -21,14 +21,14 @@ public sealed class PictureCommand : VirtualParadiseCommand
     ///     Gets or sets the tag to which the texture is applied.
     /// </summary>
     /// <value>The tag to which the texture is applied.</value>
-    [Property("tag")]
+    [Property("tag", Order = 1)]
     public Option<string> Tag { get; set; }
 
     /// <summary>
     ///     Gets or sets the time after which the texture is updated.
     /// </summary>
     /// <value>The time after which the texture is updated.</value>
-    [Property("update")]
+    [Property("update", Order = 0)]
     [ValueConverter(typeof(TimeSpanToSecondsValueConverter))]
     public Option<TimeSpan> Update { get; set; }
 }
