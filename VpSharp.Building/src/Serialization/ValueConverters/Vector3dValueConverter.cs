@@ -11,38 +11,25 @@ public sealed class Vector3dValueConverter : ValueConverter<Vector3d>
     /// <inheritdoc />
     public override Vector3d Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
-        double x = ReadDouble(ref reader, out success);
-        if (!success)
+        success = false;
+
+        if (!TryReadDouble(ref reader, out double x))
         {
             return Vector3d.Zero;
         }
 
-        double y = ReadDouble(ref reader, out success);
-        if (!success)
+        if (!TryReadDouble(ref reader, out double y))
         {
             return Vector3d.Zero;
         }
 
-        double z = ReadDouble(ref reader, out success);
-        if (!success)
+        if (!TryReadDouble(ref reader, out double z))
         {
             return Vector3d.Zero;
         }
 
+        success = true;
         return new Vector3d(x, y, z);
-    }
-
-    private static double ReadDouble(ref Utf8ActionReader reader, out bool success)
-    {
-        Token token = reader.Read();
-        if (token.Type == TokenType.None)
-        {
-            success = false;
-            return 0.0;
-        }
-
-        success = double.TryParse(token.ValueSpan, NumberStyles.Float, CultureInfo.InvariantCulture, out double value);
-        return success ? value : 0.0;
     }
 
     /// <inheritdoc />
@@ -51,5 +38,17 @@ public sealed class Vector3dValueConverter : ValueConverter<Vector3d>
         writer.Write(value.X);
         writer.Write(value.Y);
         writer.Write(value.Z);
+    }
+
+    private static bool TryReadDouble(ref Utf8ActionReader reader, out double value)
+    {
+        Token token = reader.Read();
+        if (token.Type == TokenType.None)
+        {
+            value = 0.0;
+            return false;
+        }
+
+        return double.TryParse(token.ValueSpan, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
     }
 }

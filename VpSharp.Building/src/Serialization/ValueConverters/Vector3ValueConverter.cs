@@ -11,38 +11,25 @@ public sealed class Vector3ValueConverter : ValueConverter<Vector3>
     /// <inheritdoc />
     public override Vector3 Read(ref Utf8ActionReader reader, out bool success, ActionSerializerOptions options)
     {
-        float x = ReadSingle(ref reader, out success);
-        if (!success)
+        success = false;
+
+        if (!TryReadSingle(ref reader, out float x))
         {
             return Vector3.Zero;
         }
 
-        float y = ReadSingle(ref reader, out success);
-        if (!success)
+        if (!TryReadSingle(ref reader, out float y))
         {
             return Vector3.Zero;
         }
 
-        float z = ReadSingle(ref reader, out success);
-        if (!success)
+        if (!TryReadSingle(ref reader, out float z))
         {
             return Vector3.Zero;
         }
 
+        success = true;
         return new Vector3(x, y, z);
-    }
-
-    private static float ReadSingle(ref Utf8ActionReader reader, out bool success)
-    {
-        Token token = reader.Read();
-        if (token.Type == TokenType.None)
-        {
-            success = false;
-            return 0.0f;
-        }
-
-        success = float.TryParse(token.ValueSpan, NumberStyles.Float, CultureInfo.InvariantCulture, out float value);
-        return success ? value : 0.0f;
     }
 
     /// <inheritdoc />
@@ -51,5 +38,17 @@ public sealed class Vector3ValueConverter : ValueConverter<Vector3>
         writer.Write(value.X);
         writer.Write(value.Y);
         writer.Write(value.Z);
+    }
+
+    private static bool TryReadSingle(ref Utf8ActionReader reader, out float value)
+    {
+        Token token = reader.Read();
+        if (token.Type == TokenType.None)
+        {
+            value = 0.0f;
+            return false;
+        }
+
+        return float.TryParse(token.ValueSpan, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
     }
 }
