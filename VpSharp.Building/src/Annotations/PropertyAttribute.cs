@@ -27,4 +27,10 @@ public sealed class PropertyAttribute : Attribute
     /// </summary>
     /// <value>The property name.</value>
     public string Name { get; }
+
+    /// <summary>
+    ///     Gets or sets the order in which the property should appear in the serialized output.
+    /// </summary>
+    /// <value>The order in which the property should appear in the serialized output.</value>
+    public int Order { get; set; }
 }

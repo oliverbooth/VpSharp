@@ -240,9 +240,24 @@ public partial class ActionSerializer
         List<PropertyInfo> properties,
         ActionSerializerOptions options)
     {
-        for (var index = 0; index < properties.Count; index++)
+        var orderedProperties = new List<PropertyInfo>(properties);
+
+        orderedProperties.Sort((left, right) =>
         {
-            PropertyInfo property = properties[index];
+            PropertyAttribute? leftAttribute = left.GetCustomAttribute<PropertyAttribute>();
+            PropertyAttribute? rightAttribute = right.GetCustomAttribute<PropertyAttribute>();
+
+            if (leftAttribute is null || rightAttribute is null)
+            {
+                return 0;
+            }
+
+            return leftAttribute.Order.CompareTo(rightAttribute.Order);
+        });
+
+        for (var index = 0; index < orderedProperties.Count; index++)
+        {
+            PropertyInfo property = orderedProperties[index];
             PropertyAttribute? attribute = property.GetCustomAttribute<PropertyAttribute>();
 
             if (attribute is null)
