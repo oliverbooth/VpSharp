@@ -8,7 +8,7 @@ namespace VpSharp.Building.Tests.CommandConverters.Deserialization;
 internal sealed class SayCommandTests
 {
     [Test]
-    public void CreateSay_ShouldDeserialize_GivenNoArguments()
+    public void ActivateSay_ShouldDeserialize_GivenNoArguments()
     {
         const string source = "activate say";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
@@ -27,7 +27,7 @@ internal sealed class SayCommandTests
     }
 
     [Test]
-    public void CreateSay_ShouldDeserialize_GivenMessage()
+    public void ActivateSay_ShouldDeserialize_GivenMessage()
     {
         const string source = "activate say \"Hello World\"";
         VirtualParadiseAction action = ActionSerializer.Deserialize(source);
