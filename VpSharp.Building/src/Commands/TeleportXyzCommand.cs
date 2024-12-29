@@ -1,36 +1,25 @@
 using VpSharp.Building.Annotations;
+using VpSharp.Building.Serialization.CommandConverters;
 
 namespace VpSharp.Building.Commands;
 
 /// <summary>
 ///     Represents the <c>teleportxyz</c> command.
 /// </summary>
-[Command("teleportxyz")]
+[Command("teleportxyz", ConverterType = typeof(TeleportXyzCommandConverter))]
 public sealed class TeleportXyzCommand : VirtualParadiseCommand
 {
     /// <summary>
     ///     Gets or sets the facing direction.
     /// </summary>
     /// <value>The facing direction.</value>
-    [Parameter(3, IsOptional = true)]
+    [Parameter(1, IsOptional = true)]
     public double Yaw { get; set; }
 
     /// <summary>
     ///     Gets or sets the teleport destination.
     /// </summary>
     /// <value>The teleport destination.</value>
-    public Vector3d Destination
-    {
-        get => new(X, Y, Z);
-        set
-        {
-            X = value.X;
-            Y = value.Y;
-            Z = value.Z;
-        }
-    }
-
-    [Parameter(0)] private double X { get; set; } = 1.0;
-    [Parameter(1)] private double Y { get; set; } = 1.0;
-    [Parameter(2)] private double Z { get; set; } = 1.0;
+    [Parameter(0)]
+    public Vector3d Destination { get; set; }
 }
