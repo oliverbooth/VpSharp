@@ -119,7 +119,7 @@ public partial class ActionSerializer
             throw new InvalidOperationException($"Command {commandType.Name} is missing a {nameof(CommandAttribute)}.");
         }
 
-        ReadOnlySpan<char> commandName = attribute.CommandName;
+        ReadOnlySpan<char> commandName = attribute.CommandName.AsSpan().Trim();
         int byteCount = Encoding.GetByteCount(commandName);
         Span<byte> bytes = stackalloc byte[byteCount];
         Encoding.GetBytes(commandName, bytes);
@@ -300,7 +300,11 @@ public partial class ActionSerializer
 
             if (valueConverter is not null)
             {
-                valueConverter.Write(writer, underlyingType, value, options);
+                if (value is not string s || !string.IsNullOrWhiteSpace(s))
+                {
+                    valueConverter.Write(writer, underlyingType, value, options);
+                }
+
                 return;
             }
         }
@@ -316,7 +320,11 @@ public partial class ActionSerializer
 
             if (valueConverter.CanConvert(underlyingType))
             {
-                valueConverter.Write(writer, underlyingType, value, options);
+                if (value is not string s || !string.IsNullOrWhiteSpace(s))
+                {
+                    valueConverter.Write(writer, underlyingType, value, options);
+                }
+
                 return;
             }
         }
