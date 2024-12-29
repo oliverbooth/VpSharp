@@ -195,9 +195,23 @@ public partial class ActionSerializer
         List<PropertyInfo> parameters,
         ActionSerializerOptions options)
     {
-        for (var index = 0; index < parameters.Count; index++)
+        var orderedParameters = new List<PropertyInfo>(parameters);
+        orderedParameters.Sort((left, right) =>
         {
-            var parameter = parameters[index];
+            ParameterAttribute? leftAttribute = left.GetCustomAttribute<ParameterAttribute>();
+            ParameterAttribute? rightAttribute = right.GetCustomAttribute<ParameterAttribute>();
+
+            if (leftAttribute is null || rightAttribute is null)
+            {
+                return 0;
+            }
+
+            return leftAttribute.Order.CompareTo(rightAttribute.Order);
+        });
+
+        for (var index = 0; index < orderedParameters.Count; index++)
+        {
+            PropertyInfo parameter = orderedParameters[index];
             ParameterAttribute? attribute = parameter.GetCustomAttribute<ParameterAttribute>();
 
             if (attribute is null)
