@@ -45,6 +45,22 @@ public sealed class ColorValueConverter : ValueConverter<Color>
     /// <inheritdoc />
     public override void Write(Utf8ActionWriter writer, Color value, ActionSerializerOptions options)
     {
-        writer.Write((value.ToArgb() & 0xFFFFFF).ToString("X6"));
+        if (value.IsNamedColor)
+        {
+            ReadOnlySpan<char> span = value.Name.AsSpan();
+            Span<char> name = stackalloc char[span.Length];
+            span.ToLowerInvariant(name);
+            writer.Write(name);
+        }
+        else
+        {
+            int rgb = value.ToArgb() & 0xFFFFFF;
+
+            Span<char> buffer = stackalloc char[6];
+            if (rgb.TryFormat(buffer, out int charsWritten, "X6"))
+            {
+                writer.Write(buffer[..charsWritten]);
+            }
+        }
     }
 }
