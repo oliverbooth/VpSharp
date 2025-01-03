@@ -39,7 +39,7 @@ public sealed class MoveCommandConverter : CommandConverter<MoveCommand>
 
         switch (command.Movement)
         {
-            case { X: 0.0, Z: 0.0 }:
+            case { Y: 0.0, Z: 0.0 }:
                 writer.WriteNumber(command.Movement.X);
                 break;
 
