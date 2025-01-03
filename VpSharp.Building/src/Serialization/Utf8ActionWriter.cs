@@ -121,9 +121,26 @@ public sealed class Utf8ActionWriter
     }
 
     /// <summary>
+    ///     Writes a span of characters to the stream.
+    /// </summary>
+    /// <param name="value">The span of characters to write.</param>
+    public void Write(ReadOnlySpan<char> value)
+    {
+        WriteLeadingSpace();
+
+        int byteCount = Encoding.UTF8.GetByteCount(value);
+        Span<byte> bytes = stackalloc byte[byteCount];
+        int bytesWritten = Encoding.UTF8.GetBytes(value, bytes);
+
+        _stream.Write(bytes[..bytesWritten]);
+
+        _spaceNeeded = true;
+    }
+
+    /// <summary>
     ///     Writes a value to the stream.
     /// </summary>
-    /// <param name="value">The number to write.</param>
+    /// <param name="value">The value to write.</param>
     public void Write<T>(T? value)
     {
         if (value is null)
