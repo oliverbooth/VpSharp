@@ -36,6 +36,7 @@ jobs:
       run: |
         mkdir build
         dotnet pack VpSharp -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
+        dotnet pack VpSharp.Building -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
         dotnet pack VpSharp.Commands -p:SymbolPackageFormat=snupkg --include-symbols --include-source -o build -p:VersionSuffix='nightly' -p:BuildNumber=${{ github.run_number }}
 
     - name: Push NuGet Package to GitHub
