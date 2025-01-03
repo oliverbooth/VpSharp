@@ -11,6 +11,11 @@ public sealed class TimeSpanToSecondsValueConverter : ValueConverter<TimeSpan>
         Token token = reader.Read();
         success = token.Type != TokenType.None;
 
+        if (token.ValueSpan is "9e9")
+        {
+            return TimeSpan.MaxValue;
+        }
+
         if (token.Type is TokenType.Number or TokenType.Text && double.TryParse(token.ValueSpan, out var seconds))
         {
             return TimeSpan.FromSeconds(seconds);
@@ -22,6 +27,13 @@ public sealed class TimeSpanToSecondsValueConverter : ValueConverter<TimeSpan>
     /// <inheritdoc />
     public override void Write(Utf8ActionWriter writer, TimeSpan value, ActionSerializerOptions options)
     {
-        writer.WriteNumber(value.TotalSeconds);
+        if (value == TimeSpan.MaxValue)
+        {
+            writer.Write("9e9");
+        }
+        else
+        {
+            writer.WriteNumber(value.TotalSeconds);
+        }
     }
 }
