@@ -21,6 +21,11 @@ public sealed class ColorValueConverter : ValueConverter<Color>
         ReadOnlySpan<char> span = token.ValueSpan;
         Color color = Color.Empty;
 
+        if (span.Equals("grey", StringComparison.OrdinalIgnoreCase))
+        {
+            span = "gray";
+        }
+
         if (Enum.TryParse(span, true, out KnownColor knownColor))
         {
             color = Color.FromKnownColor(knownColor);
@@ -50,7 +55,7 @@ public sealed class ColorValueConverter : ValueConverter<Color>
             ReadOnlySpan<char> span = value.Name.AsSpan();
             Span<char> name = stackalloc char[span.Length];
             span.ToLowerInvariant(name);
-            writer.Write(name);
+            writer.Write(name is "gray" ? "grey" : name);
         }
         else
         {
