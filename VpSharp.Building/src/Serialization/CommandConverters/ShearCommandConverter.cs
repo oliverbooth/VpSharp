@@ -51,15 +51,27 @@ public sealed class ShearCommandConverter : CommandConverter<ShearCommand>
         if (command.PositiveShear != Vector3d.Zero)
         {
             writer.WriteNumber(command.PositiveShear.Z);
-            writer.WriteNumber(command.PositiveShear.X);
-            writer.WriteNumber(command.PositiveShear.Y);
+            if (command.PositiveShear is not { X: 0.0, Y: 0.0 })
+            {
+                writer.WriteNumber(command.PositiveShear.X);
+                if (command.PositiveShear is not { Y: 0.0 })
+                {
+                    writer.WriteNumber(command.PositiveShear.Y);
+                }
+            }
         }
 
         if (command.NegativeShear != Vector3d.Zero)
         {
             writer.WriteNumber(command.NegativeShear.Y);
-            writer.WriteNumber(command.NegativeShear.Z);
-            writer.WriteNumber(command.NegativeShear.X);
+            if (command.NegativeShear is not { X: 0.0, Z: 0.0 })
+            {
+                writer.WriteNumber(command.NegativeShear.Z);
+                if (command.NegativeShear is not { X: 0.0 })
+                {
+                    writer.WriteNumber(command.NegativeShear.X);
+                }
+            }
         }
     }
 }
