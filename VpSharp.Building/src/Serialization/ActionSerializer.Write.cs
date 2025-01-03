@@ -307,6 +307,11 @@ public partial class ActionSerializer
             value = value!.GetType().GetProperty("Value", PropertyBindingFlags)!.GetValue(value);
         }
 
+        if (value?.GetType().IsEnum == true)
+        {
+            value = value.ToString()?.ToLowerInvariant();
+        }
+
         if (parameter.GetCustomAttribute<ValueConverterAttribute>() is { } valueConverterAttribute)
         {
             valueConverter = Activator.CreateInstance(valueConverterAttribute.ConverterType) as ValueConverter;
