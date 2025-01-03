@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Annotations;
 using VpSharp.Building.Serialization.CommandConverters;
 using VpSharp.Building.Serialization.ValueConverters;
@@ -66,7 +67,7 @@ public sealed class MoveCommand : VirtualParadiseCommand
     /// <value>The duration of half of a cycle.</value>
     [Property("time")]
     [ValueConverter(typeof(TimeSpanToSecondsValueConverter))]
-    public TimeSpan Time { get; set; } = TimeSpan.FromSeconds(1);
+    public Option<TimeSpan> Time { get; set; }
 
     /// <summary>
     ///     Gets or sets the time before continuing movement after one half of a cycle.
@@ -74,5 +75,5 @@ public sealed class MoveCommand : VirtualParadiseCommand
     /// <value>The wait time.</value>
     [Property("wait")]
     [ValueConverter(typeof(TimeSpanToSecondsValueConverter))]
-    public TimeSpan Wait { get; set; }
+    public Option<TimeSpan> Wait { get; set; }
 }

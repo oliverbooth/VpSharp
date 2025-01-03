@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Serialization;
 using VpSharp.Building.Triggers;
@@ -201,7 +202,7 @@ internal sealed class MoveCommandTests
                 {
                     Commands =
                     [
-                        new MoveCommand { Movement = new Vector3d(90, 0, 0), Time = TimeSpan.FromSeconds(10) }
+                        new MoveCommand { Movement = new Vector3d(90, 0, 0), Time = Option.Some(TimeSpan.FromSeconds(10)) }
                     ]
                 }
             ]
@@ -224,7 +225,7 @@ internal sealed class MoveCommandTests
                 {
                     Commands =
                     [
-                        new MoveCommand { Movement = new Vector3d(90, 0, 0), Wait = TimeSpan.FromSeconds(10) }
+                        new MoveCommand { Movement = new Vector3d(90, 0, 0), Wait = Option.Some(TimeSpan.FromSeconds(10)) }
                     ]
                 }
             ]

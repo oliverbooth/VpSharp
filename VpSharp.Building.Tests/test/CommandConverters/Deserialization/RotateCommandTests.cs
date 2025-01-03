@@ -28,8 +28,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -55,8 +55,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -82,8 +82,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -109,8 +109,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -136,8 +136,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -163,8 +163,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -190,8 +190,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.True);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -217,8 +217,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.True);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -244,8 +244,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(10)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.Zero));
+            Assert.That(command.Time, Is.EqualTo(Option.Some(TimeSpan.FromSeconds(10))));
+            Assert.That(command.Wait, Is.EqualTo(Option.None<TimeSpan>()));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }
@@ -271,8 +271,8 @@ internal sealed class RotateCommandTests
             Assert.That(command.Offset, Is.EqualTo(TimeSpan.Zero));
             Assert.That(command.ShouldReset, Is.False);
             Assert.That(command.ShouldSync, Is.False);
-            Assert.That(command.Time, Is.EqualTo(TimeSpan.FromSeconds(1)));
-            Assert.That(command.Wait, Is.EqualTo(TimeSpan.FromSeconds(10)));
+            Assert.That(command.Time, Is.EqualTo(Option.None<TimeSpan>()));
+            Assert.That(command.Wait, Is.EqualTo(Option.Some(TimeSpan.FromSeconds(10))));
             Assert.That(command.ExecuteAs, Is.EqualTo(Option.None<string>()));
         });
     }

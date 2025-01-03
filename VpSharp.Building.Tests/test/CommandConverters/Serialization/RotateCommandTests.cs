@@ -1,3 +1,4 @@
+using Optional;
 using VpSharp.Building.Commands;
 using VpSharp.Building.Serialization;
 using VpSharp.Building.Triggers;
@@ -201,7 +202,7 @@ internal sealed class RotateCommandTests
                 {
                     Commands =
                     [
-                        new RotateCommand { Rotation = new Vector3d(0, 90, 0), Time = TimeSpan.FromSeconds(10) }
+                        new RotateCommand { Rotation = new Vector3d(0, 90, 0), Time = Option.Some(TimeSpan.FromSeconds(10)) }
                     ]
                 }
             ]
@@ -224,7 +225,7 @@ internal sealed class RotateCommandTests
                 {
                     Commands =
                     [
-                        new RotateCommand { Rotation = new Vector3d(0, 90, 0), Wait = TimeSpan.FromSeconds(10) }
+                        new RotateCommand { Rotation = new Vector3d(0, 90, 0), Wait = Option.Some(TimeSpan.FromSeconds(10)) }
                     ]
                 }
             ]
