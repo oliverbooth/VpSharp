@@ -2,9 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -13,15 +11,20 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: |
+          8.0.x
+          9.0.x
 
-    - name: Add NuGet source
+    - name: Add GitHub NuGet source
       run: dotnet nuget add source --username oliverbooth --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/oliverbooth/index.json"
+
+    - name: Add BaGet source
+      run: dotnet nuget add source --username oliverbooth --password ${{ secrets.BAGET_API_KEY }} --store-password-in-clear-text --name baget "https://nuget.oliverbooth.dev/v3/index.json"
 
     - name: Restore dependencies
       run: dotnet restore
@@ -29,5 +32,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
+    - name: Test .NET 8
+      run: dotnet test --no-build --verbosity normal --configuration Release --framework net8.0
+
+    - name: Test .NET 9
+      run: dotnet test --no-build --verbosity normal --configuration Release --framework net9.0

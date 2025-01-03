@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+                xmlns="">
+        <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+
+    <data name="AvatarNotInWorld" xml:space="preserve">
+        <value>The target avatar is not in the world.</value>
+    </data>
+    <data name="CannotInviteNonExistentUser" xml:space="preserve">
+        <value>Cannot invite non-existent user.</value>
+    </data>
+    <data name="CannotJoinNonExistentUser" xml:space="preserve">
+        <value>Cannot join non-existent user.</value>
+    </data>
+    <data name="CannotLogin_IncompleteConfiguration" xml:space="preserve">
+        <value>Cannot login due to incomplete configuration.</value>
+    </data>
+    <data name="CannotLogin_InvalidLogin" xml:space="preserve">
+        <value>The specified username and password constitute an invalid login.</value>
+    </data>
+    <data name="CannotLogin_StringTooLong" xml:space="preserve">
+        <value>A value in the configuration is too long. (BotName?)</value>
+    </data>
+    <data name="CannotLogin_Timeout" xml:space="preserve">
+        <value>The login request timed out.</value>
+    </data>
+    <data name="CannotUseSelf" xml:space="preserve">
+        <value>The operation cannot be performed on the client's current avatar.</value>
+    </data>
+    <data name="ConnectionTimedOut" xml:space="preserve">
+        <value>Connection to the server timed out.</value>
+    </data>
+        <data name="ConnectionToUniverseServerRequired" xml:space="preserve">
+        <value>A connection to a universe server is required for this operation.</value>
+    </data>
+    <data name="ConnectionToWorldServerRequired" xml:space="preserve">
+        <value>A connection to a world server is required for this operation.</value>
+    </data>
+    <data name="NoSuchExtension" xml:space="preserve">
+        <value>No extension with the type {0} is added to this client.</value>
+    </data>
+    <data name="NotAllowedToModifyWorldSettings" xml:space="preserve">
+        <value>Not allowed to modify world settings.</value>
+    </data>
+    <data name="NotInWorld" xml:space="preserve">
+        <value>An attempt was made to perform an operation that requires a connection to a world server.</value>
+    </data>
+    <data name="ObjectNotFound" xml:space="preserve">
+        <value>An attempt was made to perform an operation on a nonexistent object.</value>
+    </data>
+    <data name="RadiusMustBeGreaterThan1" xml:space="preserve">
+        <value>Radius must be greater than or equal to 1.</value>
+    </data>
+    <data name="StringTooLong" xml:space="preserve">
+        <value>A specified value is too long.</value>
+    </data>
+    <data name="TypeCannotBeAbstract" xml:space="preserve">
+        <value>Type cannot be abstract.</value>
+    </data>
+    <data name="TypeMustInherit" xml:space="preserve">
+        <value>Type must inherit from {0}.</value>
+    </data>
+    <data name="UnsupportedEndpoint" xml:space="preserve">
+        <value>The specified remote endpoint is not supported.</value>
+    </data>
+    <data name="UnsupportedObjectType" xml:space="preserve">
+        <value>Unsupported object type.</value>
+    </data>
+    <data name="ValueCannotBeEmpty" xml:space="preserve">
+        <value>Value cannot be empty.</value>
+    </data>
+    <data name="WorldLoginError" xml:space="preserve">
+        Connection to the universe server was lost, or connecting to the world failed.
+    </data>
+    <data name="WorldNameCannotBeEmpty" xml:space="preserve">
+        <value>World name cannot be null or empty.</value>
+    </data>
+    <data name="ZeroThroughOne" xml:space="preserve">
+        <value>Value must be 0.0 through 1.0.</value>
+    </data>
+</root>
