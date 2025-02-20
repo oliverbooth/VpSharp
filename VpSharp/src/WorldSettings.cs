@@ -23,7 +23,7 @@ public sealed class WorldSettings
     ///     Gets a value indicating whether flying is enabled.
     /// </summary>
     /// <value><see langword="true" /> if flying is enabled; otherwise, <see langword="false" />.</value>
-    [SerializationKey("allow_flight")]
+    [SerializationKey("allow_flying")]
     public bool AllowFlight { get; internal set; } = true;
 
     /// <summary>
