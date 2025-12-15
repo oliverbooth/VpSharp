@@ -38,3 +38,6 @@ jobs:
 
     - name: Test .NET 9
       run: dotnet test --no-build --verbosity normal --configuration Release --framework net9.0
+
+    - name: Test .NET 10
+      run: dotnet test --no-build --verbosity normal --configuration Release --framework net10.0
