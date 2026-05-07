@@ -4,5 +4,6 @@ internal enum ObjectType
 {
     Model,
     ParticleEmitter = 2,
-    Path
+    Path,
+    Zone
 }
