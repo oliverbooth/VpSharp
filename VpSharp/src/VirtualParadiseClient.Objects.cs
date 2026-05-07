@@ -216,6 +216,7 @@ public sealed partial class VirtualParadiseClient
             ObjectType.Model => new VirtualParadiseModelObject(this, id),
             ObjectType.ParticleEmitter => new VirtualParadiseParticleEmitterObject(this, id),
             ObjectType.Path => new VirtualParadisePathObject(this, id),
+            ObjectType.Zone => new VirtualParadiseZoneObject(this, id),
             _ => throw new NotSupportedException(ExceptionMessages.UnsupportedObjectType)
         };
 
